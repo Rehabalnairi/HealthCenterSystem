@@ -1,10 +1,12 @@
-﻿namespace HealthCenterSystem
+﻿using HealthCenterSystem.Models;
+
+namespace HealthCenterSystem
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            List<User> users = new List<User>();
         }
     }
 }

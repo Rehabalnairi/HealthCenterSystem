@@ -29,14 +29,33 @@ namespace HealthCenterSystem.Models
 
     class SuperAdmin : User // create a class for super admin that inherits from User
     {
-
-        public SuperAdmin() : base(
-            id: 1, name: "Super Admin", email: "XXXX@gmail.com", password: "XXXX", role: "SuperAdmin")  // initialize super admin properties)
+        public List<User> UsersList;
+        public int Index=2; // index to keep track of the next user ID
+        public SuperAdmin(List<User> usersList) :base(1,"Super Admin","SuperAdmin@gmail.com", "SuperAdmin", "SuperAdmin123") // constructor to initialize super admin properties
         {
-
+            this.UsersList = usersList; // initialize the list of users
+            this.UsersList.Add(this); // add the super admin to the list of users
         }
 
+        public void AddAdmin(string name, string email, string password) // method to add an admin
+        {
+            Admins newAdmin = new Admins(Index++, name, email, password); // create a new admin with the next index
+            this.UsersList.Add(newAdmin); // add the new admin to the list of users
+        }
 
+        public void AddDoctor(string name, string email, string password) // method to add a doctor
+        {
+            Doctor newDoctor = new Doctor (Index++, name, email, password); // create a new doctor with the next index
+            this.UsersList.Add(newDoctor); // add the new doctor to the list of users
+        }
+    }
+
+    class Admins : User
+    {
+     public Admins(int id, string name, string email, string password) : base(id, name, email, password, "Admin") // constructor to initialize admin properties
+        {
+            this.ISActive = true; // default active status is true
+        }
     }
 }  
        

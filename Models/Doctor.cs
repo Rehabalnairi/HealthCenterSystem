@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace HealthCenterSystem.Models
 {
-    class Doctor
+    class Doctor:User
     {
+        public Doctor(int id, string name, string email, string password)
+            : base(id, name, email, password, "Doctor") // constructor to initialize doctor properties
+        {
+            // Doctor specific initialization can go here if needed
+        }
     }
 }
