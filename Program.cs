@@ -7,6 +7,11 @@ namespace HealthCenterSystem
         static void Main(string[] args)
         {
             List<User> users = new List<User>();
+            Console .WriteLine("Welcome to Health Center System");
+            // create mune
+            SuperAdmin superAdmin = new SuperAdmin(users);
+            // add admin
+                
         }
     }
 }
