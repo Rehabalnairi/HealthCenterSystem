@@ -37,6 +37,7 @@ namespace HealthCenterSystem.Models
             this.UsersList.Add(this); // add the super admin to the list of users
         }
 
+
         public void AddAdmin(string name, string email, string password) // method to add an admin
         {
             Admins newAdmin = new Admins(Index++, name, email, password); // create a new admin with the next index
