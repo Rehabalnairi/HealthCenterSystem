@@ -26,9 +26,9 @@ namespace HealthCenterSystem.Models
             this.Doctors.Add(doctor); // add the doctor to the list of doctors
         }
 
-        //public void AddClinic(Clinic clinic) // method to add a clinic to the department
-        //{
-        //    this.clinics.Add(clinic); // add the clinic to the list of clinics
-        //}
+        public void AddClinic(Clinic clinic) // method to add a clinic to the department
+        {
+            this.clinics.Add(clinic); // add the clinic to the list of clinics
+        }
     }
 }
