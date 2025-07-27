@@ -8,6 +8,7 @@ namespace HealthCenterSystem.Models
 {
     class Doctor:User
     {
+        public string Spelcialization { get; set; } // property to hold doctor's specialization
         public Doctor(int id, string name, string email, string password)
             : base(id, name, email, password, "98376256", "Doctor") // constructor to initialize doctor properties
         {
