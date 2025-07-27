@@ -12,16 +12,17 @@ namespace HealthCenterSystem.Models
         public string Name { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
+        public string PhoneNumber { get; set; } // property to hold user phone number
         public string Role { get; set; } // property to hold user role
         public bool ISActive { get; set; } // property to hold user active status
 
-
-        public User(int id, string name, string email, string password, string role) //constructor to initialize user properties
+        public User(int id, string name, string email, string password, string PhoneNumber, string role) //constructor to initialize user properties
         {
             this.Id = id;
             this.Name = name;
             this.Email = email;
             this.Password = password;
+            this.PhoneNumber = PhoneNumber; // initialize phone number
             this.Role = role; // default role is User
             this.ISActive = true; // default active status is true
         }
@@ -31,12 +32,11 @@ namespace HealthCenterSystem.Models
     {
         public List<User> UsersList;
         public int Index=2; // index to keep track of the next user ID
-        public SuperAdmin(List<User> usersList) :base(1,"Super Admin","SuperAdmin@gmail.com", "SuperAdmin", "SuperAdmin123") // constructor to initialize super admin properties
+        public SuperAdmin(List<User> usersList) :base(1,"Super Admin","SuperAdmin@gmail.com", "SuperAdmin123", "99997799", "SuperAdmin") // constructor to initialize super admin properties
         {
             this.UsersList = usersList; // initialize the list of users
             this.UsersList.Add(this); // add the super admin to the list of users
         }
-
 
         public void AddAdmin(string name, string email, string password) // method to add an admin
         {
@@ -53,7 +53,7 @@ namespace HealthCenterSystem.Models
 
     class Admins : User
     {
-     public Admins(int id, string name, string email, string password) : base(id, name, email, password, "Admin") // constructor to initialize admin properties
+        public Admins(int id, string name, string email, string password) : base(id, name, email, password, "99999", "Admin") // constructor to initialize admin properties
         {
             this.ISActive = true; // default active status is true
         }
