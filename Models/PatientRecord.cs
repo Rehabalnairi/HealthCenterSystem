@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HealthCenterSystem.Models
 {
-    class PatientRecord
+     public class PatientRecord
     {
         public int RecordId { get; set; } // property to hold record ID
         public Patient patient { get; set; }// property to hold patient information

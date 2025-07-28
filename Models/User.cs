@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HealthCenterSystem.Models
 { // user update
-    class User // create user class
+   public class User // create user class
     {
         public int UserId { get; set; }
         public string Name { get; set; }

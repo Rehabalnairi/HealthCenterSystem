@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HealthCenterSystem.Models
 {
-    class Patient : User
+     public class Patient : User
     { 
         public string Gender { get; set; }
         public DateTime DateOfBirth { get; set; }

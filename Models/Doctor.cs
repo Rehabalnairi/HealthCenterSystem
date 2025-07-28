@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HealthCenterSystem.Models
 {
-    class Doctor:User
+    public class Doctor:User
     {
         public string Spelcialization { get; set; } // property to hold doctor's specialization
         public List<PatientRecord> PatientRecords { get; set; } // list to hold patient records associated with the doctor

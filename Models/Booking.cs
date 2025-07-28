@@ -23,8 +23,9 @@ namespace HealthCenterSystem.Models
 
         public static List<Doctor> Doctors = new List<Doctor>
         {
-            new Doctor ( 1, "Dr. Smith","rehab@gmai.com"),
-            new Doctor ( 2,"Dr. Jones", 2 )
+            new Doctor ( 1, "Dr. Smith","rehab@gmai.com","re12345", ""),
+
+          
         };
 
         public static List<DateTime> AvailableTimes = new List<DateTime>
