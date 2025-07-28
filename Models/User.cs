@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HealthCenterSystem.Models
 { // user update
-    class User // create user class
+   public class User // create user class
     {
         public int UserId { get; set; }
         public string Name { get; set; }
@@ -36,6 +36,7 @@ namespace HealthCenterSystem.Models
         {
             this.UsersList = usersList; // initialize the list of users
             this.UsersList.Add(this); // add the super admin to the list of users
+
         }
 
         public void AddAdmin(string name, string email, string password) // method to add an admin
@@ -53,6 +54,21 @@ namespace HealthCenterSystem.Models
         internal void AddDoctor(string? doctorName, string? doctorEmail, string? doctorPassword)
         {
             throw new NotImplementedException();
+        }
+        List<Branch> BranchesList = new List<Branch>();
+        public void AddBranch(string branchName, string branchLocation, int noOfFloors, int noOfRooms, string departments, string clinics)
+        // method to add a branch
+        {
+            Branch newBranch = new Branch();// create a new branch with the next index
+            this.BranchesList.Add(newBranch); // add the new branch to the list of users
+        }
+        public void ViewUsers() // method to view all users
+        {
+            Console.WriteLine("List of Users:");
+            foreach (var user in this.UsersList) // iterate through the list of users
+            {
+                Console.WriteLine($"User ID: {user.UserId}, Name: {user.Name}, Email: {user.Email}, Role: {user.Role}, Active: {user.ISActive}"); // print user information
+            }
         }
     }
 

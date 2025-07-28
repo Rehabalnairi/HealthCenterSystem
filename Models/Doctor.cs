@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace HealthCenterSystem.Models
 {
-    class Doctor:User
+    public class Doctor:User
     {
         public string Spelcialization { get; set; } // property to hold doctor's specialization
         public List<PatientRecord> PatientRecords { get; set; } // list to hold patient records associated with the doctor
         //public List<Appointment> Appointments { get; set; } // list to hold appointments associated with the doctor
         public List<Clinic> Clinics { get; set; } // list to hold clinics associated with the doctor
-
+        public List<Department> Departments { get; set; } // list to hold departments associated with the doctor
         public Doctor(int id, string name, string email, string password,string Spelcialization)
             : base(id, name, email, password, "98376256", "Doctor") // constructor to initialize doctor properties
         {

@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace HealthCenterSystem.Models
 {
-    class Clinic
-    {
+   public class Clinic
+   {
         public int ClinicId { get; set; }
         public string Name { get; set; } // property to hold clinic name
         public string Address { get; set; } // property to hold clinic address

@@ -16,6 +16,7 @@ namespace HealthCenterSystem
             int choice = 0;
             while (choice != 4)
             {
+                Console.Clear();
                 Console.WriteLine("\nPlease select your role:");
                 Console.WriteLine("1. Super Admin");
                 Console.WriteLine("2. Admin");
@@ -33,14 +34,15 @@ namespace HealthCenterSystem
                 {
                     case 1:
                         Console.WriteLine("You are logged in as Super Admin.");
-                        Console.Write("Enter Admin Name: ");
-                        string adminName = Console.ReadLine();
+                        Console.Write("Enter Admin ID: ");
+                        string ID = Console.ReadLine();
                         Console.Write("Enter Admin Email: ");
                         string adminEmail = Console.ReadLine();
                         Console.Write("Enter Admin Password: ");
                         string adminPassword = Console.ReadLine();
-                        superAdmin.AddAdmin(adminName, adminEmail, adminPassword);
-                        Console.WriteLine(" Admin added successfully.");
+                        superAdmin.AddAdmin(ID, adminEmail, adminPassword);
+                        Console.WriteLine(" Admin Login successfully.");
+                        SuperAdminMenu();
                         break;
 
                     case 2:
@@ -74,6 +76,91 @@ namespace HealthCenterSystem
                     default:
                         Console.WriteLine("Invalid choice. Please try again.");
                         break;
+                }
+            }
+
+            //SuperAdmin menu
+            static void SuperAdminMenu()
+            {
+                Console.Clear();
+                Console.WriteLine("SuperAdmin Menu:");
+                Console.WriteLine("1. Add Admin");
+                Console.WriteLine("2. Add Doctor");
+                Console.WriteLine("3. Add Branch");
+                Console.WriteLine("4. View Users");
+                Console.WriteLine("0. Exit");
+                int superAdminChoice = 0;
+                while (superAdminChoice != 5)
+                {
+
+                    Console.Write("Select an option: ");
+                    if (!int.TryParse(Console.ReadLine(), out superAdminChoice))
+                    {
+                        Console.WriteLine("Invalid input. Please enter a number between 1 and 5.");
+                        continue;
+                    }
+                    switch (superAdminChoice)
+                    {
+                        case 1:
+                            Console.Write("Enter Admin Name: ");
+                            string adminName = Console.ReadLine();
+                            Console.Write("Enter Admin Email: ");
+                            string adminEmail = Console.ReadLine();
+                            Console.Write("Enter Admin Password: ");
+                            string adminPassword = Console.ReadLine();
+                            superAdmin.AddAdmin(adminName, adminEmail, adminPassword);
+                            Console.WriteLine("Admin added successfully.");
+                            break;
+                        case 2:
+                            Console.Write("Enter Doctor Name: ");
+                            string doctorName = Console.ReadLine();
+                            Console.Write("Enter Doctor Email: ");
+                            string doctorEmail = Console.ReadLine();
+                            Console.Write("Enter Doctor Password: ");
+                            string doctorPassword = Console.ReadLine();
+                            Console.Write("Enter Doctor Specialization: ");
+                            string doctorSpecialization = Console.ReadLine();
+                            superAdmin.AddDoctor(doctorName, doctorEmail, doctorPassword, doctorSpecialization);
+                            Console.WriteLine("Doctor added successfully.");
+                            break;
+                        case 3:
+
+                            Console.Write("Enter Branch Name: ");
+                            string branchName = Console.ReadLine();
+                            Console.Write("Enter Branch Location: ");
+                            string branchLocation = Console.ReadLine();
+                            Console.Write("Enter Number of Floors: ");
+                            int noOfFloors;
+                            while (!int.TryParse(Console.ReadLine(), out noOfFloors) || noOfFloors <= 0)
+                            {
+                                Console.Write("Invalid input. Please enter a valid number of floors: ");
+                            }
+                            Console.Write("Enter Number of Rooms: ");
+                            int noOfRooms;
+
+                            while (!int.TryParse(Console.ReadLine(), out noOfRooms) || noOfRooms <= 0)
+                            {
+                                Console.Write("Invalid input. Please enter a valid number of rooms: ");
+                            }
+                            Console.Write("Enter Departments: ");
+                            string departments = Console.ReadLine();
+                            Console.Write("Enter Clinics: ");
+                            string clinics = Console.ReadLine();
+                            superAdmin.AddBranch(branchName, branchLocation, noOfFloors, noOfRooms, departments, clinics);
+                            Console.WriteLine("Branch added successfully.");
+                            Console.ReadLine();
+                            break;
+                        case 4:
+                            superAdmin.ViewUsers();
+                            Console.WriteLine("Users viewed successfully.");
+                            break;
+                        case 5:
+                            Console.WriteLine("Exiting Super Admin menu.");
+                            break;
+                        default:
+                            Console.WriteLine("Invalid choice. Please try again.");
+                            break;
+                    }
                 }
             }
         }
