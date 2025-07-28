@@ -14,7 +14,7 @@ namespace HealthCenterSystem.Models
         public List<Clinic> Clinics { get; set; } // list to hold clinics associated with the doctor
         public List<Department> Departments { get; set; } // list to hold departments associated with the doctor
         public Doctor(int id, string name, string email, string password,string Spelcialization)
-            : base(id, name, email, password, "98376256", "Doctor") // constructor to initialize doctor properties
+            :   base(name, email, password, "98376256", "Doctor") // constructor to initialize doctor properties
         {
             this.Spelcialization = Spelcialization; // initialize specialization
             this.PatientRecords = new List<PatientRecord>(); // initialize the list of patient records
