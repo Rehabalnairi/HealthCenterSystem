@@ -29,7 +29,7 @@ namespace HealthCenterSystem.Models
             this.Clinics = "General Clinic"; // default clinics
 
         }
-    class Branches
+     class Branches
         {
             public List<Branch> BranchList { get; set; } // property to hold list of branches
             public Branches() // constructor to initialize the list of branches
@@ -48,4 +48,5 @@ namespace HealthCenterSystem.Models
         }
 
     
-    } }
+     } 
+}
