@@ -15,7 +15,7 @@ namespace HealthCenterSystem.Models
         public string Diagnosis { get; set; } // property to hold diagnosis information
         public string Treatment { get; set; } // property to hold treatment information
         public string Notes { get; set; } // property to hold additional notes
-
+        //
         public PatientRecord(int recordId, Patient patient, Doctor doctor, DateTime visitDate, string diagnosis, string treatment, string notes)
         {
             this.RecordId = recordId; // initialize record ID
