@@ -27,8 +27,8 @@ namespace HealthCenterSystem.Models
         }
 
         public void AddClinic(Clinic clinic) // method to add a clinic
-        {
-            this.Clinics.Add(clinic); // add the clinic to the list of clinics
+        {       
+                this.Clinics.Add(clinic); // add the clinic to the list of clinics    
         }
 
         public override string ToString() // override ToString method to return doctor's information
