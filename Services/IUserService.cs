@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HealthCenterSystem.Services
 {
-    class IUserService
+    interface IUserService
     {
         void AddUser(User user);
         User Login(string email, string password);

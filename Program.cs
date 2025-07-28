@@ -51,7 +51,9 @@ namespace HealthCenterSystem
                         string doctorEmail = Console.ReadLine();
                         Console.Write("Enter Doctor Password: ");
                         string doctorPassword = Console.ReadLine();
-                        superAdmin.AddDoctor(doctorName, doctorEmail, doctorPassword);
+                        Console.Write("Enter Doctor Specialization: ");
+                        string doctorSpecialization = Console.ReadLine();
+                        superAdmin.AddDoctor(doctorName, doctorEmail, doctorPassword, doctorSpecialization);
                         Console.WriteLine("Doctor added successfully.");
                         break;
 
