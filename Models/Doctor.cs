@@ -32,7 +32,7 @@ namespace HealthCenterSystem.Models
 
         public override string ToString() // override ToString method to return doctor's information
         {
-            return $"Doctor ID: {Id}, Name: {Name}, Email: {Email}, Specialization: {Spelcialization}, Phone: {PhoneNumber}, Role: {Role}";
+            return $"Doctor ID: {UserId}, Name: {Name}, Email: {Email}, Specialization: {Spelcialization}, Phone: {PhoneNumber}, Role: {Role}";
         }
     }
 }
