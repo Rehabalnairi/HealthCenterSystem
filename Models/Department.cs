@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace HealthCenterSystem.Models
 {
@@ -8,37 +9,57 @@ namespace HealthCenterSystem.Models
         public int DepId { get; set; }
         public string DepName { get; set; }
         // public List<Doctor> Doctors { get; set; }
-         public List<Clinic> Clinics { get; set; }
+        public List<Clinic> Clinics { get; set; }
 
+        // Constructor
         public Department(int depId, string depName)
         {
-            this.DepId = depId;
-            this.DepName = depName;
+            DepId = depId;
+            DepName = depName ?? throw new ArgumentNullException(nameof(depName));
             Clinics = new List<Clinic>();
-            // this.Doctors = new List<Doctor>();
-            // this.Clinics = new List<Clinic>();
+            // Doctors = new List<Doctor>();
         }
 
-      
+        // Add a clinic to the department
         public void AddClinic(Clinic clinic)
         {
+            if (clinic == null)
+                throw new ArgumentNullException(nameof(clinic));
+
+            // Prevent adding duplicates by ID or object reference
+            if (!Clinics.Any(c => c.ClinicId == clinic.ClinicId))
+            {
                 Clinics.Add(clinic);
-           
+            }
         }
 
-        public void RemoveClinic(Clinic clinic)
+        // Remove a clinic from the department
+        public bool RemoveClinic(Clinic clinic)
         {
-            Clinics.Remove(clinic);
+            if (clinic == null) return false;
+            return Clinics.Remove(clinic);
         }
 
+        // Optional: Remove clinic by ID
+        public bool RemoveClinicById(int clinicId)
+        {
+            var clinic = Clinics.FirstOrDefault(c => c.ClinicId == clinicId);
+            if (clinic != null)
+            {
+                Clinics.Remove(clinic);
+                return true;
+            }
+            return false;
+        }
 
+        // Static data holder (consider moving this out in production)
         public static class DepartmentData
         {
             public static List<Department> Departments = new List<Department>
-        {
-            new Department(1, "Cardiology"),
-            new Department(2, "Neurology")
-        };//
+            {
+                new Department(1, "Cardiology"),
+                new Department(2, "Neurology")
+            };
         }
     }
 }
