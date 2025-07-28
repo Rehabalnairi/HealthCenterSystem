@@ -10,7 +10,7 @@ namespace HealthCenterSystem.Models
     // addList of branch departments
 
     // add List of branch departments to the branch
-
+    //
     class BranchDepartment
     {
         public List<Department> Departments { get; set; } // property to hold list of departments in the branch
