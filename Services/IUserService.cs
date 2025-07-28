@@ -11,9 +11,9 @@ namespace HealthCenterSystem.Services
     {
         void AddUser(User user);
         User Login(string email, string password);
-        User GetUserById(int id);
+        User GetUserById(int userid);
         List<User> GetAllUsers();
-        void DeactivateUser(int id);
-        void ActivateUser(int id);
+        void DeactivateUser(int userid);
+        void ActivateUser(int userid);
     }
 }
