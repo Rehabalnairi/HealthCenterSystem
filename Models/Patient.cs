@@ -12,8 +12,8 @@ namespace HealthCenterSystem.Models
         public DateTime DateOfBirth { get; set; }
         public string Address { get; set; }
 
-        public Patient ( int id, string name, string email, string password, string phoneNumber, string gender, DateTime dateOfBirth, string address) 
-            : base (id, name, email, password, phoneNumber, "Patient") // constructor to initialize patient properties
+        public Patient ( int userid, string name, string email, string password, string phoneNumber, string gender, DateTime dateOfBirth, string address) 
+            : base (userid, name, email, password, phoneNumber, "Patient") // constructor to initialize patient properties
 
         {
             this.Gender = gender;
