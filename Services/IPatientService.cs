@@ -13,10 +13,7 @@ namespace HealthCenterSystem.Services
 
         void UpdatePatient(int id, string name, string email, string password, string phoneNumber);
         void DeletePatient(int id);
-        //List<Patient> GetAllPatients();
-       // Patient GetPatientById(int id);
-
-    
-        
+        List<Patient> GetAllPatients();
+        Patient GetPatientById(int id);       
     }
 }
