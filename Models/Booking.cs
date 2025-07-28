@@ -8,6 +8,6 @@ namespace HealthCenterSystem.Models
 {
     class Booking
     {
-        public int BookingId { get; set; }
+        public int BookingID { get; set; }
     }
 }
