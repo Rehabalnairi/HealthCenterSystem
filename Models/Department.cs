@@ -8,26 +8,29 @@ namespace HealthCenterSystem.Models
         public int DepId { get; set; }
         public string DepName { get; set; }
         // public List<Doctor> Doctors { get; set; }
-        // public List<Clinic> Clinics { get; set; }
+         public List<Clinic> Clinics { get; set; }
 
         public Department(int depId, string depName)
         {
             this.DepId = depId;
             this.DepName = depName;
+            Clinics = new List<Clinic>();
             // this.Doctors = new List<Doctor>();
             // this.Clinics = new List<Clinic>();
         }
 
-        //  public void AddDoctor(Doctor doctor)
-        // {
-        //  this.Doctors.Add(doctor);
-        //}
+      
+        public void AddClinic(Clinic clinic)
+        {
+                Clinics.Add(clinic);
+           
+        }
 
-        //    public void AddClinic(Clinic clinic)
-        //    {
-        //        this.Clinics.Add(clinic);
-        //    }
-        //}
+        public void RemoveClinic(Clinic clinic)
+        {
+            Clinics.Remove(clinic);
+        }
+
 
         public static class DepartmentData
         {
@@ -35,7 +38,7 @@ namespace HealthCenterSystem.Models
         {
             new Department(1, "Cardiology"),
             new Department(2, "Neurology")
-        };
+        };//
         }
     }
 }

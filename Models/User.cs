@@ -16,7 +16,7 @@ namespace HealthCenterSystem.Models
         public string PhoneNumber { get; set; } // property to hold user phone number
         public string Role { get; set; } // property to hold user role
         public bool IsActive { get; set; } // property to hold user active status
-
+        
         public User( string name, string email, string password, string PhoneNumber, string role) //constructor to initialize user properties
         {
             this.UserId = IndexUserID++;

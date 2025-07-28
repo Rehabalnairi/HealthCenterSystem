@@ -20,17 +20,12 @@ namespace HealthCenterSystem.Models
         //construct a class to hold a list of branches
         public Branch()
         {
-            this.BranchId = 1; // default branch ID
-            this.BranchName = "Default Branch"; // default branch name
-            this.BranchLocation = "Default Location"; // default branch location
-            this.NoOFfloors = 1; // default number of floors
-            this.NoOFRooms = 10; // default number of rooms
-            this.Departments = "General"; // default departments
-            this.Clinics = "General Clinic"; // default clinics
+           Departments= new List<Department>().ToString(); // initialize departments as an empty string
 
         }
      class Branches
         {
+            public List<Department> Departments { get; set; } // property to hold list of departments
             public List<Branch> BranchList { get; set; } // property to hold list of branches
             public Branches() // constructor to initialize the list of branches
             {
@@ -40,13 +35,16 @@ namespace HealthCenterSystem.Models
             {
                 this.BranchList.Add(branch);
             }
+            public void AddDepartment(Department department) // method to add a department to the list
+            { 
+                Departments.Add(department);
+            }
+
+            public void RemoveDepartment(Department department) // method to remove a department from the list
+            {
+                Departments.Remove(department);
+            }
         }
 
-        public virtual string GetBranchInfo() // method to get branch information
-        {
-            return $"Branch ID: {BranchId}, Name: {BranchName}, Location: {BranchLocation}, Floors: {NoOFfloors}, Rooms: {NoOFRooms}, Departments: {Departments}, Clinics: {Clinics}";
-        }
-
-    
-     } 
-}
+      
+    } }

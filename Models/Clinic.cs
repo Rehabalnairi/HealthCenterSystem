@@ -15,7 +15,7 @@ namespace HealthCenterSystem.Models
         public string PhoneNumber { get; set; } // property to hold clinic phone number
         public bool IsActive { get; set; } // property to hold clinic active status
         public int Status { get; set; }
-
+        //add
         public Clinic(int clinicId, string name, string address, decimal price, string phoneNumber, bool isActive = true) // constructor to initialize clinic properties
         {
             ClinicId = clinicId;
