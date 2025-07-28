@@ -20,7 +20,8 @@ namespace HealthCenterSystem
                 Console.WriteLine("1. Super Admin");
                 Console.WriteLine("2. Admin");
                 Console.WriteLine("3. Doctor");
-                Console.WriteLine("4. Exit");
+                Console.WriteLine("4. Patient");
+                Console.WriteLine("0. Exit");
 
                 if (!int.TryParse(Console.ReadLine(), out choice))
                 {
@@ -60,6 +61,11 @@ namespace HealthCenterSystem
                         break;
 
                     case 4:
+                        Console.WriteLine("You are logged in as Patient.");
+                        Console.WriteLine("Patient functionality coming soon...");
+                        break;
+
+                    case 0:
                         Console.WriteLine("Exiting the system. Goodbye!");
                         break;
 
