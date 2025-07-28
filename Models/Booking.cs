@@ -17,15 +17,12 @@ namespace HealthCenterSystem.Models
     {
         public static List<Department> Departments = new List<Department>
         {
-            new Department (1,"Cardiology" ),
-            new Department (2,"Neurology" )
+           
         };
 
         public static List<Doctor> Doctors = new List<Doctor>
         {
-            new Doctor ( 1, "Dr. Smith","rehab@gmai.com","re12345", ""),
-
-          
+            
         };
 
         public static List<DateTime> AvailableTimes = new List<DateTime>
