@@ -8,7 +8,7 @@ namespace HealthCenterSystem.Models
 { // user update
     class User // create user class
     {
-        public int Id { get; set; }
+        public int UserId { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
@@ -16,9 +16,9 @@ namespace HealthCenterSystem.Models
         public string Role { get; set; } // property to hold user role
         public bool ISActive { get; set; } // property to hold user active status
 
-        public User(int id, string name, string email, string password, string PhoneNumber, string role) //constructor to initialize user properties
+        public User(int userid, string name, string email, string password, string PhoneNumber, string role) //constructor to initialize user properties
         {
-            this.Id = id;
+            this.UserId = userid;
             this.Name = name;
             this.Email = email;
             this.Password = password;
@@ -53,7 +53,7 @@ namespace HealthCenterSystem.Models
 
     class Admins : User
     {
-        public Admins(int id, string name, string email, string password) : base(id, name, email, password, "99999", "Admin") // constructor to initialize admin properties
+        public Admins(int userid, string name, string email, string password) : base(userid, name, email, password, "99999", "Admin") // constructor to initialize admin properties
         {
             this.ISActive = true; // default active status is true
         }
