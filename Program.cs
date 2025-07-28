@@ -36,14 +36,18 @@ namespace HealthCenterSystem
                         Console.WriteLine("Super Admin Loging");
                         Console.Write("Enter Admin ID: ");
                         string ID = Console.ReadLine();
-                        Console.Write("Enter Admin Email: ");
-                        string adminEmail = Console.ReadLine();
                         Console.Write("Enter Admin Password: ");
                         string adminPassword = Console.ReadLine();
-                        superAdmin.AddAdmin(ID, adminEmail, adminPassword);
-                        Console.WriteLine(" Admin Login successfully.");
-                        
-                        SuperAdminMenu();
+                        if (ID != "1" || adminPassword != "123")
+                        {
+                            Console.WriteLine("Invalid ID or password.");
+                            Console.ReadKey();
+                        }
+                        else
+                        {
+                            Console.WriteLine("Login successful.");
+                            SuperAdminMenu();
+                        }
                         break;
 
                     case 2:
@@ -56,8 +60,8 @@ namespace HealthCenterSystem
                         string doctorPassword = Console.ReadLine();
                         Console.Write("Enter Doctor Specialization: ");
                         string doctorSpecialization = Console.ReadLine();
-                        superAdmin.AddDoctor(doctorName, doctorEmail, doctorPassword, doctorSpecialization);
-                        Console.WriteLine("Doctor added successfully.");
+                        //superAdmin.AddDoctor(doctorName, doctorSpecialization);
+                      //  Console.WriteLine("Doctor added successfully.");
                        
                         break;
 
@@ -106,27 +110,25 @@ namespace HealthCenterSystem
                         case 1:
                             Console.Write("Enter Admin Name: ");
                             string adminName = Console.ReadLine();
-                            Console.Write("Enter Admin Email: ");
-                            string adminEmail = Console.ReadLine();
                             Console.Write("Enter Admin Password: ");
                             string adminPassword = Console.ReadLine();
-                            superAdmin.AddAdmin(adminName, adminEmail, adminPassword);
-                            Console.WriteLine("Admin added successfully.");
+                            string adminEmail = superAdmin.AddAdmin(adminName, adminPassword);
+                            Console.WriteLine($"Admin added successfully. Email: {adminEmail}");
                             break;
+
                         case 2:
                             Console.Write("Enter Doctor Name: ");
                             string doctorName = Console.ReadLine();
-                            Console.Write("Enter Doctor Email: ");
-                            string doctorEmail = Console.ReadLine();
                             Console.Write("Enter Doctor Password: ");
                             string doctorPassword = Console.ReadLine();
                             Console.Write("Enter Doctor Specialization: ");
                             string doctorSpecialization = Console.ReadLine();
-                            superAdmin.AddDoctor(doctorName, doctorEmail, doctorPassword, doctorSpecialization);
-                            Console.WriteLine("Doctor added successfully.");
+                            string doctorEmail = superAdmin.AddDoctor(doctorName, doctorPassword, doctorSpecialization);
+                            Console.WriteLine($"Doctor added successfully. Email: {doctorEmail}");
                             break;
-                        case 3:
 
+                        case 3:
+                            Console.WriteLine("Add Branch");
                             Console.Write("Enter Branch Name: ");
                             string branchName = Console.ReadLine();
                             Console.Write("Enter Branch Location: ");
