@@ -22,4 +22,6 @@ namespace HealthCenterSystem.Models
             this.ISActive = true; // default active status is true
         }
     }
+
+
 }
