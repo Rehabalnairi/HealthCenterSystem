@@ -62,6 +62,14 @@ namespace HealthCenterSystem.Models
             Branch newBranch = new Branch();// create a new branch with the next index
             this.BranchesList.Add(newBranch); // add the new branch to the list of users
         }
+        public void ViewUsers() // method to view all users
+        {
+            Console.WriteLine("List of Users:");
+            foreach (var user in this.UsersList) // iterate through the list of users
+            {
+                Console.WriteLine($"User ID: {user.UserId}, Name: {user.Name}, Email: {user.Email}, Role: {user.Role}, Active: {user.ISActive}"); // print user information
+            }
+        }
     }
 
     class Admins : User
