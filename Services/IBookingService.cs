@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace HealthCenterSystem.Services
 {
+    // This interface defines the methods for managing bookings in a health center system.
     interface IBookingService
     {
         void AddBooking(Booking booking); // method to add a new booking

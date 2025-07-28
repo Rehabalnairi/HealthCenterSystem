@@ -38,7 +38,5 @@ namespace HealthCenterSystem.Models
             this.Treatment = treatment; // update treatment information
             this.Notes = notes; // update additional notes
         }
-
-
     }
 }
