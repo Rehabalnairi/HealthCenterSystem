@@ -8,5 +8,6 @@ namespace HealthCenterSystem.Models
 {
     class Booking
     {
+
     }
 }
