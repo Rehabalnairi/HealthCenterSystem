@@ -12,7 +12,15 @@ namespace HealthCenterSystem.Services
         void AddDoctor(string name, string email, string password, string phoneNumber, string specialization);
         void UpdateDoctor(int id, string name, string email, string password, string phoneNumber, string specialization);
         void DeleteDoctor(int id);
-      
+        // List<Doctor> GetAllDoctors();
+
+        // Doctor GetDoctorById(int id);
+        // List<Doctor> GetDoctorsBySpecialization(string specialization);
+        // List<Doctor> GetDoctorsByBranch(int branchId);
+        // List<Doctor> GetDoctorsByDepartment(int departmentId);
+        // List<Doctor> GetDoctorsByClinic(int clinicId);
+        // List<Doctor> GetDoctorsByPatient(int patientId);
+
 
     }
 }
