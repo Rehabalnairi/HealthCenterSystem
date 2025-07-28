@@ -13,13 +13,13 @@ namespace HealthCenterSystem.Models
         public string Address { get; set; }
 
         public Patient ( int userid, string name, string email, string password, string phoneNumber, string gender, DateTime dateOfBirth, string address) 
-            : base (userid, name, email, password, phoneNumber, "Patient") // constructor to initialize patient properties
+            : base (name, email, password, phoneNumber, "Patient") // constructor to initialize patient properties
 
         {
             this.Gender = gender;
             this.DateOfBirth = dateOfBirth;
             this.Address = address;
-            this.ISActive = true; // default active status is true
+            this.IsActive = true; // default active status is true
         }
     }
 

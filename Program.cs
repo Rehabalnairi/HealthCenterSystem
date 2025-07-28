@@ -6,7 +6,7 @@ namespace HealthCenterSystem
 {
     internal class Program
     {
-        static List<User> users = new List<User>();
+        public static List<User> users = new List<User>();
         static SuperAdmin superAdmin = new SuperAdmin(users); // static SuperAdmin instance
 
         static void Main(string[] args)
@@ -33,7 +33,7 @@ namespace HealthCenterSystem
                 switch (choice)
                 {
                     case 1:
-                        Console.WriteLine("You are logged in as Super Admin.");
+                        Console.WriteLine("Super Admin Loging");
                         Console.Write("Enter Admin ID: ");
                         string ID = Console.ReadLine();
                         Console.Write("Enter Admin Email: ");
@@ -42,6 +42,7 @@ namespace HealthCenterSystem
                         string adminPassword = Console.ReadLine();
                         superAdmin.AddAdmin(ID, adminEmail, adminPassword);
                         Console.WriteLine(" Admin Login successfully.");
+                        
                         SuperAdminMenu();
                         break;
 
@@ -57,6 +58,7 @@ namespace HealthCenterSystem
                         string doctorSpecialization = Console.ReadLine();
                         superAdmin.AddDoctor(doctorName, doctorEmail, doctorPassword, doctorSpecialization);
                         Console.WriteLine("Doctor added successfully.");
+                       
                         break;
 
                     case 3:
