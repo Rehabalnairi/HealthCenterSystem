@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HealthCenterSystem.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,22 +7,18 @@ using System.Threading.Tasks;
 
 namespace HealthCenterSystem.Services
 {
+    /// This interface defines the methods for managing doctors in a health center system.
     interface IDoctorService
     {
-        IDoctorService Clone();
-        void AddDoctor(string name, string email, string password, string phoneNumber, string specialization);
-        void UpdateDoctor(int id, string name, string email, string password, string phoneNumber, string specialization);
-        void DeleteDoctor(int id);
-        // List<Doctor> GetAllDoctors();
+        void AddDoctor(string name, string email, string password, string phoneNumber, string specialization); // Adds a new doctor to the system
+        void UpdateDoctor(int id, string name, string email, string password, string phoneNumber, string specialization); /// Updates an existing doctor's information by ID
+        void DeleteDoctor(int id); // Deletes a doctor from the system by ID
+        List<Doctor> GetAllDoctors(); // Retrieves a list of all doctors in the system
+        Doctor GetDoctorById(int id); // Retrieves a doctor by their ID
 
-        // Doctor GetDoctorById(int id);
-        // List<Doctor> GetDoctorsBySpecialization(string specialization);
-        // List<Doctor> GetDoctorsByBranch(int branchId);
-        // List<Doctor> GetDoctorsByDepartment(int departmentId);
-        // List<Doctor> GetDoctorsByClinic(int clinicId);
-        // List<Doctor> GetDoctorsByPatient(int patientId);
-
-
+        List<Doctor> GetDoctorsBySpecialization(string specialization); // Retrieves a list of doctors by their specialization
+        List<Doctor> GetDoctorsByDepartment(int departmentId); // Retrieves a list of doctors by their department ID
+        List<Doctor> GetDoctorsByClinic(int clinicId); // Retrieves a list of doctors by their clinic ID
 
     }
 }
