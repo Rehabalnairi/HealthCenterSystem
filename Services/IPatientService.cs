@@ -11,10 +11,14 @@ namespace HealthCenterSystem.Services
     interface IPatientService
     {
         void AddPatient(string name, string email, string password, string phoneNumber);
-        void UpdatePatient(int userid, string name, string email, string password, string phoneNumber);
-        void DeletePatient(int userid);
-        List<Patient> GetAllPatients();
-        Patient GetPatientById(int userid);
+
+        void UpdatePatient(int id, string name, string email, string password, string phoneNumber);
+        void DeletePatient(int id);
+        //List<Patient> GetAllPatients();
+       // Patient GetPatientById(int id);
+
+    
+        
     }
 
 
