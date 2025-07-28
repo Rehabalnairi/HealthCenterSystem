@@ -3,24 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 namespace HealthCenterSystem.Models
 {
     public class SuperAdmin : User
     {
         // <summary>
         /// SuperAdmin class inherits from User and manages the system's users and branches.
-        
         public List<User> UsersList { get; set; }// List to hold all users in the system, including admins and doctors.
         public List<Branch> BranchesList { get; set; }// List to hold all branches in the system.
-
         /// Constructor initializes the SuperAdmin with default values and empty lists for users and branches.
         public SuperAdmin(List<User> usersList) : base("Super Admin", "suadmin@healthsystem.com", "123", "999", "Super Admin")
         {
             this.UsersList = new List<User>();
             BranchesList = new List<Branch>();
         }
-       
+        public SuperAdmin() : base("Super Admin", "suadmin@healthsystem.com", "123", "999", "Super Admin")
+        {
+            this.UsersList = new List<User>();
+            BranchesList = new List<Branch>();
+        }
         /// Constructor that accepts a list of users to initialize the SuperAdmin.
         private string GenerateEmail(string name, string role)
         {
@@ -28,8 +29,6 @@ namespace HealthCenterSystem.Models
             return $"{name.ToLower().Replace(" ", ".")}@{role.ToLower()}.healthsystem.com";
         }
         /// <summary>
-
-
         /// Adds a new admin to the system and returns the generated email.
         public string AddAdmin(string name, string password)
         {
@@ -38,8 +37,6 @@ namespace HealthCenterSystem.Models
             UsersList.Add(newAdmin);
             return email;
         }
-
-
         /// Adds a new doctor to the system and returns the generated email.
         public string AddDoctor(string name, string password, string Spelcialization)
         {
@@ -48,21 +45,19 @@ namespace HealthCenterSystem.Models
             UsersList.Add(newDoctor);
             return email;
         }
-
         /// Adds a new patient to the system and returns the generated email.
         public void ViewUsers()
         {
             Console.WriteLine("List of Users:");
             foreach (var user in UsersList)
             {
-                if(user.Role== "Super Admin")
+                if (user.Role == "Super Admin")
                 {
                     continue; // Skip Super Admin
                     Console.WriteLine($"User ID: {user.UserId}, Name: {user.Name}, Email: {user.Email}, Role: {user.Role}, Active: {user.IsActive}");
                 }
             }
         }
-
         /// Adds a new branch to the system with the specified details.
         public void AddBranch(string branchName, string branchLocation, int noOfFloors, int noOfRooms, string departments, string clinics)
         {
@@ -82,5 +77,23 @@ namespace HealthCenterSystem.Models
     }
 }
 
-   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
