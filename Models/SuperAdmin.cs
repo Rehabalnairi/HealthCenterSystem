@@ -20,12 +20,7 @@ namespace HealthCenterSystem.Models
             this.UsersList = new List<User>();
             BranchesList = new List<Branch>();
         }
-        public SuperAdmin() : base("Super Admin", "suadmin@healthsystem.com", "123", "999", "Super Admin")
-        {
-            this.UsersList = new List<User>();
-            BranchesList = new List<Branch>();
-        }
-
+       
         /// Constructor that accepts a list of users to initialize the SuperAdmin.
         private string GenerateEmail(string name, string role)
         {
