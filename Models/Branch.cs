@@ -23,7 +23,7 @@ namespace HealthCenterSystem.Models
            Departments= new List<Department>().ToString(); // initialize departments as an empty string
 
         }
-    class Branches
+     class Branches
         {
             public List<Department> Departments { get; set; } // property to hold list of departments
             public List<Branch> BranchList { get; set; } // property to hold list of branches

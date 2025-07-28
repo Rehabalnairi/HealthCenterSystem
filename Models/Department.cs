@@ -38,7 +38,7 @@ namespace HealthCenterSystem.Models
         {
             new Department(1, "Cardiology"),
             new Department(2, "Neurology")
-        };
+        };//
         }
     }
 }

@@ -15,7 +15,7 @@ namespace HealthCenterSystem.Models
         public List<Doctor> Doctors { get; set; } // list to hold doctors associated with the doctor
         public List<Department> Departments { get; set; } // list to hold departments associated with the doctor
         public Doctor(int id, string name, string email, string password,string Spelcialization)
-            : base(id, name, email, password, "98376256", "Doctor") // constructor to initialize doctor properties
+            :   base(name, email, password, "98376256", "Doctor") // constructor to initialize doctor properties
         {
             this.Spelcialization = Spelcialization; // initialize specialization
             this.PatientRecords = new List<PatientRecord>(); // initialize the list of patient records
@@ -27,8 +27,8 @@ namespace HealthCenterSystem.Models
         }
 
         public void AddClinic(Clinic clinic) // method to add a clinic
-        {
-            this.Clinics.Add(clinic); // add the clinic to the list of clinics
+        {       
+                this.Clinics.Add(clinic); // add the clinic to the list of clinics    
         }
 
         public override string ToString() // override ToString method to return doctor's information
