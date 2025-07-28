@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 
 namespace HealthCenterSystem.Models
 {
+
     class PatientService
     {
-        private List<Patient> patients = new List<Patient>();
+        private List<Patient> patients = new List<Patient>(); // List to hold all patients in the system
 
+        /// Adds a new patient to the system with the provided details
         public void AddPatient(string name, string email, string password, string phoneNumber)
         {
             string gender = "Unknow";
@@ -20,6 +22,7 @@ namespace HealthCenterSystem.Models
             patients.Add(newpatient);
         }
 
+        /// Updates an existing patient's information based on their ID
         public void UpdatePatient(int id, string name, string email, string password, string phoneNumber)
         {
             var patient = GetPatientById(id);
@@ -32,6 +35,7 @@ namespace HealthCenterSystem.Models
             }
         }
 
+        /// Deletes a patient from the system based on their ID
         public void DeletePatient(int id)
         {
             var patient = GetPatientById(id);
@@ -41,11 +45,13 @@ namespace HealthCenterSystem.Models
             }
         }
 
+        /// Retrieves a list of all patients in the system
         public List<Patient> GetAllPatients()
         {
             return patients;
         }
 
+        /// Retrieves a patient by their ID
         public Patient GetPatientById(int id)
         {
             return patients.FirstOrDefault(p => p.UserId == id);
