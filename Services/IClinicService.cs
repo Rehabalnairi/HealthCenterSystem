@@ -12,7 +12,7 @@ namespace HealthCenterSystem.Services
         void AddClinic(Clinic clinic); // method to add a new clinic
         Clinic GetClinicById(int id); // method to get a clinic by its ID
         List<Clinic> GetAllClinics(); // method to get all clinics
-        void UpdateClinic(int id, string name, string address, string phoneNumber, string email); // method to update clinic details
+        void UpdateClinic(Clinic updateClinic); // method to update clinic details
         void DeactivateClinic(int id); // method to deactivate a clinic
         void ActivateClinic(int id); // method to activate a clinic
     }
