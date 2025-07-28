@@ -4,11 +4,11 @@ using System.Linq;
 
 namespace HealthCenterSystem.Models
 {
-    public class Department
-    {
-        public string Name { get; set; }
-        public string Head { get; set; }
-    }
+    //public class Department
+    //{
+    //    public string Name { get; set; }
+    //    public string Head { get; set; }
+    //}
 
     public class Branch
     {
@@ -30,6 +30,7 @@ namespace HealthCenterSystem.Models
         {
             Departments = new List<Department>();
             Clinics = new List<string>();
+            BranchName = "";
         }
 
         //  Methods
@@ -101,7 +102,7 @@ namespace HealthCenterSystem.Models
             var branch = BranchList.FirstOrDefault(b => b.BranchId == branchId);
             if (branch != null)
             {
-                var dept = branch.Departments.FirstOrDefault(d => d.Name == departmentName);
+                var dept = branch.Departments.FirstOrDefault(d => d.DepName == departmentName);
                 if (dept != null)
                 {
                     branch.Departments.Remove(dept);

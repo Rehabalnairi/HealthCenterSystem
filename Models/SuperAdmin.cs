@@ -66,10 +66,10 @@ namespace HealthCenterSystem.Models
             {
                 BranchName = branchName,
                 BranchLocation = branchLocation,
-                NoOFfloors = noOfFloors,
-                NoOFRooms = noOfRooms,
-                Departments = departments,
-                Clinics = clinics
+              //  NoOFfloors = noOfFloors,
+              // NoOFRooms = noOfRooms,
+              //  Departments = departments,
+               // Clinics = clinics
             };
             // Add the new branch to the list of branches
             BranchesList.Add(newBranch);
