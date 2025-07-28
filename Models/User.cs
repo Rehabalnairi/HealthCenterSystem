@@ -49,6 +49,11 @@ namespace HealthCenterSystem.Models
             Doctor newDoctor = new Doctor (Index++, name, email, password, Spelcialization); // create a new doctor with the next index
             this.UsersList.Add(newDoctor); // add the new doctor to the list of users
         }
+
+        internal void AddDoctor(string? doctorName, string? doctorEmail, string? doctorPassword)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     class Admins : User
