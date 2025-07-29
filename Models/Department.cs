@@ -8,15 +8,22 @@ namespace HealthCenterSystem.Models
     {
         public int DepId { get; set; }
         public string DepName { get; set; }
+        public  string Head { get; set; } // Property to hold the head of the department
         // public List<Doctor> Doctors { get; set; }
         public List<Clinic> Clinics { get; set; }
 
+        public Department()
+        {
+            Clinics = new List<Clinic>();
+            // Doctors = new List<Doctor>();
+        }
         // Constructor
-        public Department(int depId, string depName)
+        public Department(int depId, string depName, string head)
         {
             DepId = depId;
             DepName = depName ?? throw new ArgumentNullException(nameof(depName));
             Clinics = new List<Clinic>();
+            Head = head;
             // Doctors = new List<Doctor>();
         }
 
@@ -57,8 +64,8 @@ namespace HealthCenterSystem.Models
         {
             public static List<Department> Departments = new List<Department>
             {
-                new Department(1, "Cardiology"),
-                new Department(2, "Neurology")
+                new Department(1, "Cardiology","re"),
+                new Department(2, "Neurology", "re2")
             };
         }
     }

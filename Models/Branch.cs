@@ -35,10 +35,52 @@ namespace HealthCenterSystem.Models
 
         //  Methods
 
-        public static void AddBranch(Branch branch)
+        //public  void AddBranch(Branch branch)
+        //{
+        //   Branch newBranch = new Branch
+        //   {
+        //       BranchId = branch.BranchId,
+        //       BranchName = branch.BranchName,
+        //       BranchLocation = branch.BranchLocation,
+        //       NoOfFloors = branch.NoOfFloors,
+        //       NoOfRooms = branch.NoOfRooms,
+        //       IsActive = branch.IsActive,
+        //       Departments = new List<Department>(branch.Departments),
+        //       Clinics = new List<string>(branch.Clinics)
+        //      // IsActive = true // Default to active when adding a new branch
+
+        //   };
+        //    BranchList.Add(newBranch);
+        //}
+
+        public void AddBranch(string branchName, string branchLocation, int noOfFloors, int noOfRooms, string departments, string clinics)
         {
-            BranchList.Add(branch);
+            Branch newBranch = new Branch
+            {
+                BranchId=BranchId,
+                BranchName = branchName,
+                BranchLocation = branchLocation,
+                NoOfFloors = noOfFloors,
+                NoOfRooms = noOfRooms,
+                IsActive = true
+            };
+
+            //Convert comma-separated string to Department list
+            newBranch.Departments = departments.Split(',')
+                .Where(d => !string.IsNullOrWhiteSpace(d))
+                .Select(d => new Department { DepName = d.Trim(), Head = "" })
+                .ToList();
+
+            //  Convert comma-separated string to Clinic list
+            newBranch.Clinics = clinics.Split(',')
+                .Where(c => !string.IsNullOrWhiteSpace(c))
+                .Select(c => c.Trim())
+                .ToList();
+
+            // Add the new branch to the list
+            BranchList.Add(newBranch);
         }
+
 
         public static bool RemoveBranch(int branchId)
         {

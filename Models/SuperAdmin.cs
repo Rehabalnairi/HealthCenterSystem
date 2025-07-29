@@ -12,6 +12,7 @@ namespace HealthCenterSystem.Models
         public List<User> UsersList { get; set; }// List to hold all users in the system, including admins and doctors.
         public List<Branch> BranchesList { get; set; }// List to hold all branches in the system.
         /// Constructor initializes the SuperAdmin with default values and empty lists for users and branches.
+       
         public SuperAdmin(List<User> usersList) : base("Super Admin", "suadmin@healthsystem.com", "123", "999", "Super Admin")
         {
             this.UsersList = new List<User>();
@@ -64,16 +65,68 @@ namespace HealthCenterSystem.Models
             // Validate inputs
             Branch newBranch = new Branch
             {
-                BranchName = branchName,
-                BranchLocation = branchLocation,
-              //  NoOFfloors = noOfFloors,
-              // NoOFRooms = noOfRooms,
-              //  Departments = departments,
-               // Clinics = clinics
+                BranchId = BranchesList.Count + 1, // Assign a new ID based on the current count
+                BranchName = branchName ?? throw new ArgumentNullException(nameof(branchName)),
+                BranchLocation = branchLocation ?? throw new ArgumentNullException(nameof(branchLocation)),
+                NoOfFloors = noOfFloors,
+                NoOfRooms = noOfRooms,
+                IsActive = true, // Default to active when adding a new branch
+                Departments = new List<Department>(), // Initialize departments list
+                Clinics = clinics?.Split(',').Select(c => c.Trim()).ToList() ?? new List<string>() // Split clinics by comma and trim whitespace
             };
             // Add the new branch to the list of branches
             BranchesList.Add(newBranch);
         }
+
+        public void ViewBranches()
+        {
+            Console.WriteLine("List of Branches:");
+            foreach (var branch in BranchesList)
+            {
+                Console.WriteLine($"Branch ID: {branch.BranchId}, Name: {branch.BranchName}, Location: {branch.BranchLocation}, Floors: {branch.NoOfFloors}, Rooms: {branch.NoOfRooms}, Active: {branch.IsActive}");
+                Console.WriteLine("Departments:");
+                foreach (var department in branch.Departments)
+                {
+                    Console.WriteLine($"- {department.DepName})");
+                }
+                Console.WriteLine("Clinics:");
+                foreach (var clinic in branch.Clinics)
+                {
+                    Console.WriteLine($"- {clinic}");
+                }
+            }
+        }
+
+        public bool RemoveBranch(int branchId)
+        {
+            // Find the branch by ID
+            var branch = BranchesList.FirstOrDefault(b => b.BranchId == branchId);
+            if (branch != null)
+            {
+                // Remove the branch from the list
+                BranchesList.Remove(branch);
+                return true; // Return true if removal was successful
+            }
+            return false; // Return false if no branch was found with the given ID
+        }
+
+        public bool UpdateBranch(int branchId, string name, string location, int floors, int rooms)
+        {
+            // Find the branch by ID
+            var branch = BranchesList.FirstOrDefault(b => b.BranchId == branchId);
+            if (branch != null)
+            {
+                // Update the branch details
+                branch.BranchName = name;
+                branch.BranchLocation = location;
+                branch.NoOfFloors = floors;
+                branch.NoOfRooms = rooms;
+                return true; // Return true if update was successful
+            }
+            return false; // Return false if no branch was found with the given ID
+        }
+
+
     }
 }
 

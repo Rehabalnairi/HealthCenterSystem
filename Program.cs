@@ -128,31 +128,106 @@ namespace HealthCenterSystem
                             break;
 
                         case 3:
-                            Console.WriteLine("Add Branch");
-                            Console.Write("Enter Branch Name: ");
-                            string branchName = Console.ReadLine();
-                            Console.Write("Enter Branch Location: ");
-                            string branchLocation = Console.ReadLine();
-                            Console.Write("Enter Number of Floors: ");
-                            int noOfFloors;
-                            while (!int.TryParse(Console.ReadLine(), out noOfFloors) || noOfFloors <= 0)
+                            int branchOption = -1;
+                            while (branchOption != 0)
                             {
-                                Console.Write("Invalid input. Please enter a valid number of floors: ");
-                            }
-                            Console.Write("Enter Number of Rooms: ");
-                            int noOfRooms;
+                                Console.Clear();
+                                Console.WriteLine("Branch managment Menu:");
+                                Console.WriteLine("1. Add Branch");
+                                Console.WriteLine("2. Update Branch");
+                                Console.WriteLine("3. Delete Branch");
+                                Console.WriteLine("4. Add Department To Branch");
+                                Console.WriteLine("5. View Branches");
+                                Console.WriteLine("0. Exit Branch Management");
 
-                            while (!int.TryParse(Console.ReadLine(), out noOfRooms) || noOfRooms <= 0)
-                            {
-                                Console.Write("Invalid input. Please enter a valid number of rooms: ");
+                                if (!int.TryParse(Console.ReadLine(), out branchOption))
+                                {
+                                    Console.WriteLine("Invalid input. Please enter a number between 0 and 5.");
+                                    continue;
+                                }
+                                switch(branchOption)
+                                {
+                                    case 1:
+                                        Console.Write("Enter Branch Name: ");
+                                        string branchName = Console.ReadLine();
+                                        Console.Write("Enter Branch Location: ");
+                                        string branchLocation = Console.ReadLine();
+                                        Console.Write("Enter Number of Floors: ");
+                                        int noOfFloors = int.Parse(Console.ReadLine());
+                                        Console.Write("Enter Number of Rooms: ");
+                                        int noOfRooms = int.Parse(Console.ReadLine());
+                                        superAdmin.AddBranch(branchName, branchLocation, noOfFloors, noOfRooms, "", "");
+
+                                        Console.WriteLine("Branch added successfully.");
+                                        break;
+                                    case 2:
+                                        Console.Write("Enter Branch ID to update: ");
+                                        int updateId;
+                                        if (!int.TryParse(Console.ReadLine(), out updateId))
+                                        {
+                                            Console.WriteLine("Invalid ID.");
+                                            break;
+                                        }
+
+                                        Console.Write("Enter New Branch Name: ");
+                                        string newName = Console.ReadLine();
+                                        Console.Write("Enter New Branch Location: ");
+                                        string newLoc = Console.ReadLine();
+
+                                        Console.Write("Enter New Number of Floors: ");
+                                        int newFloors = int.Parse(Console.ReadLine());
+                                        Console.Write("Enter New Number of Rooms: ");
+                                        int newRooms = int.Parse(Console.ReadLine());
+
+                                        superAdmin.UpdateBranch(updateId, newName, newLoc, newFloors, newRooms);
+                                        Console.WriteLine("Branch updated successfully.");
+                                        break;
+                                    case 3:
+                                         Console.Write("Enter Branch ID to delete: ");
+                                        int deleteId;
+                                        if (!int.TryParse(Console.ReadLine(), out deleteId))
+                                        {
+                                            Console.WriteLine("Invalid ID.");
+                                            break;
+                                        }
+                                        superAdmin.RemoveBranch(deleteId);
+                                        Console.WriteLine("Branch deleted successfully.");
+                                        break;
+                                    case 4: Console.Write("Enter Branch ID to add department: ");
+                                        int branchId;
+                                        if (!int.TryParse(Console.ReadLine(), out branchId))
+                                        {
+                                            Console.WriteLine("Invalid ID.");
+                                            break;
+                                        }
+                                        Console.Write("Enter Department Name: ");
+                                        string departmentName = Console.ReadLine();
+                                        Console.Write("Enter Department Location: ");
+                                        string departmentLocation = Console.ReadLine();
+                                        Console.Write("Enter Number of Doctors: ");
+                                        int noOfDoctors;
+                                        if (!int.TryParse(Console.ReadLine(), out noOfDoctors))
+                                        {
+                                            Console.WriteLine("Invalid number of doctors.");
+                                            break;
+                                        }
+
+                                        break;
+                                    case 5:
+                                        Console.WriteLine("List of Branches:");
+                                        superAdmin.ViewBranches();
+                                        break;
+                                    case 0:
+                                        Console.WriteLine("Exiting Branch Management.");
+                                        break;
+                                    default:
+                                        Console.WriteLine("Invalid choice. Please try again.");
+                                        break;
+                                }
+
+
+
                             }
-                            Console.Write("Enter Departments: ");
-                            string departments = Console.ReadLine();
-                            Console.Write("Enter Clinics: ");
-                            string clinics = Console.ReadLine();
-                            superAdmin.AddBranch(branchName, branchLocation, noOfFloors, noOfRooms, departments, clinics);
-                            Console.WriteLine("Branch added successfully.");
-                            Console.ReadLine();
                             break;
                         case 4:
                             superAdmin.ViewUsers();
