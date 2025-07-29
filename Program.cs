@@ -129,6 +129,7 @@ namespace HealthCenterSystem
                             string adminPassword = Console.ReadLine();
                             string adminEmail = superAdmin.AddAdmin(adminName, adminPassword);
                             Console.WriteLine($"Admin added successfully. Email: {adminEmail}");
+                            
                             break;
 
                         case 2:
@@ -143,8 +144,7 @@ namespace HealthCenterSystem
                             Console.Write("Enter Doctor Specialization: ");
                             string doctorSpecialization = Console.ReadLine();
 
-                            // Select Branch with validation
-                            Console.WriteLine("\nAvailable Branches:");
+                         Console.WriteLine("\nAvailable Branches:");
                             foreach (var branch in branches)
                                 Console.WriteLine($"{branch.BranchId}. {branch.BranchName}");
 
@@ -180,6 +180,7 @@ namespace HealthCenterSystem
                                 Console.Write("Invalid Department ID. Please enter again: ");
                             }
                             Department selectedDepartment = departments.First(d => d.DepId == departmentId);
+
 
                             // Add doctor and generate email
                             string doctorEmail = doctorService.AddDoctorAndGenerateEmail(doctorName, doctorPassword, doctorSpecialization, selectedClinic, selectedDepartment);
