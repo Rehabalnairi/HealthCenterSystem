@@ -48,16 +48,16 @@ namespace HealthCenterSystem.Models
 
         public List<Doctor> GetDoctorByDepartment(int departmentId)
         {
-            //var department = BookingData.Departments.FirstOrDefault(d => d.Id == departmentId);
-            //if (department != null)
-            //{
-            //    return BookingData.Doctors.Where(d => d.DepartmentId == departmentId).ToList();
-            //}
-            //else
-            //{
-            //    Console.WriteLine("Department not found.");
-             return new List<Doctor>();
-           //}
+            var department = BookingData.Departments.FirstOrDefault(d => d.DepId == departmentId);
+            if (department != null)
+            {
+                return BookingData.Doctors.Where(d => d.DepartmentId == departmentId).ToList();
+            }
+            else
+            {
+                Console.WriteLine("Department not found.");
+                return new List<Doctor>();
+            }
         }
 
         public List<DateTime> GetAvailableTimes()

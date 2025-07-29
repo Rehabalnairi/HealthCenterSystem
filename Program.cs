@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using HealthCenterSystem.Models;
+using HealthCenterSystem.Services;
 
 namespace HealthCenterSystem
 {
@@ -8,9 +9,23 @@ namespace HealthCenterSystem
     {
         public static List<User> users = new List<User>();
         static SuperAdmin superAdmin = new SuperAdmin(users); // static SuperAdmin instance
-
+        static List<Branch> branches = new List<Branch>();
         static void Main(string[] args)
         {
+                 List<Branch> branches = new List<Branch>
+                 {
+                      new Branch { BranchId = 1, BranchName = "Muscat Branch" },
+                      new Branch { BranchId = 2, BranchName = "Dhofar Branch" }
+                 };
+
+            List<Clinic> clinics = new List<Clinic>
+            {
+                     new Clinic(1, "Cardiology Clinic", "Muscat", 100.00m, "12345678", "cardio@clinic.com"),
+                     new Clinic(2, "Pediatrics Clinic", "Muscat", 80.00m, "87654321", "pediatrics@clinic.com")
+            };
+
+            DoctorService doctorService = new DoctorService();
+
             Console.WriteLine("Welcome to Codeline Health System");
 
             int choice = 0;
@@ -46,7 +61,7 @@ namespace HealthCenterSystem
                         else
                         {
                             Console.WriteLine("Login successful.");
-                            SuperAdminMenu();
+                            SuperAdminMenu(branches, clinics);
                         }
                         break;
 
@@ -86,7 +101,7 @@ namespace HealthCenterSystem
             }
 
             //SuperAdmin menu
-            static void SuperAdminMenu()
+            static void SuperAdminMenu(List<Branch> branches, List<Clinic> clinics)
             {
                 Console.Clear();
                 Console.WriteLine("SuperAdmin Menu:");
@@ -117,14 +132,60 @@ namespace HealthCenterSystem
                             break;
 
                         case 2:
+                            DoctorService doctorService = new DoctorService();
+
                             Console.Write("Enter Doctor Name: ");
                             string doctorName = Console.ReadLine();
+
                             Console.Write("Enter Doctor Password: ");
                             string doctorPassword = Console.ReadLine();
+
                             Console.Write("Enter Doctor Specialization: ");
                             string doctorSpecialization = Console.ReadLine();
-                            string doctorEmail = superAdmin.AddDoctor(doctorName, doctorPassword, doctorSpecialization);
+
+                            // Select Branch with validation
+                            Console.WriteLine("\nAvailable Branches:");
+                            foreach (var branch in branches)
+                                Console.WriteLine($"{branch.BranchId}. {branch.BranchName}");
+
+                            int branchId;
+                            while (!int.TryParse(Console.ReadLine(), out branchId) || !branches.Any(b => b.BranchId == branchId))
+                            {
+                                Console.Write("Invalid Branch ID. Please enter again: ");
+                            }
+                            Branch selectedBranch = branches.First(b => b.BranchId == branchId);
+
+                            // Select Clinic with validation
+                            Console.WriteLine("\nAvailable Clinics:");
+                            foreach (var clinic in clinics)
+                                Console.WriteLine($"{clinic.ClinicId}. {clinic.Name}");
+
+                            int clinicId;
+                            while (!int.TryParse(Console.ReadLine(), out clinicId) || !clinics.Any(c => c.ClinicId == clinicId))
+                            {
+                                Console.Write("Invalid Clinic ID. Please enter again: ");
+                            }
+                            Clinic selectedClinic = clinics.First(c => c.ClinicId == clinicId);
+
+                            List<Department> departments = Department.GetAllDepartments();
+
+                            // Select Department with validation
+                            Console.WriteLine("\nAvailable Departments:");
+                            foreach (var d in departments)
+                                Console.WriteLine($"{d.DepId}. {d.DepName}");
+
+                            int departmentId;
+                            while (!int.TryParse(Console.ReadLine(), out departmentId) || !departments.Any(d => d.DepId == departmentId))
+                            {
+                                Console.Write("Invalid Department ID. Please enter again: ");
+                            }
+                            Department selectedDepartment = departments.First(d => d.DepId == departmentId);
+
+                            // Add doctor and generate email
+                            string doctorEmail = doctorService.AddDoctorAndGenerateEmail(doctorName, doctorPassword, doctorSpecialization, selectedClinic, selectedDepartment);
+
                             Console.WriteLine($"Doctor added successfully. Email: {doctorEmail}");
+                            Console.ReadKey();
                             break;
 
                         case 3:
@@ -269,6 +330,12 @@ namespace HealthCenterSystem
                                 }
 
                             }
+                            //Console.Write("Enter Departments: ");
+                            //string departments = Console.ReadLine();
+
+                            //superAdmin.AddBranch(branchName, branchLocation, noOfFloors, noOfRooms, departments, clinics);
+                            //Console.WriteLine("Branch added successfully.");
+                            Console.ReadLine();
                             break;
                         case 4:
                             superAdmin.ViewUsers();

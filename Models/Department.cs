@@ -68,5 +68,11 @@ namespace HealthCenterSystem.Models
                 new Department(2, "Neurology", "re2")
             };
         }
+
+        public static List<Department> GetAllDepartments()
+        {
+            return DepartmentData.Departments;
+        }
+
     }
 }
