@@ -31,7 +31,7 @@ namespace HealthCenterSystem.Models
                 doctor.Email = email;
                 doctor.Password = password;
                 doctor.PhoneNumber = phoneNumber;
-                doctor.Spelcialization = specialization;
+                doctor.Specialization = specialization;
             }
         }
 
@@ -60,7 +60,7 @@ namespace HealthCenterSystem.Models
         /// Retrieves a list of doctors based on their specialization
         public List<Doctor> GetDoctorsBySpecialization(string specialization)
         {
-            return doctors.Where(d => d.Spelcialization ==specialization).ToList();
+            return doctors.Where(d => d.Specialization ==specialization).ToList();
         }
 
         /// Retrieves a list of doctors associated with a specific department
@@ -74,5 +74,28 @@ namespace HealthCenterSystem.Models
         {
             return doctors.Where(d => d.Clinics.Any(c => c.ClinicId == clinicId)).ToList();
         }
+
+        public string AddDoctorAndGenerateEmail(string name, string password, string specialization, Clinic clinic, Department department)
+        {
+            string email = GenerateEmail(name, "doctor");
+            int newId = doctors.Count + 1;
+            Doctor newDoctor = new Doctor(newId, name, email, password, specialization);
+            newDoctor.PhoneNumber = "00000000";
+            if (clinic != null)
+                newDoctor.Clinics.Add(clinic);
+
+            if (department != null)
+                newDoctor.Departments.Add(department);
+
+            doctors.Add(newDoctor);
+            return email;
+        }
+
+        private string GenerateEmail(string name, string role)
+        {
+            return $"{name.ToLower()}.{role}@gmail.com";
+        }
+
+
     }
 }

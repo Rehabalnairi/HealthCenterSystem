@@ -8,16 +8,16 @@ namespace HealthCenterSystem.Models
 {
     public class Doctor:User
     {
-        public string Spelcialization { get; set; } // property to hold doctor's specialization
+        public string Specialization { get; set; } // property to hold doctor's specialization
         public List<PatientRecord> PatientRecords { get; set; } // list to hold patient records associated with the doctor
         public List<Clinic> Clinics { get; set; } // list to hold clinics associated with the doctor
         public List<Department> Departments { get; set; } // list to hold departments associated with the doctor
         public int DepartmentId { get; set; } // property to hold department ID
-        public Doctor(int id, string name, string email, string password,string Spelcialization)
+        public Doctor(int id, string name, string email, string password,string Specialization)
             :   base(name, email, password, "98376256", "Doctor") // constructor to initialize doctor properties
         {
             UserId = id; // set the user ID
-            this.Spelcialization = Spelcialization; // initialize specialization
+            this.Specialization = Specialization; // initialize specialization
             this.PatientRecords = new List<PatientRecord>(); // initialize the list of patient records
             this.Clinics = new List<Clinic>(); // initialize the list of clinics
             this.Departments = new List<Department>(); // initialize the list of departments
@@ -34,7 +34,7 @@ namespace HealthCenterSystem.Models
 
         public override string ToString() // override ToString method to return doctor's information
         {
-            return $"Doctor ID: {UserId}, Name: {Name}, Email: {Email}, Specialization: {Spelcialization}, Phone: {PhoneNumber}, Role: {Role}";
+            return $"Doctor ID: {UserId}, Name: {Name}, Email: {Email}, Specialization: {Specialization}, Phone: {PhoneNumber}, Role: {Role}";
         }
     }
 }
