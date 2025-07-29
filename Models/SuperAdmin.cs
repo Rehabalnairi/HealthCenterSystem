@@ -29,7 +29,7 @@ namespace HealthCenterSystem.Models
         public string AddAdmin(string name, string password)
         {
             string email = GenerateEmail(name, "admin");
-            Admins newAdmin = new Admins(UserId,name, email, password);
+            Admins newAdmin = new Admins(UserId,name, email, password,"","");
             UsersList.Add(newAdmin);
             return email;
         }
@@ -62,8 +62,8 @@ namespace HealthCenterSystem.Models
                 NoOfFloors = noOfFloors,
                 NoOfRooms = noOfRooms,
                 IsActive = true,
-                Clinics = clinics?.Split(',').Select(c => c.Trim()).ToList() ?? new List<string>(),
-                Departments = departments?.Split(',').Where(d => !string.IsNullOrWhiteSpace(d))
+               Clinics = clinics?.Split(',').Select(c => c.Trim()).ToList() ?? new List<string>(),
+               Departments = departments?.Split(',').Where(d => !string.IsNullOrWhiteSpace(d))
                     .Select(d => new Department(0, d.Trim(), "")).ToList() ?? new List<Department>()
             };
 

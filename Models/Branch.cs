@@ -55,7 +55,7 @@ namespace HealthCenterSystem.Models
         //    BranchList.Add(newBranch);
         //}
 
-        public void AddBranch(string branchName, string branchLocation, int noOfFloors, int noOfRooms, string departments, string clinics)
+        public void AddBranch(string branchName, string branchLocation, int noOfFloors, int noOfRooms)
         {
             Branch newBranch = new Branch
             {
@@ -67,17 +67,17 @@ namespace HealthCenterSystem.Models
                 IsActive = true
             };
 
-            //Convert comma-separated string to Department list
-            newBranch.Departments = departments.Split(',')
-                .Where(d => !string.IsNullOrWhiteSpace(d))
-                .Select(d => new Department { DepName = d.Trim(), Head = "" })
-                .ToList();
+            ////Convert comma-separated string to Department list
+            //newBranch.Departments = departments.Split(',')
+            //    .Where(d => !string.IsNullOrWhiteSpace(d))
+            //    .Select(d => new Department { DepName = d.Trim(), Head = "" })
+            //    .ToList();
 
-            //  Convert comma-separated string to Clinic list
-            newBranch.Clinics = clinics.Split(',')
-                .Where(c => !string.IsNullOrWhiteSpace(c))
-                .Select(c => c.Trim())
-                .ToList();
+            ////  Convert comma-separated string to Clinic list
+            //newBranch.Clinics = clinics.Split(',')
+            //    .Where(c => !string.IsNullOrWhiteSpace(c))
+            //    .Select(c => c.Trim())
+            //    .ToList();
 
             // Add the new branch to the list
             BranchList.Add(newBranch);

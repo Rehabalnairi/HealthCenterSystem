@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net;
+using System.Numerics;
 using HealthCenterSystem.Models;
 using HealthCenterSystem.Services;
 
@@ -244,11 +247,8 @@ namespace HealthCenterSystem
                                         int noOfFloors = int.Parse(Console.ReadLine());
                                         Console.Write("Enter Number of Rooms: ");
                                         int noOfRooms = int.Parse(Console.ReadLine());
-                                        Console.WriteLine("add Department");
-                                        string departmentName = Console.ReadLine();
-                                        Console.WriteLine("add Clinic");
-                                        string clinicName = Console.ReadLine();
-                                        superAdmin.AddBranch(branchName, branchLocation, noOfFloors, noOfRooms, departmentName, clinicName);
+                                       
+                                        superAdmin.AddBranch(branchName, branchLocation, noOfFloors, noOfRooms,"","");
                                         Console.WriteLine("Branch added successfully.");
                                         Console.WriteLine("Press any key to continue...");
                                         Console.ReadKey();
@@ -298,15 +298,14 @@ namespace HealthCenterSystem
 
                                     case 4:
                                         Console.Write("Enter Branch ID to add department(s): ");
-                                        int BranchId;
-                                        if (!int.TryParse(Console.ReadLine(), out branchId))
+                                        if (!int.TryParse(Console.ReadLine(), out int BranchId))
                                         {
                                             Console.WriteLine("Invalid ID.");
                                             break;
                                         }
 
                                         // Find the branch by ID
-                                        var branch = superAdmin.BranchesList.FirstOrDefault(b => b.BranchId == branchId);
+                                        var branch = superAdmin.BranchesList.FirstOrDefault(b => b.BranchId == BranchId);
                                         if (branch == null)
                                         {
                                             Console.WriteLine("Branch not found.");
@@ -314,8 +313,7 @@ namespace HealthCenterSystem
                                         }
 
                                         Console.Write("How many departments do you want to add? ");
-                                        int deptCount;
-                                        if (!int.TryParse(Console.ReadLine(), out deptCount) || deptCount <= 0)
+                                        if (!int.TryParse(Console.ReadLine(), out int deptCount) || deptCount <= 0)
                                         {
                                             Console.WriteLine("Invalid number of departments.");
                                             break;
@@ -326,13 +324,28 @@ namespace HealthCenterSystem
                                             Console.Write($"Enter name of department #{i + 1}: ");
                                             string deptName = Console.ReadLine();
 
-                                            // You can create a new Department object, assuming constructor is Department(string name)
-                                            // Or set the DepName property after instantiating.
-
                                             Department newDept = new Department();
                                             newDept.DepName = deptName;
+                                            newDept.Clinics = new List<Clinic>();
 
-                                            // Add to the branch's Departments list
+                                            Console.Write($"How many clinics in department '{deptName}'? ");
+                                            if (!int.TryParse(Console.ReadLine(), out int clinicCount) || clinicCount < 0)
+                                            {
+                                                Console.WriteLine("Invalid clinic count. Skipping this department.");
+                                                continue;
+                                            }
+
+                                            for (int j = 0; j < clinicCount; j++)
+                                            {
+                                                Console.Write($"\tEnter name of clinic #{j + 1} in department '{deptName}': ");
+                                                string clinicName = Console.ReadLine();
+                                                Clinic newClinic = new Clinic {
+                                                    Name = clinicName,
+                                                    IsActive = true
+                                                };
+                                                newDept.Clinics.Add(newClinic);
+                                            }
+
                                             branch.Departments.Add(newDept);
                                         }
 
@@ -340,6 +353,7 @@ namespace HealthCenterSystem
                                         Console.WriteLine("Press any key to continue...");
                                         Console.ReadKey();
                                         break;
+
 
                                     case 5:
                                         Console.WriteLine("List of Branches:");
