@@ -9,17 +9,17 @@ namespace HealthCenterSystem.Models
         public List<User> UsersList { get; set; }
         public List<Branch> BranchesList { get; set; }
 
-        public SuperAdmin(List<User> usersList) : base("Super Admin", "suadmin@healthsystem.com", "123", "999", "Super Admin")
+        public SuperAdmin(List<User> usersList) : base(1,"Super Admin", "suadmin@healthsystem.com", "123", "999", "Super Admin")
         {
             this.UsersList = usersList;
             BranchesList = new List<Branch>();
         }
 
-        public SuperAdmin() : base("Super Admin", "suadmin@healthsystem.com", "123", "999", "Super Admin")
-        {
-            this.UsersList = new List<User>();
-            BranchesList = new List<Branch>();
-        }
+        //public SuperAdmin() : base(1,"Super Admin", "suadmin@healthsystem.com", "123", "999", "Super Admin")
+        //{
+        //    this.UsersList = new List<User>();
+        //    BranchesList = new List<Branch>();
+        //}
 
         private string GenerateEmail(string name, string role)
         {
@@ -29,7 +29,7 @@ namespace HealthCenterSystem.Models
         public string AddAdmin(string name, string password)
         {
             string email = GenerateEmail(name, "admin");
-            Admins newAdmin = new Admins(name, email, password);
+            Admins newAdmin = new Admins(UserId,name, email, password);
             UsersList.Add(newAdmin);
             return email;
         }
