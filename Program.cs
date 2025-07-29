@@ -129,6 +129,7 @@ namespace HealthCenterSystem
                             string adminPassword = Console.ReadLine();
                             string adminEmail = superAdmin.AddAdmin(adminName, adminPassword);
                             Console.WriteLine($"Admin added successfully. Email: {adminEmail}");
+                            
                             break;
 
                         case 2:

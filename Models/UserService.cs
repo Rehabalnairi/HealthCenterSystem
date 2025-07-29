@@ -11,6 +11,11 @@ namespace HealthCenterSystem.Models
     {
         private List<User> users = new List<User>();
 
+        public void AddAdmin(Admins admin)
+        {
+            users.Add(admin);
+            Console.WriteLine($"Admin {admin.Name} added successfully.");
+        }
         public void AddUser(User user)
         {
             if (users.Any(u => u.Email == user.Email))
