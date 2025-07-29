@@ -105,6 +105,7 @@ namespace HealthCenterSystem
             {
                 Console.Clear();
                 Console.WriteLine("SuperAdmin Menu:");
+
                 Console.WriteLine("1. Add Admin");
                 Console.WriteLine("2. Add Doctor");
                 Console.WriteLine("3. Add Branch");
@@ -271,7 +272,7 @@ namespace HealthCenterSystem
 
                                     case 4:
                                         Console.Write("Enter Branch ID to add department(s): ");
-                                        int branchId;
+                                        int BranchId;
                                         if (!int.TryParse(Console.ReadLine(), out branchId))
                                         {
                                             Console.WriteLine("Invalid ID.");

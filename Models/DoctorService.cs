@@ -12,6 +12,7 @@ namespace HealthCenterSystem.Models
     {
         private List<Doctor> doctors = new List<Doctor>(); // List to hold all doctors in the system
 
+
         /// Adds a new doctor to the system with the provided details
         public void AddDoctor(string name, string email, string password, string phoneNumber, string specialization)
         {
