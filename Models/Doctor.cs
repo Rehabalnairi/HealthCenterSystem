@@ -12,6 +12,7 @@ namespace HealthCenterSystem.Models
         public List<PatientRecord> PatientRecords { get; set; } // list to hold patient records associated with the doctor
         public List<Clinic> Clinics { get; set; } // list to hold clinics associated with the doctor
         public List<Department> Departments { get; set; } // list to hold departments associated with the doctor
+        public int DepartmentId { get; set; } // property to hold department ID
         public Doctor(int id, string name, string email, string password,string Spelcialization)
             :   base(name, email, password, "98376256", "Doctor") // constructor to initialize doctor properties
         {
