@@ -123,16 +123,40 @@ namespace HealthCenterSystem
                     switch (superAdminChoice)
                     {
                         case 1:
-                            Console.Write("Enter Admin Name: ");
-                            string adminName = Console.ReadLine();
-                            Console.Write("Enter Admin Password: ");
-                            string adminPassword = Console.ReadLine();
-                            string adminEmail = superAdmin.AddAdmin(adminName, adminPassword);
-                            Console.WriteLine($"Admin added successfully. Email: {adminEmail}");
-                            Console.WriteLine("New Admin Added");
-                            Console.ReadKey();
-                            break;
+                            int adminId;
+                            while (true)
+                            {
+                                Console.WriteLine("Enter Admin ID 'The Id must be morr than 6 digits' :");
+                                string inputId = Console.ReadLine();
+                                if (!int.TryParse(inputId, out adminId))
+                                {
+                                    Console.WriteLine("Invalid input. Please enter a numeric ID.");
+                                    continue;
+                                }
+                                if (inputId.Length < 6)
+                                {
+                                    Console.WriteLine("ID must be at least 6 digits long. Please try again.");
+                                    continue;
+                                }
+                                Console.WriteLine("Enter Admin Name: ");
+                                string adminName = Console.ReadLine();
 
+                                Console.WriteLine("Enter Admin Password: ");
+                                string adminPassword = Console.ReadLine();
+                                Console.WriteLine("Enter Admin Phone Number: ");
+                                string adminPhoneNumber = Console.ReadLine();
+                                if(string.IsNullOrWhiteSpace(adminName) || string.IsNullOrWhiteSpace(adminPassword) || string.IsNullOrWhiteSpace(adminPhoneNumber))
+                                {
+                                    Console.WriteLine("Admin Name, Password, and Phone Number cannot be empty. Please try again.");
+                                    continue;
+                                }
+                                string adminEmail = superAdmin.AddAdmin(adminName, adminPassword);
+                                Console.WriteLine($"Admin added successfully. Email: {adminEmail}");
+                                Console.ReadKey();
+                                break; // Exit the loop if a valid ID is entered
+
+                            }
+                            break;
                         case 2:
                             DoctorService doctorService = new DoctorService();
 
