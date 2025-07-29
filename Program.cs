@@ -15,7 +15,11 @@ namespace HealthCenterSystem
         static List<Branch> branches = new List<Branch>();
         static void Main(string[] args)
         {
-             List<Branch> branches = new List<Branch>();
+            List<Branch> branches = new List<Branch>
+          {
+           new Branch { BranchId = 1, BranchName = "Muscat Branch" },
+           new Branch { BranchId = 2, BranchName = "Dhofar Branch" }
+         };
 
 
             List<Clinic> clinics = new List<Clinic>
@@ -160,71 +164,46 @@ namespace HealthCenterSystem
                             }
                             break;
                         case 2:
-                            DoctorService doctorService = new DoctorService();
-
-                            Console.Write("Enter Doctor Name: ");
+                            Console.Write("Enter doctor name: ");
                             string doctorName = Console.ReadLine();
 
-                            Console.Write("Enter Doctor Password: ");
+                            Console.Write("Enter password: ");
                             string doctorPassword = Console.ReadLine();
 
-                            Console.Write("Enter Doctor Specialization: ");
-                            string doctorSpecialization = Console.ReadLine();
+                            Console.Write("Enter specialization: ");
+                            string specialization = Console.ReadLine();
 
-                            // Get selected branch
-                            Console.WriteLine("\nAvailable Branches:");
-                            foreach (var branch in superAdmin.BranchesList)
-                                Console.WriteLine($"{branch.BranchId}. {branch.BranchName}");
-
-                            int branchId;
-                            while (!int.TryParse(Console.ReadLine(), out branchId) || !superAdmin.BranchesList.Any(b => b.BranchId == branchId))
+                          
+                            if (superAdmin.BranchesList.Count == 0)
                             {
-                                Console.Write("Invalid Branch ID. Please enter again: ");
-                            }
-                            Branch selectedBranch = superAdmin.BranchesList.First(b => b.BranchId == branchId);
-
-                            // Get departments from that branch
-                            if (selectedBranch.Departments.Count == 0)
-                            {
-                                Console.WriteLine("No departments found in this branch.");
+                                Console.WriteLine("No branches available. Please add a branch first.");
                                 break;
                             }
 
-                            Console.WriteLine("\nAvailable Departments:");
-                            foreach (var dept in selectedBranch.Departments)
-                                Console.WriteLine($"{dept.DepId}. {dept.DepName}");
-
-                            int departmentId;
-                            while (!int.TryParse(Console.ReadLine(), out departmentId) || !selectedBranch.Departments.Any(d => d.DepId == departmentId))
+                            Console.WriteLine("Available Branches:");
+                            for (int i = 0; i < superAdmin.BranchesList.Count; i++)
                             {
-                                Console.Write("Invalid Department ID. Please enter again: ");
+                                Console.WriteLine($"{i + 1}. {superAdmin.BranchesList[i].BranchName}");
                             }
-                            Department selectedDepartment = selectedBranch.Departments.First(d => d.DepId == departmentId);
 
-                            // Get clinics from selected department
-                            if (selectedDepartment.Clinics.Count == 0)
+                            Console.Write("Select branch number to assign this doctor to: ");
+                            int branchChoice = int.Parse(Console.ReadLine());
+
+                            if (branchChoice < 1 || branchChoice > superAdmin.BranchesList.Count)
                             {
-                                Console.WriteLine("No clinics found in this department.");
+                                Console.WriteLine("Invalid branch selection.");
                                 break;
                             }
 
-                            Console.WriteLine("\nAvailable Clinics:");
-                            foreach (var clinic in selectedDepartment.Clinics)
-                                Console.WriteLine($"{clinic.ClinicId}. {clinic.Name}");
+                            Branch selectedBranch = superAdmin.BranchesList[branchChoice - 1];
 
-                            int clinicId;
-                            while (!int.TryParse(Console.ReadLine(), out clinicId) || !selectedDepartment.Clinics.Any(c => c.ClinicId == clinicId))
-                            {
-                                Console.Write("Invalid Clinic ID. Please enter again: ");
-                            }
-                            Clinic selectedClinic = selectedDepartment.Clinics.First(c => c.ClinicId == clinicId);
+                            string doctorEmail = superAdmin.AddDoctor(doctorName, doctorPassword, specialization);
 
-                            // Add doctor and generate email
-                            string doctorEmail = doctorService.AddDoctorAndGenerateEmail(doctorName, doctorPassword, doctorSpecialization, selectedClinic, selectedDepartment);
+                            Console.WriteLine($"Doctor added successfully with email: {doctorEmail}");
 
-                            Console.WriteLine($"Doctor added successfully. Email: {doctorEmail}");
-                            Console.ReadKey();
                             break;
+
+
 
                         case 3:
                             Console.Clear();
