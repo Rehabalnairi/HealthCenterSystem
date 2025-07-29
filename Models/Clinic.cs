@@ -12,10 +12,10 @@ namespace HealthCenterSystem.Models
         public string Email { get; set; }
         public bool IsActive { get; set; }
 
-        // ✅ Constructor فارغ يسمح بإنشاء object بدون تمرير معاملات
+        // 
         public Clinic() { }
 
-        // ✅ Constructor لتعيين القيم أثناء الإنشاء
+        // 
         public Clinic(int clinicId, string name, string address, decimal price, string phoneNumber, string email, bool isActive = true)
         {
             ClinicId = clinicId;
