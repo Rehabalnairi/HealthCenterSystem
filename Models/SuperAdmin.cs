@@ -1,35 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 namespace HealthCenterSystem.Models
 {
     public class SuperAdmin : User
     {
-        // <summary>
-        /// SuperAdmin class inherits from User and manages the system's users and branches.
-        public List<User> UsersList { get; set; }// List to hold all users in the system, including admins and doctors.
-        public List<Branch> BranchesList { get; set; }// List to hold all branches in the system.
-        /// Constructor initializes the SuperAdmin with default values and empty lists for users and branches.
+        public List<User> UsersList { get; set; }
+        public List<Branch> BranchesList { get; set; }
+
         public SuperAdmin(List<User> usersList) : base("Super Admin", "suadmin@healthsystem.com", "123", "999", "Super Admin")
         {
-            this.UsersList = new List<User>();
+            this.UsersList = usersList;
             BranchesList = new List<Branch>();
         }
+
         public SuperAdmin() : base("Super Admin", "suadmin@healthsystem.com", "123", "999", "Super Admin")
         {
             this.UsersList = new List<User>();
             BranchesList = new List<Branch>();
         }
-        /// Constructor that accepts a list of users to initialize the SuperAdmin.
+
         private string GenerateEmail(string name, string role)
         {
-            // Generates an email address based on the user's name and role.
             return $"{name.ToLower().Replace(" ", ".")}@{role.ToLower()}.healthsystem.com";
         }
-        /// <summary>
-        /// Adds a new admin to the system and returns the generated email.
+
         public string AddAdmin(string name, string password)
         {
             string email = GenerateEmail(name, "admin");
@@ -37,63 +33,108 @@ namespace HealthCenterSystem.Models
             UsersList.Add(newAdmin);
             return email;
         }
-        /// Adds a new doctor to the system and returns the generated email.
-        public string AddDoctor(string name, string password, string Spelcialization)
+
+        public string AddDoctor(string name, string password, string specialization)
         {
             string email = GenerateEmail(name, "doctor");
-            Doctor newDoctor = new Doctor(0, name, email, password, Spelcialization);
+            Doctor newDoctor = new Doctor(0, name, email, password, specialization);
             UsersList.Add(newDoctor);
             return email;
         }
-        /// Adds a new patient to the system and returns the generated email.
+
         public void ViewUsers()
         {
             Console.WriteLine("List of Users:");
             foreach (var user in UsersList)
             {
-                if (user.Role == "Super Admin")
-                {
-                    continue; // Skip Super Admin
-                    Console.WriteLine($"User ID: {user.UserId}, Name: {user.Name}, Email: {user.Email}, Role: {user.Role}, Active: {user.IsActive}");
-                }
+                if (user.Role == "Super Admin") continue;
+                Console.WriteLine($"User ID: {user.UserId}, Name: {user.Name}, Email: {user.Email}, Role: {user.Role}, Active: {user.IsActive}");
             }
         }
-        /// Adds a new branch to the system with the specified details.
+
         public void AddBranch(string branchName, string branchLocation, int noOfFloors, int noOfRooms, string departments, string clinics)
         {
-            // Validate inputs
             Branch newBranch = new Branch
             {
-                BranchName = branchName,
-                BranchLocation = branchLocation,
-              //  NoOFfloors = noOfFloors,
-              // NoOFRooms = noOfRooms,
-              //  Departments = departments,
-               // Clinics = clinics
+                BranchId = BranchesList.Count + 1,
+                BranchName = branchName ?? throw new ArgumentNullException(nameof(branchName)),
+                BranchLocation = branchLocation ?? throw new ArgumentNullException(nameof(branchLocation)),
+                NoOfFloors = noOfFloors,
+                NoOfRooms = noOfRooms,
+                IsActive = true,
+                Clinics = clinics?.Split(',').Select(c => c.Trim()).ToList() ?? new List<string>(),
+                Departments = departments?.Split(',').Where(d => !string.IsNullOrWhiteSpace(d))
+                    .Select(d => new Department(0, d.Trim(), "")).ToList() ?? new List<Department>()
             };
-            // Add the new branch to the list of branches
+
             BranchesList.Add(newBranch);
         }
+
+        public void ViewBranches()
+        {
+            Console.WriteLine("List of Branches:");
+            foreach (var branch in BranchesList)
+            {
+                Console.WriteLine($"Branch ID: {branch.BranchId}, Name: {branch.BranchName}, Location: {branch.BranchLocation}, Floors: {branch.NoOfFloors}, Rooms: {branch.NoOfRooms}, Active: {branch.IsActive}");
+                Console.WriteLine("Departments:");
+                foreach (var department in branch.Departments)
+                    Console.WriteLine($"- {department.DepName}");
+                Console.WriteLine("Clinics:");
+                foreach (var clinic in branch.Clinics)
+                    Console.WriteLine($"- {clinic}");
+            }
+        }
+
+        public bool RemoveBranch(int branchId)
+        {
+            var branch = BranchesList.FirstOrDefault(b => b.BranchId == branchId);
+            if (branch != null)
+            {
+                BranchesList.Remove(branch);
+                return true;
+            }
+            return false;
+        }
+
+        public bool RemoveBranchByName(string branchName)
+        {
+            var branch = BranchesList.FirstOrDefault(b => b.BranchName.Equals(branchName, StringComparison.OrdinalIgnoreCase));
+            if (branch != null)
+            {
+                BranchesList.Remove(branch);
+                return true;
+            }
+            return false;
+        }
+
+        public bool UpdateBranch(int branchId, string name, string location, int floors, int rooms)
+        {
+            var branch = BranchesList.FirstOrDefault(b => b.BranchId == branchId);
+            if (branch != null)
+            {
+                branch.BranchName = name;
+                branch.BranchLocation = location;
+                branch.NoOfFloors = floors;
+                branch.NoOfRooms = rooms;
+                return true;
+            }
+            return false;
+        }
+
+        public bool UpdateBranchByName(string branchName, string newName, string newLocation, int newFloors, int newRooms)
+        {
+            var branch = BranchesList.FirstOrDefault(b => b.BranchName.Equals(branchName, StringComparison.OrdinalIgnoreCase));
+            if (branch != null)
+            {
+                branch.BranchName = newName;
+                branch.BranchLocation = newLocation;
+                branch.NoOfFloors = newFloors;
+                branch.NoOfRooms = newRooms;
+                return true;
+            }
+            return false;
+        }
+       
+
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

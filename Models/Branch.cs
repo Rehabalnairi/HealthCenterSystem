@@ -13,6 +13,7 @@ namespace HealthCenterSystem.Models
     public class Branch
     {
         //Properties for one Branch
+        private static int _idCounter = 1;
         public int BranchId { get; set; }
         public string BranchName { get; set; }
         public string BranchLocation { get; set; }
@@ -28,16 +29,82 @@ namespace HealthCenterSystem.Models
  
         public Branch()
         {
+            BranchId = _idCounter++; // Auto-incrementing ID
             Departments = new List<Department>();
             Clinics = new List<string>();
-            BranchName = "";
+            BranchName = ""; // Optional default
         }
 
         //  Methods
 
-        public static void AddBranch(Branch branch)
+        //public  void AddBranch(Branch branch)
+        //{
+        //   Branch newBranch = new Branch
+        //   {
+        //       BranchId = branch.BranchId,
+        //       BranchName = branch.BranchName,
+        //       BranchLocation = branch.BranchLocation,
+        //       NoOfFloors = branch.NoOfFloors,
+        //       NoOfRooms = branch.NoOfRooms,
+        //       IsActive = branch.IsActive,
+        //       Departments = new List<Department>(branch.Departments),
+        //       Clinics = new List<string>(branch.Clinics)
+        //      // IsActive = true // Default to active when adding a new branch
+
+        //   };
+        //    BranchList.Add(newBranch);
+        //}
+
+        public void AddBranch(string branchName, string branchLocation, int noOfFloors, int noOfRooms, string departments, string clinics)
         {
-            BranchList.Add(branch);
+            Branch newBranch = new Branch
+            {
+                BranchId=BranchId,
+                BranchName = branchName,
+                BranchLocation = branchLocation,
+                NoOfFloors = noOfFloors,
+                NoOfRooms = noOfRooms,
+                IsActive = true
+            };
+
+            //Convert comma-separated string to Department list
+            newBranch.Departments = departments.Split(',')
+                .Where(d => !string.IsNullOrWhiteSpace(d))
+                .Select(d => new Department { DepName = d.Trim(), Head = "" })
+                .ToList();
+
+            //  Convert comma-separated string to Clinic list
+            newBranch.Clinics = clinics.Split(',')
+                .Where(c => !string.IsNullOrWhiteSpace(c))
+                .Select(c => c.Trim())
+                .ToList();
+
+            // Add the new branch to the list
+            BranchList.Add(newBranch);
+        }
+
+        public static bool UpdateBranchByName(string name, string location, int floors, int rooms)
+        {
+            var branch = BranchList.FirstOrDefault(b => b.BranchName.Equals(name, StringComparison.OrdinalIgnoreCase));
+            if (branch != null)
+            {
+                branch.BranchLocation = location;
+                branch.NoOfFloors = floors;
+                branch.NoOfRooms = rooms;
+                return true;
+            }
+            return false;
+        }
+
+        public static bool RemoveBranchByName(string name)
+        {
+            var branch = BranchList.FirstOrDefault(b => b.BranchName.Equals(name, StringComparison.OrdinalIgnoreCase));
+            if (branch != null)
+            {
+                BranchList.Remove(branch);
+                return true;
+            }
+            return false;
         }
 
         public static bool RemoveBranch(int branchId)
@@ -51,19 +118,28 @@ namespace HealthCenterSystem.Models
             return false;
         }
 
-        public static bool UpdateBranch(int branchId, string name, string location, int floors, int rooms)
+        //public static bool UpdateBranch(int branchId, string name, string location, int floors, int rooms)
+        //{
+        //    var branch = BranchList.FirstOrDefault(b => b.BranchId == branchId);
+        //    if (branch != null)
+        //    {
+        //        branch.BranchName = name;
+        //        branch.BranchLocation = location;
+        //        branch.NoOfFloors = floors;
+        //        branch.NoOfRooms = rooms;
+        //        return true;
+        //    }
+        //    return false;
+        //}
+
+        public void ViewBranches()
         {
-            var branch = BranchList.FirstOrDefault(b => b.BranchId == branchId);
-            if (branch != null)
+            foreach (var b in Branch.GetAllBranches())
             {
-                branch.BranchName = name;
-                branch.BranchLocation = location;
-                branch.NoOfFloors = floors;
-                branch.NoOfRooms = rooms;
-                return true;
+                Console.WriteLine($"ID: {b.BranchId}, Name: {b.BranchName}, Location: {b.BranchLocation}");
             }
-            return false;
         }
+
 
         public static bool SetBranchStatus(int branchId, bool isActive)
         {
