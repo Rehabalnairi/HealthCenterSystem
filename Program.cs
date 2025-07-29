@@ -129,7 +129,8 @@ namespace HealthCenterSystem
                             string adminPassword = Console.ReadLine();
                             string adminEmail = superAdmin.AddAdmin(adminName, adminPassword);
                             Console.WriteLine($"Admin added successfully. Email: {adminEmail}");
-                            
+                            Console.WriteLine("New Admin Added");
+                            Console.ReadKey();
                             break;
 
                         case 2:
@@ -229,10 +230,10 @@ namespace HealthCenterSystem
                                         break;
                                     case 2:
                                         Console.Write("Enter Branch Name to update: ");
-                                        string updateName = Console.ReadLine(); // 
+                                        string updateName = Console.ReadLine(); 
 
                                         Console.Write("Enter New Branch Name: ");
-                                        string newName = Console.ReadLine(); // 
+                                        string newName = Console.ReadLine(); 
                                         Console.Write("Enter New Location: ");
                                         string newLoc = Console.ReadLine();
 
