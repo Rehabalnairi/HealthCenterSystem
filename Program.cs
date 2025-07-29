@@ -129,7 +129,6 @@ namespace HealthCenterSystem
                             string adminPassword = Console.ReadLine();
                             string adminEmail = superAdmin.AddAdmin(adminName, adminPassword);
                             Console.WriteLine($"Admin added successfully. Email: {adminEmail}");
-                            
                             break;
 
                         case 2:
@@ -145,7 +144,42 @@ namespace HealthCenterSystem
                             string doctorSpecialization = Console.ReadLine();
 
                             // Select Branch with validation
-                           
+                            Console.WriteLine("\nAvailable Branches:");
+                            foreach (var branch in branches)
+                                Console.WriteLine($"{branch.BranchId}. {branch.BranchName}");
+
+                            int branchId;
+                            while (!int.TryParse(Console.ReadLine(), out branchId) || !branches.Any(b => b.BranchId == branchId))
+                            {
+                                Console.Write("Invalid Branch ID. Please enter again: ");
+                            }
+                            Branch selectedBranch = branches.First(b => b.BranchId == branchId);
+
+                            // Select Clinic with validation
+                            Console.WriteLine("\nAvailable Clinics:");
+                            foreach (var clinic in clinics)
+                                Console.WriteLine($"{clinic.ClinicId}. {clinic.Name}");
+
+                            int clinicId;
+                            while (!int.TryParse(Console.ReadLine(), out clinicId) || !clinics.Any(c => c.ClinicId == clinicId))
+                            {
+                                Console.Write("Invalid Clinic ID. Please enter again: ");
+                            }
+                            Clinic selectedClinic = clinics.First(c => c.ClinicId == clinicId);
+
+                            List<Department> departments = Department.GetAllDepartments();
+
+                            // Select Department with validation
+                            Console.WriteLine("\nAvailable Departments:");
+                            foreach (var d in departments)
+                                Console.WriteLine($"{d.DepId}. {d.DepName}");
+
+                            int departmentId;
+                            while (!int.TryParse(Console.ReadLine(), out departmentId) || !departments.Any(d => d.DepId == departmentId))
+                            {
+                                Console.Write("Invalid Department ID. Please enter again: ");
+                            }
+                            Department selectedDepartment = departments.First(d => d.DepId == departmentId);
 
                             // Add doctor and generate email
                             string doctorEmail = doctorService.AddDoctorAndGenerateEmail(doctorName, doctorPassword, doctorSpecialization, selectedClinic, selectedDepartment);
