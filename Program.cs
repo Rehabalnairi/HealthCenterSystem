@@ -14,7 +14,7 @@ namespace HealthCenterSystem
         public static List<User> users = new List<User>();
         static SuperAdmin superAdmin = new SuperAdmin(users); // static SuperAdmin instance
         public static List<Admins> admins = new List<Admins>();
-        static List<Branch> branches = new List<Branch>();
+         static List<Branch> branches = new List<Branch>();
         static PatientRecordService recordService = new PatientRecordService();
 
         static void Main(string[] args)
