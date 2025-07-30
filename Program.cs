@@ -678,9 +678,9 @@ namespace HealthCenterSystem
                                                 {
                                                     Console.Write($"Enter name of department #{i + 1}: ");
                                                     string deptName = Console.ReadLine()?.Trim();
-                                                    if (string.IsNullOrWhiteSpace(deptName))
+                                                    if (string.IsNullOrWhiteSpace(deptName) || deptName.Any(char.IsDigit))
                                                     {
-                                                        Console.WriteLine("Department name cannot be empty. Skipping this department.");
+                                                        Console.WriteLine("Invalid department name. It must contain letters only. Skipping this department.");
                                                         continue;
                                                     }
 
@@ -694,15 +694,13 @@ namespace HealthCenterSystem
                                                     while (true)
                                                     {
                                                         Console.Write($"How many clinics in department '{deptName}'? ");
-                                                        string inputClinicCount = Console.ReadLine();
+                                                        string clinicName = Console.ReadLine();
 
-
-                                                        if (!int.TryParse(inputClinicCount, out clinicCount) || clinicCount < 0)
+                                                        if (string.IsNullOrWhiteSpace(clinicName) || clinicName.Any(char.IsDigit))
                                                         {
-                                                            Console.WriteLine("Invalid clinic count. Please enter a valid non-negative number");
+                                                            Console.WriteLine("Invalid clinic name. It must contain letters only. Skipping this clinic.");
                                                             continue;
                                                         }
-                                                        break;
                                                     }
 
                                                     for (int j = 0; j < clinicCount; j++)
