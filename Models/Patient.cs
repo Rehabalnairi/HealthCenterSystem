@@ -8,7 +8,7 @@ namespace HealthCenterSystem.Models
 {
      public class Patient : User
     { 
-        public string PatientNI { get; set; }
+        
         public string Gender { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string Address { get; set; }

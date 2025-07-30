@@ -12,6 +12,7 @@ namespace HealthCenterSystem
     {
         public static List<User> users = new List<User>();
         static SuperAdmin superAdmin = new SuperAdmin(users); // static SuperAdmin instance
+        static List<Admins> admins = new List<Admins>();
         static List<Branch> branches = new List<Branch>();
         static void Main(string[] args)
         {
@@ -52,8 +53,8 @@ namespace HealthCenterSystem
                 switch (choice)
                 {
                     case 1:
-                        Console.WriteLine("Super Admin Loging");
-                        Console.Write("Enter Admin ID: ");
+                        Console.WriteLine("==Super Admin Loging==");
+                        Console.Write("Enter Super Admin ID: ");
                         string ID = Console.ReadLine();
                         Console.Write("Enter Admin Password: ");
                         string adminPassword = Console.ReadLine();
@@ -70,19 +71,27 @@ namespace HealthCenterSystem
                         break;
 
                     case 2:
-                        Console.WriteLine("You are logged in as Admin.");
-                        Console.Write("Enter Doctor Name: ");
-                        string doctorName = Console.ReadLine();
-                        Console.Write("Enter Doctor Email: ");
-                        string doctorEmail = Console.ReadLine();
-                        Console.Write("Enter Doctor Password: ");
-                        string doctorPassword = Console.ReadLine();
-                        Console.Write("Enter Doctor Specialization: ");
-                        string doctorSpecialization = Console.ReadLine();
-                        //superAdmin.AddDoctor(doctorName, doctorSpecialization);
-                      //  Console.WriteLine("Doctor added successfully.");
-                       
-                        break;
+                        Console.WriteLine("==Admin Login==");
+                        Console.WriteLine("Enter your ID: ");
+                        string adminID = Console.ReadLine();
+                        Console.WriteLine("Enter You Passowerd");
+                        string AdPassowerd = Console.ReadLine();
+                        if(!int.TryParse(adminID, out int userId)){ 
+                            Console.WriteLine("Invaild ID.The Id must be numric");
+                            Console.ReadKey();
+                        }
+                        Admins addminFound = admins.FirstOrDefault(a => a.UserId == userId && a.Password == AdPassowerd);
+                        if (addminFound == null)
+                        {
+                            Console.WriteLine("Invalid ID or password.");
+                            Console.ReadKey();
+                        }
+                        else
+                        {
+                            Console.WriteLine("Login successful.");
+                            AdminMenu();
+                        }
+                            break;
 
                     case 3:
                         Console.WriteLine("You are logged in as Doctor.");
@@ -106,7 +115,7 @@ namespace HealthCenterSystem
             }
 
             //SuperAdmin menu
-            static void SuperAdminMenu(List<Branch> branches, List<Clinic> clinics)
+             void SuperAdminMenu(List<Branch> branches, List<Clinic> clinics)
             {
                 Console.Clear();
                 Console.WriteLine("SuperAdmin Menu:");
@@ -156,7 +165,7 @@ namespace HealthCenterSystem
                                     Console.WriteLine("Admin Name, Password, and Phone Number cannot be empty. Please try again.");
                                     continue;
                                 }
-                                string adminEmail = superAdmin.AddAdmin(adminName, adminPassword);
+                                string adminEmail = superAdmin.AddAdmin(adminId,adminName, adminPassword,adminPhoneNumber);
                                 Console.WriteLine($"Admin added successfully. Email: {adminEmail}");
                                 Console.ReadKey();
                                 break; // Exit the loop if a valid ID is entered
@@ -373,6 +382,91 @@ namespace HealthCenterSystem
                         case 5:
                             Console.WriteLine("Exiting Super Admin menu.");
                             return; // Exit Super Admin menu
+                        default:
+                            Console.WriteLine("Invalid choice. Please try again.");
+                            break;
+                    }
+                }
+            }
+
+
+             void AdminMenu()
+            {
+                Console.Clear();
+                Console.WriteLine("Admin Menu:");
+                Console.WriteLine("1. Assign Exisiting Doctoer to Department and clinic");
+               
+                Console.WriteLine("2. Update Or Delete Doctor");
+                Console.WriteLine("3. Add Appointment");
+                Console.WriteLine("4. Book Appointments For Patient");
+                Console.WriteLine("Views");
+                Console.WriteLine("0. Exit Admin Menu");
+                //Console.WriteLine("5. View All Departments and Clinic");
+                // Console.WriteLine("2. View All Doctors");
+                // Console.WriteLine("7. View All Appointments");
+                //Console.WriteLine("9. View Patients");
+                int adminChoice = -1;
+                while (adminChoice != 0)
+                {
+                    Console.Write("Select an option: ");
+                    if (!int.TryParse(Console.ReadLine(), out adminChoice))
+                    {
+                        Console.WriteLine("Invalid input. Please enter a number between 0 and 4.");
+                        continue;
+                    }
+                    switch (adminChoice)
+                    {
+                        case 1:
+                            Console.Clear();
+                            Console.WriteLine("==Assign Exisiting Doctoer to Department and clinic==");
+                            if (branches.Count == 0)
+                            {
+                                Console.WriteLine("No branch available.");
+                                break;
+                            }
+                            Console.WriteLine("\nAvailable Branches");
+                            foreach (var b in branches)
+                                Console.WriteLine($"{b.BranchId}.\n{b.BranchName}");
+                            Console.WriteLine("Enter Branch ID:");
+                            if (!int.TryParse(Console.ReadLine(), out int branchId))
+                            {
+                                Console.WriteLine("Invaild Input!");
+                                break;
+                            }
+                            var selectBranch=branches.FirstOrDefault(b=>b.BranchId == branchId);
+                            if(selectBranch != null)
+                            {
+                                Console.WriteLine("Branch not found");
+                                break;
+                            }
+                            if(selectBranch.Departments.Count == 0)
+                            {
+                                Console.WriteLine("This Branch has no department");
+                                break;
+                            }
+                            Console.WriteLine("\nAvailable Departments:");
+                            foreach (var dep in selectBranch.Departments)
+                                Console.WriteLine($"{dep.DepId}.{dep.DepName}");
+                            Console.WriteLine("Enter Department ID:");
+                            if (!int.TryParse(Console.ReadLine(), out int depId))
+                            {
+                                Console.WriteLine("Invalid Input!");
+                                break;
+                            }
+
+
+                            break;
+                        case 2:
+                           
+                            break;
+                        case 3:
+                            
+                            break;
+                        case 4:
+                            
+                            break;
+                        case 0:
+                            return; // Exit Admin menu
                         default:
                             Console.WriteLine("Invalid choice. Please try again.");
                             break;

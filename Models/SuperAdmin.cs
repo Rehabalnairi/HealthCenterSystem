@@ -26,13 +26,14 @@ namespace HealthCenterSystem.Models
             return $"{name.ToLower().Replace(" ", ".")}@{role.ToLower()}.healthsystem.com";
         }
 
-        public string AddAdmin(string name, string password)
+        public string AddAdmin(int userId, string name, string password, string phoneNumber, string role = "Admin")
         {
-            string email = GenerateEmail(name, "admin");
-            Admins newAdmin = new Admins(UserId,name, email, password,"","");
+            string email = GenerateEmail(name, role.ToLower());
+            Admins newAdmin = new Admins(userId, name, email, password, phoneNumber, role);
             UsersList.Add(newAdmin);
             return email;
         }
+
 
         public string AddDoctor(string name, string password, string specialization)
         {
