@@ -526,8 +526,8 @@ namespace HealthCenterSystem
                                                 continue;
                                             }
 
-                                            var branch = superAdmin.BranchesList.FirstOrDefault(b => b.BranchId == updateId);
-                                            if (branch == null)
+                                            var selectbranch = superAdmin.BranchesList.FirstOrDefault(b => b.BranchId == updateId);
+                                            if (selectbranch == null)
                                             {
                                                 Console.WriteLine("Branch with this ID does not exist.");
                                                 Console.Write("Do you want to return to continue? (Y/N): ");
@@ -627,64 +627,112 @@ namespace HealthCenterSystem
                                         Console.ReadKey();
                                         break;
 
-                                    //case 4:
-                                    //    Console.Write("Enter Branch ID to add department(s): ");
-                                    //    if (!int.TryParse(Console.ReadLine(), out int BranchId))
-                                    //    {
-                                    //        Console.WriteLine("Invalid ID.");
-                                    //        break;
-                                    //    }
+                                    case 4:
+                                        int branchId;
+                                        while (true)
+                                        {
+                                            Console.Write("Enter Branch ID to add department(s): ");
+                                            string inputBranchId = Console.ReadLine();
 
-                                    //    // Find the branch by ID
-                                    //    var branch = superAdmin.BranchesList.FirstOrDefault(b => b.BranchId == BranchId);
-                                    //    if (branch == null)
-                                    //    {
-                                    //        Console.WriteLine("Branch not found.");
-                                    //        break;
-                                    //    }
+                                            if (!int.TryParse(inputBranchId, out branchId))
+                                            {
+                                                Console.WriteLine("Invalid ID. Please enter a numeric Branch ID");
+                                                continue;
+                                            }
 
-                                    //    Console.Write("How many departments do you want to add? ");
-                                    //    if (!int.TryParse(Console.ReadLine(), out int deptCount) || deptCount <= 0)
-                                    //    {
-                                    //        Console.WriteLine("Invalid number of departments.");
-                                    //        break;
-                                    //    }
+                                            // Find the branch by ID
+                                            var branch = superAdmin.BranchesList.FirstOrDefault(b => b.BranchId == branchId);
+                                            if (branch == null)
+                                            {
+                                                Console.WriteLine("Branch not found.");
+                                                Console.Write("Do you want to enter another Branch ID? (Y/N): ");
+                                                string choice = Console.ReadLine().Trim().ToUpper();
+                                                if (choice == "Y")
+                                                {
+                                                    continue;
+                                                }
+                                                else
+                                                {
+                                                    break;
+                                                }
+                                            }
+                                            else
+                                            {
 
-                                    //    for (int i = 0; i < deptCount; i++)
-                                    //    {
-                                    //        Console.Write($"Enter name of department #{i + 1}: ");
-                                    //        string deptName = Console.ReadLine();
+                                                int deptCount;
+                                                while (true)
+                                                {
+                                                    Console.Write("How many departments do you want to add? ");
+                                                    string inputDeptCount = Console.ReadLine();
 
-                                    //        Department newDept = new Department();
-                                    //        newDept.DepName = deptName;
-                                    //        newDept.Clinics = new List<Clinic>();
+                                                    if (!int.TryParse(inputDeptCount, out deptCount) || deptCount <= 0)
+                                                    {
+                                                        Console.WriteLine("Invalid number of departments. Must be a positive integer");
+                                                        continue;
+                                                    }
+                                                    break;
+                                                }
 
-                                    //        Console.Write($"How many clinics in department '{deptName}'? ");
-                                    //        if (!int.TryParse(Console.ReadLine(), out int clinicCount) || clinicCount < 0)
-                                    //        {
-                                    //            Console.WriteLine("Invalid clinic count. Skipping this department.");
-                                    //            continue;
-                                    //        }
+                                                for (int i = 0; i < deptCount; i++)
+                                                {
+                                                    Console.Write($"Enter name of department #{i + 1}: ");
+                                                    string deptName = Console.ReadLine()?.Trim();
+                                                    if (string.IsNullOrWhiteSpace(deptName))
+                                                    {
+                                                        Console.WriteLine("Department name cannot be empty. Skipping this department.");
+                                                        continue;
+                                                    }
 
-                                    //        for (int j = 0; j < clinicCount; j++)
-                                    //        {
-                                    //            Console.Write($"\tEnter name of clinic #{j + 1} in department '{deptName}': ");
-                                    //            string clinicName = Console.ReadLine();
-                                    //            Clinic newClinic = new Clinic
-                                    //            {
-                                    //                Name = clinicName,
-                                    //                IsActive = true
-                                    //            };
-                                    //            newDept.Clinics.Add(newClinic);
-                                    //        }
+                                                    Department newDept = new Department
+                                                    {
+                                                        DepName = deptName,
+                                                        Clinics = new List<Clinic>()
+                                                    };
 
-                                    //        branch.Departments.Add(newDept);
-                                    //    }
+                                                    int clinicCount;
+                                                    while (true)
+                                                    {
+                                                        Console.Write($"How many clinics in department '{deptName}'? ");
+                                                        string inputClinicCount = Console.ReadLine();
 
-                                    //    Console.WriteLine($"{deptCount} department(s) added successfully to branch '{branch.BranchName}'.");
-                                    //    Console.WriteLine("Press any key to continue...");
-                                    //    Console.ReadKey();
-                                    //    break;
+
+                                                        if (!int.TryParse(inputClinicCount, out clinicCount) || clinicCount < 0)
+                                                        {
+                                                            Console.WriteLine("Invalid clinic count. Please enter a valid non-negative number");
+                                                            continue;
+                                                        }
+                                                        break;
+                                                    }
+
+                                                    for (int j = 0; j < clinicCount; j++)
+                                                    {
+                                                        Console.Write($"\tEnter name of clinic #{j + 1} in department '{deptName}': ");
+                                                        string clinicName = Console.ReadLine()?.Trim();
+
+                                                        if (string.IsNullOrWhiteSpace(clinicName))
+                                                        {
+                                                            Console.WriteLine("Clinic name cannot be empty. Skipping this clinic.");
+                                                            continue;
+                                                        }
+
+                                                        Clinic newClinic = new Clinic
+                                                        {
+                                                            Name = clinicName,
+                                                            IsActive = true
+                                                        };
+                                                        newDept.Clinics.Add(newClinic);
+                                                    }
+
+                                                    branch.Departments.Add(newDept);
+                                                }
+
+                                                Console.WriteLine($"{deptCount} department(s) added successfully to branch '{branch.BranchName}'.");
+                                                Console.WriteLine("Press any key to continue...");
+                                                Console.ReadKey();
+                                                break;
+                                            }
+                                        }
+                                        break;
 
                                     case 5:
                                         superAdmin.ViewBranches();
