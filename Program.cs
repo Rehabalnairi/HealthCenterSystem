@@ -579,11 +579,32 @@ namespace HealthCenterSystem
                                             break;
                                         }
 
-                                        Console.Write("Enter New Branch Name: ");
-                                        string newName = Console.ReadLine();
+                                        string newName;
+                                        while (true)
+                                        {
+                                            Console.Write("Enter New Branch Name: ");
+                                        newName = Console.ReadLine()?.Trim();
+                                            if (string.IsNullOrWhiteSpace(newName) || newName.Any(char.IsDigit))
+                                            {
+                                                Console.WriteLine("Invalid branch name. Only letters allowed.");
+                                                continue;
+                                            }
+                                            break;
+                                        }
 
-                                        Console.Write("Enter New Location: ");
-                                        string newLocation = Console.ReadLine();
+                                        string newLocation;
+                                        while (true)
+                                        {
+
+                                            Console.Write("Enter New Location: ");
+                                            newLocation = Console.ReadLine()?.Trim();
+                                            if (string.IsNullOrWhiteSpace(newLocation) || newLocation.Any(char.IsDigit))
+                                            {
+                                                Console.WriteLine("❌Invalid location. Only letters allowed.");
+                                                continue;
+                                            }
+                                            break;
+                                        }
 
                                         int newFloors;
                                         while (true)
@@ -630,13 +651,19 @@ namespace HealthCenterSystem
 
 
                                     case 3:
-                                        Console.Write("Enter Branch ID to delete: ");
-                                        if (!int.TryParse(Console.ReadLine(), out int deleteId))
+                                        int deleteId;
+                                        while (true)
+                                        {
+                                            Console.Write("Enter Branch ID to delete: ");
+                                        string deleteInput = Console.ReadLine();
+                                        if (!int.TryParse(deleteInput, out deleteId))
                                         {
                                             Console.WriteLine("Invalid ID format. Please enter a numeric ID.");
+                                            continue;
                                         }
-                                        else
-                                        {
+                                        break;
+                                        }
+                                      
                                             if (superAdmin.RemoveBranch(deleteId))
                                             {
                                                 Console.WriteLine("Branch deleted successfully.");
@@ -645,7 +672,7 @@ namespace HealthCenterSystem
                                             {
                                                 Console.WriteLine("Branch not found.");
                                             }
-                                        }
+                                        
                                         Console.WriteLine("Press any key to continue...");
                                         Console.ReadKey();
                                         break;
