@@ -354,6 +354,12 @@ namespace HealthCenterSystem
                     
 
                         case 2:
+                            if (superAdmin.BranchesList.Count == 0)
+                            {
+                                Console.WriteLine("No branches available. Please add a branch first.");
+                                Console.ReadKey();
+                                break;
+                            }
                             int doctorId;
                             while (true)
                             { 
@@ -415,12 +421,7 @@ namespace HealthCenterSystem
 
                             Console.Write("Enter specialization: ");
                             string specialization = Console.ReadLine();
-
-                            if (superAdmin.BranchesList.Count == 0)
-                            {
-                                Console.WriteLine("No branches available. Please add a branch first.");
-                                break;
-                            }
+                            
 
                             Console.WriteLine("Available Branches:");
                             for (int i = 0; i < superAdmin.BranchesList.Count; i++)
