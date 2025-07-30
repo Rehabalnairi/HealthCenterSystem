@@ -61,7 +61,7 @@ namespace HealthCenterSystem.Models
             }
         }
 
-        public void AddBranch(string branchName, string branchLocation, int noOfFloors, int noOfRooms, string departments, string clinics)
+        public Branch AddBranch(string branchName, string branchLocation, int noOfFloors, int noOfRooms, string departments, string clinics)
         {
             Branch newBranch = new Branch
             {
@@ -77,6 +77,8 @@ namespace HealthCenterSystem.Models
             };
 
             BranchesList.Add(newBranch);
+            return newBranch;
+
         }
 
         public void ViewBranches()

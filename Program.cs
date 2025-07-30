@@ -14,23 +14,16 @@ namespace HealthCenterSystem
         public static List<User> users = new List<User>();
         static SuperAdmin superAdmin = new SuperAdmin(users); // static SuperAdmin instance
         public static List<Admins> admins = new List<Admins>();
-         static List<Branch> branches = new List<Branch>();
+        static List<Branch> branches = new List<Branch>();
         static PatientRecordService recordService = new PatientRecordService();
 
         static void Main(string[] args)
         {
-            List<Branch> branches = new List<Branch>
-          {
-           new Branch { BranchId = 1, BranchName = "Muscat Branch" },
-           new Branch { BranchId = 2, BranchName = "Dhofar Branch" }
-         };
+            List<Branch> branches = new List<Branch>();
 
 
-            List<Clinic> clinics = new List<Clinic>
-            {
-                     //new Clinic(1, "Cardiology Clinic", "Muscat", 100.00m, "12345678", "cardio@clinic.com"),
-                     //new Clinic(2, "Pediatrics Clinic", "Muscat", 80.00m, "87654321", "pediatrics@clinic.com")
-            };
+
+            List<Clinic> clinics = new List<Clinic>();
 
             DoctorService doctorService = new DoctorService();
 
@@ -351,7 +344,7 @@ namespace HealthCenterSystem
                             Console.WriteLine($"Admin added successfully. Email: {adminEmail}");
                             Console.ReadKey();
                             break; // Exit the loop if a valid ID is entered
-                    
+
 
                         case 2:
                             if (superAdmin.BranchesList.Count == 0)
@@ -362,12 +355,12 @@ namespace HealthCenterSystem
                             }
                             int doctorId;
                             while (true)
-                            { 
+                            {
                                 Console.Write("Enter doctor ID: (The Id must be more than 6 digits) ");
                                 string inputDoctorId = Console.ReadLine();
                                 if (!int.TryParse(inputDoctorId, out doctorId))
-                            {
-                                Console.WriteLine("Invalid input. Please enter a numeric ID");
+                                {
+                                    Console.WriteLine("Invalid input. Please enter a numeric ID");
                                     continue;
                                 }
                                 if (inputDoctorId.Length < 6)
@@ -376,15 +369,15 @@ namespace HealthCenterSystem
                                     continue;
                                 }
 
-                             bool idExists = superAdmin.UsersList
-                            .OfType<Doctor>()
-                            .Any(d => d.UserId == doctorId);
+                                bool idExists = superAdmin.UsersList
+                               .OfType<Doctor>()
+                               .Any(d => d.UserId == doctorId);
 
-                            if (idExists)
-                            {
-                                Console.WriteLine("This doctor ID is already in use.");
-                                continue;
-                            }
+                                if (idExists)
+                                {
+                                    Console.WriteLine("This doctor ID is already in use.");
+                                    continue;
+                                }
                                 break;
                             }
 
@@ -421,7 +414,7 @@ namespace HealthCenterSystem
 
                             Console.Write("Enter specialization: ");
                             string specialization = Console.ReadLine();
-                            
+
 
                             Console.WriteLine("Available Branches:");
                             for (int i = 0; i < superAdmin.BranchesList.Count; i++)
@@ -439,7 +432,7 @@ namespace HealthCenterSystem
                                     Console.WriteLine("Invalid branch selection.");
                                     continue;
                                 }
-                                    break;
+                                break;
                             }
 
                             Branch selectedBranch = superAdmin.BranchesList[branchChoice - 1];
@@ -454,7 +447,7 @@ namespace HealthCenterSystem
                             break;
 
 
-                            //
+                        //
                         case 3:
                             Console.Clear();
                             int branchOption = -1;
@@ -531,8 +524,10 @@ namespace HealthCenterSystem
                                             break;
                                         }
 
-                                        superAdmin.AddBranch(branchName, branchLocation, noOfFloors, noOfRooms, "", "");
+                                        Branch newBranch = superAdmin.AddBranch(branchName, branchLocation, noOfFloors, noOfRooms, "", "");
+                                        branches.Add(newBranch); //add new branch to the list
                                         Console.WriteLine("Branch added successfully.");
+
                                         Console.WriteLine("Press any key to continue...");
                                         Console.ReadKey();
                                         break;
@@ -583,7 +578,7 @@ namespace HealthCenterSystem
                                         while (true)
                                         {
                                             Console.Write("Enter New Branch Name: ");
-                                        newName = Console.ReadLine()?.Trim();
+                                            newName = Console.ReadLine()?.Trim();
                                             if (string.IsNullOrWhiteSpace(newName) || newName.Any(char.IsDigit))
                                             {
                                                 Console.WriteLine("Invalid branch name. Only letters allowed.");
@@ -655,24 +650,24 @@ namespace HealthCenterSystem
                                         while (true)
                                         {
                                             Console.Write("Enter Branch ID to delete: ");
-                                        string deleteInput = Console.ReadLine();
-                                        if (!int.TryParse(deleteInput, out deleteId))
+                                            string deleteInput = Console.ReadLine();
+                                            if (!int.TryParse(deleteInput, out deleteId))
+                                            {
+                                                Console.WriteLine("Invalid ID format. Please enter a numeric ID.");
+                                                continue;
+                                            }
+                                            break;
+                                        }
+
+                                        if (superAdmin.RemoveBranch(deleteId))
                                         {
-                                            Console.WriteLine("Invalid ID format. Please enter a numeric ID.");
-                                            continue;
+                                            Console.WriteLine("Branch deleted successfully.");
                                         }
-                                        break;
+                                        else
+                                        {
+                                            Console.WriteLine("Branch not found.");
                                         }
-                                      
-                                            if (superAdmin.RemoveBranch(deleteId))
-                                            {
-                                                Console.WriteLine("Branch deleted successfully.");
-                                            }
-                                            else
-                                            {
-                                                Console.WriteLine("Branch not found.");
-                                            }
-                                        
+
                                         Console.WriteLine("Press any key to continue...");
                                         Console.ReadKey();
                                         break;
@@ -781,7 +776,7 @@ namespace HealthCenterSystem
                                             break;
                                         }
                                         break;
-                                       
+
 
                                     case 5:
                                         superAdmin.ViewBranches();
@@ -1162,26 +1157,16 @@ namespace HealthCenterSystem
                                     }
                                 }
                             }
-                                        case 0:
-                                        return; // Exit Admin menu
-                                    default:
-                                        Console.WriteLine("Invalid choice. Please try again.");
-                                        break;
-                                    }
-                                }
-
-                            }
+                        case 0:
+                            return; // Exit Admin menu
+                        default:
+                            Console.WriteLine("Invalid choice. Please try again.");
+                            break;
                     }
-                
-            
-        
-                
-            
-        
+                }
 
-                
-
-
+            }
+        }
         public static void DoctorMenu(Doctor loggedInDoctor)
         {
             while (true)
@@ -1313,9 +1298,7 @@ namespace HealthCenterSystem
                 }
             }
         }
-     
     }
-
 }
 
 
