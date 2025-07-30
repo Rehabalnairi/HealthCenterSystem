@@ -7,7 +7,10 @@ using System.Threading.Tasks;
 namespace HealthCenterSystem.Models
 {
      public class Patient : User
-    { 
+    {
+        // add pationtRecords property to hold a list of patient records
+        public List<PatientRecord> Records { get; set; } = new List<PatientRecord>();
+
         public string PatientNI { get; set; }
         public string Gender { get; set; }
         public DateTime DateOfBirth { get; set; }

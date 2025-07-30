@@ -91,7 +91,9 @@ namespace HealthCenterSystem
 
                     case 4:
                         Console.WriteLine("You are logged in as Patient.");
-                        Console.WriteLine("Patient functionality coming soon...");
+                         
+
+
                         break;
 
                     case 0:
@@ -379,6 +381,13 @@ namespace HealthCenterSystem
                     }
                 }
             }
+
+          static void PatientMenu()
+            {
+                Console.WriteLine("")
+
+
+            }
         }
     }
-}
+
