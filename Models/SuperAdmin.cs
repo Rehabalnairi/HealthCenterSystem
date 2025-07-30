@@ -21,7 +21,7 @@ namespace HealthCenterSystem.Models
         //    BranchesList = new List<Branch>();
         //}
 
-        private string GenerateEmail(string name, string role)
+        public string GenerateEmail(string name, string role)
         {
             return $"{name.ToLower().Replace(" ", ".")}@{role.ToLower()}.healthsystem.com";
         }
@@ -36,10 +36,10 @@ namespace HealthCenterSystem.Models
         }
 
 
-        public string AddDoctor(string name, string password, string specialization)
+        public string AddDoctor(int doctorId, string name, string password, string specialization)
         {
             string email = GenerateEmail(name, "doctor");
-            Doctor newDoctor = new Doctor(0, name, email, password, specialization);
+            Doctor newDoctor = new Doctor(doctorId, name, email, password, specialization);
             UsersList.Add(newDoctor);
             return email;
         }
