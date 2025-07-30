@@ -680,8 +680,6 @@ namespace HealthCenterSystem
             }
         }
 
-               
-        
           public static void DoctorMenu(Doctor doctor)
           {
              while (true)
