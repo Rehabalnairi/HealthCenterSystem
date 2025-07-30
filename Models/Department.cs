@@ -9,13 +9,13 @@ namespace HealthCenterSystem.Models
         public int DepId { get; set; }
         public string DepName { get; set; }
         public  string Head { get; set; } // Property to hold the head of the department
-        // public List<Doctor> Doctors { get; set; }
+        public List<Doctor> Doctors { get; set; }
         public List<Clinic> Clinics { get; set; }
 
         public Department()
         {
             Clinics = new List<Clinic>();
-            // Doctors = new List<Doctor>();
+            Doctors = new List<Doctor>();
         }
         // Constructor
         public Department(int depId, string depName, string head)
@@ -24,7 +24,8 @@ namespace HealthCenterSystem.Models
             DepName = depName ?? throw new ArgumentNullException(nameof(depName));
             Clinics = new List<Clinic>();
             Head = head;
-            // Doctors = new List<Doctor>();
+            Clinics = new List<Clinic>();
+            Doctors = new List<Doctor>();
         }
 
         // Add a clinic to the department

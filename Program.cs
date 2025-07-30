@@ -12,7 +12,7 @@ namespace HealthCenterSystem
     {
         public static List<User> users = new List<User>();
         static SuperAdmin superAdmin = new SuperAdmin(users); // static SuperAdmin instance
-        static List<Admins> admins = new List<Admins>();
+        public static List<Admins> admins = new List<Admins>();
         static List<Branch> branches = new List<Branch>();
         static void Main(string[] args)
         {
@@ -573,14 +573,18 @@ namespace HealthCenterSystem
                         case 1:
                             Console.Clear();
                             Console.WriteLine("==Assign Exisiting Doctoer to Department and clinic==");
+                            // Check if there are any branches available
                             if (branches.Count == 0)
                             {
                                 Console.WriteLine("No branch available.");
                                 break;
                             }
+                            //view available branches
                             Console.WriteLine("\nAvailable Branches");
+                            
                             foreach (var b in branches)
                                 Console.WriteLine($"{b.BranchId}.\n{b.BranchName}");
+                            //select branch
                             Console.WriteLine("Enter Branch ID:");
                             if (!int.TryParse(Console.ReadLine(), out int branchId))
                             {
@@ -588,7 +592,7 @@ namespace HealthCenterSystem
                                 break;
                             }
                             var selectBranch=branches.FirstOrDefault(b=>b.BranchId == branchId);
-                            if(selectBranch != null)
+                            if(selectBranch == null)
                             {
                                 Console.WriteLine("Branch not found");
                                 break;
@@ -601,6 +605,7 @@ namespace HealthCenterSystem
                             Console.WriteLine("\nAvailable Departments:");
                             foreach (var dep in selectBranch.Departments)
                                 Console.WriteLine($"{dep.DepId}.{dep.DepName}");
+                            //select department
                             Console.WriteLine("Enter Department ID:");
                             if (!int.TryParse(Console.ReadLine(), out int depId))
                             {
@@ -608,8 +613,52 @@ namespace HealthCenterSystem
                                 break;
                             }
 
-
+                            var selectedDepartment = selectBranch.Departments.FirstOrDefault(d => d.DepId == depId);
+                            if (selectedDepartment == null)
+                            {
+                                Console.WriteLine("Department not found.");
+                                break;
+                            }
+                            if (selectedDepartment.Clinics == null || selectedDepartment.Clinics.Count == 0)
+                            {
+                                Console.WriteLine("This department has no clinics.");
+                                break;
+                            }
+                            Console.WriteLine("Available Clinics in this Department:");
+                            foreach (var clinic in selectedDepartment.Clinics)
+                                Console.WriteLine($"{clinic.Name}");
+                            //select clinic
+                            Console.WriteLine("Enter Clinic ID to assign doctor:");
+                            if(!int.TryParse(Console.ReadLine(), out int clinicId))
+                            {
+                                Console.WriteLine("Invalid Input!");
+                                break;
+                            }
+                            var selectedClinic = selectedDepartment.Clinics.FirstOrDefault(c => c.ClinicId == clinicId);
+                            if (selectedClinic == null)
+                            {
+                                Console.WriteLine("Clinic not found.");
+                                break;
+                            }
+                            Console.WriteLine("Enter Doctoer ID to assign:");
+                            if(!int.TryParse(Console.ReadLine(), out int doctorId))
+                            {
+                                Console.WriteLine("Invalid Input!");
+                                break;
+                            }
+                            Doctor doctor=users.OfType<Doctor>().FirstOrDefault(d => d.UserId == doctorId);
+                            if (doctor == null)
+                            {
+                                Console.WriteLine("Doctor not found.");
+                                break;
+                            }
+                            selectedDepartment.Doctors.Add(doctor);
+                            Console.WriteLine($"Doctor {doctor.Name} has been assigned to Department {selectedDepartment.DepName} and Clinic {selectedClinic.Name}.");
+                            Console.WriteLine("Press any key to continue...");
+                            Console.ReadKey();
                             break;
+                            
+                            
                         case 2:
                            
                             break;

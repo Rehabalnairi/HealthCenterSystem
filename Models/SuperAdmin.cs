@@ -31,6 +31,7 @@ namespace HealthCenterSystem.Models
             string email = GenerateEmail(name, role.ToLower());
             Admins newAdmin = new Admins(userId, name, email, password, phoneNumber, role);
             UsersList.Add(newAdmin);
+            Program.admins.Add(newAdmin);
             return email;
         }
 
