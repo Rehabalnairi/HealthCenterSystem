@@ -82,15 +82,37 @@ namespace HealthCenterSystem.Models
         public void ViewBranches()
         {
             Console.WriteLine("List of Branches:");
-            foreach (var branch in BranchesList)
+            foreach (var b in BranchesList)
             {
-                Console.WriteLine($"Branch ID: {branch.BranchId}, Name: {branch.BranchName}, Location: {branch.BranchLocation}, Floors: {branch.NoOfFloors}, Rooms: {branch.NoOfRooms}, Active: {branch.IsActive}");
-                Console.WriteLine("Departments:");
-                foreach (var department in branch.Departments)
-                    Console.WriteLine($"- {department.DepName}");
-                Console.WriteLine("Clinics:");
-                foreach (var clinic in branch.Clinics)
-                    Console.WriteLine($"- {clinic}");
+                Console.WriteLine($"ID: {b.BranchId}, Name: {b.BranchName}, Location: {b.BranchLocation}");
+
+                if (b.Departments != null && b.Departments.Count > 0)
+                {
+                    Console.WriteLine("  Departments:");
+                    foreach (var dept in b.Departments)
+                    {
+                        Console.WriteLine($"- {dept.DepName}");
+
+                        if (dept.Clinics != null && dept.Clinics.Count > 0)
+                        {
+                            Console.WriteLine("Clinics:");
+                            foreach (var clinic in dept.Clinics)
+                            {
+                                Console.WriteLine($"* {clinic.Name} (Active: {clinic.IsActive})");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("No clinics found.");
+                        }
+                    }
+                }
+                else
+                {
+                    Console.WriteLine(" No departments found.");
+                }
+
+                Console.WriteLine();
             }
         }
 
