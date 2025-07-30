@@ -1178,6 +1178,8 @@ namespace HealthCenterSystem
                 Console.WriteLine("3. View My Patients Reports");
                 Console.WriteLine("4. Update Medical Report");
                 Console.WriteLine("5. Logout");
+                // back to main menu
+                Console.WriteLine("0. Back to Main Menu");
                 Console.Write("Select an option: ");
                 string choice = Console.ReadLine();
 
@@ -1295,6 +1297,8 @@ namespace HealthCenterSystem
                         Console.WriteLine("Invalid option. Try again.");
                         Console.ReadKey();
                         break;
+                    case "0":
+                        return; // Back to main menu
                 }
             }
         }
