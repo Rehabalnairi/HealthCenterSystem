@@ -134,7 +134,7 @@ namespace HealthCenterSystem
                                 if (loggedPatient != null)
                                 {
                                     Console.WriteLine($"Welcome {loggedPatient.Name}!");
-
+                                    // Display patient dashboard
                                     int pMenu = -1;
                                     while (pMenu != 0)
                                     {
