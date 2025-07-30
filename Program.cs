@@ -490,7 +490,7 @@ namespace HealthCenterSystem
                                             if (!int.TryParse(floorsInput, out noOfFloors))
                                             {
                                                 Console.WriteLine("Invalid input. Number of floors must be a numeric value.");
-                                                continue; 
+                                                continue;
                                             }
                                             break;
                                         }
@@ -503,7 +503,7 @@ namespace HealthCenterSystem
                                             if (!int.TryParse(roomsInput, out noOfRooms))
                                             {
                                                 Console.WriteLine("Invalid input. Number of rooms must be a numeric value.");
-                                                continue; 
+                                                continue;
                                             }
                                             break;
                                         }
@@ -514,49 +514,97 @@ namespace HealthCenterSystem
                                         Console.ReadKey();
                                         break;
 
-                                    //case 2:
-                                    //    Console.Write("Enter Branch ID to update: ");
-                                    //    if (!int.TryParse(Console.ReadLine(), out int updateId))
-                                    //    {
-                                    //        Console.WriteLine("Invalid ID format.");
-                                    //        break;
-                                    //    }
+                                    case 2:
+                                        int updateId;
+                                        while (true)
+                                        {
+                                            Console.Write("Enter Branch ID to update: ");
+                                            string inputId = Console.ReadLine();
+                                            if (!int.TryParse(inputId, out updateId))
+                                            {
+                                                Console.WriteLine("Invalid ID format. Please enter a numeric ID");
+                                                continue;
+                                            }
 
-                                    //    var branch = superAdmin.BranchesList.FirstOrDefault(b => b.BranchId == updateId);
-                                    //    if (branch == null)
-                                    //    {
-                                    //        Console.WriteLine("Branch with this ID does not exist.");
-                                    //        break;
-                                    //    }
+                                            var branch = superAdmin.BranchesList.FirstOrDefault(b => b.BranchId == updateId);
+                                            if (branch == null)
+                                            {
+                                                Console.WriteLine("Branch with this ID does not exist.");
+                                                Console.Write("Do you want to return to continue? (Y/N): ");
+                                                string choice = Console.ReadLine().Trim().ToUpper();
 
-                                    //    Console.Write("Enter New Branch Name: ");
-                                    //    string newName = Console.ReadLine();
+                                                if (choice == "Y")
+                                                {
+                                                    continue;
+                                                }
+                                                else if (choice == "N")
+                                                {
+                                                    break;
+                                                }
+                                                else
+                                                {
+                                                    Console.WriteLine("Invalid choice. Please enter Y or N.");
+                                                    continue;
+                                                }
+                                            }
+                                            break;
+                                        }
 
-                                    //    Console.Write("Enter New Location: ");
-                                    //    string newLocation = Console.ReadLine();
+                                        var branchToUpdate = superAdmin.BranchesList.FirstOrDefault(b => b.BranchId == updateId);
+                                        if (branchToUpdate == null)
+                                        {
+                                            break;
+                                        }
 
-                                    //    Console.Write("Enter New Number of Floors: ");
-                                    //    if (!int.TryParse(Console.ReadLine(), out int newFloors))
-                                    //    {
-                                    //        Console.WriteLine("Invalid number of floors.");
-                                    //        break;
-                                    //    }
+                                        Console.Write("Enter New Branch Name: ");
+                                        string newName = Console.ReadLine();
 
-                                    //    Console.Write("Enter New Number of Rooms: ");
-                                    //    if (!int.TryParse(Console.ReadLine(), out int newRooms))
-                                    //    {
-                                    //        Console.WriteLine("Invalid number of rooms.");
-                                    //        break;
-                                    //    }
+                                        Console.Write("Enter New Location: ");
+                                        string newLocation = Console.ReadLine();
 
-                                    //    bool updated = superAdmin.UpdateBranch(updateId, newName, newLocation, newFloors, newRooms);
+                                        int newFloors;
+                                        while (true)
+                                        {
+                                            Console.Write("Enter New Number of Floors: ");
+                                            string floorsInput = Console.ReadLine();
+                                            if (!int.TryParse(floorsInput, out newFloors))
+                                            {
+                                                Console.WriteLine("Invalid number of floors. Number of floors must be a numeric value");
+                                                continue;
+                                            }
+                                            break;
+                                        }
 
-                                    //    if (updated)
-                                    //    Console.WriteLine("Branch updated successfully.");
+                                        int newRooms;
+                                        while (true)
+                                        {
+                                            Console.Write("Enter New Number of Rooms: ");
+                                            string roomsInput = Console.ReadLine();
+                                            if (!int.TryParse(roomsInput, out newRooms))
+                                            {
+                                                Console.WriteLine("Invalid number of rooms.");
+                                                continue;
+                                            }
+                                            break;
+                                        }
 
-                                    //    else
-                                    //        Console.WriteLine("Failed to update branch.");
-                                    //    break;
+                                        bool updated = superAdmin.UpdateBranch(updateId, newName, newLocation, newFloors, newRooms);
+
+                                        if (updated)
+                                        {
+                                            Console.WriteLine("Branch updated successfully.");
+                                            Console.WriteLine("Press any key to continue...");
+                                            Console.ReadKey();
+                                        }
+
+                                        else
+                                        {
+                                            Console.WriteLine("Failed to update branch.");
+                                            Console.WriteLine("Press any key to continue...");
+                                            Console.ReadKey();
+                                        }
+                                        break;
+                                
 
                                     //case 3:
                                     //    Console.Write("Enter Branch Name to delete: ");
@@ -632,12 +680,11 @@ namespace HealthCenterSystem
                                     //    Console.ReadKey();
                                     //    break;
 
-                                    //case 5:
-                                    //    Console.WriteLine("List of Branches:");
-                                    //    superAdmin.ViewBranches();
-                                    //    Console.WriteLine("Press any key to continue...");
-                                    //    Console.ReadKey();
-                                    //    break;
+                                    case 5:
+                                        superAdmin.ViewBranches();
+                                        Console.WriteLine("Press any key to continue...");
+                                        Console.ReadKey();
+                                        break;
 
                                     case 0:
                                         return; // Exit Branch Management menu

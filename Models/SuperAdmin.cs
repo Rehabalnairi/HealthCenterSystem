@@ -130,20 +130,5 @@ namespace HealthCenterSystem.Models
             return false;
         }
 
-        public bool UpdateBranchByName(string branchName, string newName, string newLocation, int newFloors, int newRooms)
-        {
-            var branch = BranchesList.FirstOrDefault(b => b.BranchName.Equals(branchName, StringComparison.OrdinalIgnoreCase));
-            if (branch != null)
-            {
-                branch.BranchName = newName;
-                branch.BranchLocation = newLocation;
-                branch.NoOfFloors = newFloors;
-                branch.NoOfRooms = newRooms;
-                return true;
-            }
-            return false;
-        }
-       
-
     }
 }
