@@ -555,7 +555,7 @@ namespace HealthCenterSystem
                 Console.WriteLine("2. Update Or Delete Doctor");
                 Console.WriteLine("3. Add Appointment");
                 Console.WriteLine("4. Book Appointments For Patient");
-                Console.WriteLine("Views");
+                Console.WriteLine("5.Views");
                 Console.WriteLine("0. Exit Admin Menu");
                 //Console.WriteLine("5. View All Departments and Clinic");
                 // Console.WriteLine("2. View All Doctors");
@@ -730,6 +730,52 @@ namespace HealthCenterSystem
                             Console.ReadKey();
                             break;
                         case 3:
+                            var doctors = users.OfType<Doctor>().ToList();
+
+                            if (doctors.Count() == 0)
+                            {
+                                Console.WriteLine("No doctors available.");
+                                return;
+                            }
+
+                            Console.WriteLine("Select a doctor to add appointments:");
+                            for (int i = 0; i < doctors.Count(); i++)
+                            {
+                                Console.WriteLine($"{i + 1}. {doctors[i].Name} - {doctors[i].Specialization}");
+                            }
+
+                            Console.Write("Enter doctor number: ");
+                            if (!int.TryParse(Console.ReadLine(), out int docIndex) || docIndex < 1 || docIndex > doctors.Count())
+                            {
+                                Console.WriteLine("Invalid selection.");
+                                return;
+                            }
+
+                            Doctor selDoctor = doctors[docIndex - 1];
+
+                            Console.Write("How many appointments do you want to add? ");
+                            if (!int.TryParse(Console.ReadLine(), out int count) || count <= 0)
+                            {
+                                Console.WriteLine("Invalid number.");
+                                return;
+                            }
+
+                            for (int i = 0; i < count; i++)
+                            {
+                                Console.Write($"Enter appointment date and time (e.g., 2025-08-01 10:00): ");
+                                if (DateTime.TryParse(Console.ReadLine(), out DateTime appointment))
+                                {
+                                    selDoctor.AvailableAppointments.Add(appointment);
+                                    Console.WriteLine("Appointment added.");
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Invalid date format.");
+                                }
+                            }
+                            Console.WriteLine("Appointments added successfully.");
+                            Console.ReadKey();
+
 
                             break;
                         case 4:
@@ -742,10 +788,13 @@ namespace HealthCenterSystem
                             break;
                     }
                 }
-            }
-        }
 
-          public static void DoctorMenu(Doctor doctor)
+            }
+
+        }
+        
+       
+        public static void DoctorMenu(Doctor doctor)
           {
              while (true)
              {
