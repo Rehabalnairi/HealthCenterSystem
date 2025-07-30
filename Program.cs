@@ -356,7 +356,7 @@ namespace HealthCenterSystem
                             int doctorId;
                             while (true)
                             { 
-                                Console.Write("Enter doctor ID: 'The Id must be more than 6 digits' ");
+                                Console.Write("Enter doctor ID: (The Id must be more than 6 digits) ");
                                 string inputDoctorId = Console.ReadLine();
                                 if (!int.TryParse(inputDoctorId, out doctorId))
                             {
@@ -369,7 +369,7 @@ namespace HealthCenterSystem
                                     continue;
                                 }
 
-                                bool idExists = superAdmin.UsersList
+                             bool idExists = superAdmin.UsersList
                             .OfType<Doctor>()
                             .Any(d => d.UserId == doctorId);
 
@@ -384,7 +384,7 @@ namespace HealthCenterSystem
                             string doctorName;
                             while (true)
                             {
-                                Console.Write("Enter doctor name: ");
+                                Console.Write("Enter doctor name: (name must contain letters only ) ");
                                 doctorName = Console.ReadLine();
 
                                 if (string.IsNullOrWhiteSpace(doctorName) || !doctorName.All(char.IsLetter))
@@ -398,7 +398,7 @@ namespace HealthCenterSystem
                             string doctorPassword;
                             while (true)
                             {
-                                Console.Write("Enter password: ");
+                                Console.Write("Enter password: ( must contain letters, numbers, and at least one symbol )");
                                 doctorPassword = Console.ReadLine();
 
                                 if (string.IsNullOrWhiteSpace(doctorPassword) ||
@@ -615,13 +615,17 @@ namespace HealthCenterSystem
                             //Console.WriteLine("Branch added successfully.");
                             Console.ReadLine();
                             break;
+
                         case 4:
                             superAdmin.ViewUsers();
-                            Console.WriteLine("Users viewed successfully.");
+                            Console.WriteLine("Press any key to continue...");
+                            Console.ReadKey();
                             break;
+
                         case 5:
                             Console.WriteLine("Exiting Super Admin menu.");
                             return; // Exit Super Admin menu
+
                         default:
                             Console.WriteLine("Invalid choice. Please try again.");
                             break;
