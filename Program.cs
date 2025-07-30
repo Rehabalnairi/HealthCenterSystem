@@ -353,27 +353,64 @@ namespace HealthCenterSystem
                     
 
                         case 2:
-                            Console.Write("Enter doctor ID: 'The Id must be more than 6 digits' ");
-                            if (!int.TryParse(Console.ReadLine(), out int doctorId))
+                            int doctorId;
+                            while (true)
+                            { 
+                                Console.Write("Enter doctor ID: 'The Id must be more than 6 digits' ");
+                                string inputDoctorId = Console.ReadLine();
+                                if (!int.TryParse(inputDoctorId, out doctorId))
                             {
-                                Console.WriteLine("Invalid ID format.");
-                                break;
-                            }
+                                Console.WriteLine("Invalid input. Please enter a numeric ID");
+                                    continue;
+                                }
+                                if (inputDoctorId.Length < 6)
+                                {
+                                    Console.WriteLine("ID must be at least 6 digits long. Please try again.");
+                                    continue;
+                                }
 
-                            bool idExists = superAdmin.UsersList
+                                bool idExists = superAdmin.UsersList
                             .OfType<Doctor>()
                             .Any(d => d.UserId == doctorId);
 
                             if (idExists)
                             {
                                 Console.WriteLine("This doctor ID is already in use.");
+                                continue;
+                            }
                                 break;
                             }
-                            Console.Write("Enter doctor name: ");
-                            string doctorName = Console.ReadLine();
 
-                            Console.Write("Enter password: ");
-                            string doctorPassword = Console.ReadLine();
+                            string doctorName;
+                            while (true)
+                            {
+                                Console.Write("Enter doctor name: ");
+                                doctorName = Console.ReadLine();
+
+                                if (string.IsNullOrWhiteSpace(doctorName) || !doctorName.All(char.IsLetter))
+                                {
+                                    Console.WriteLine("Doctor name must contain letters only (no digits or symbols).");
+                                    continue;
+                                }
+                                break;
+                            }
+
+                            string doctorPassword;
+                            while (true)
+                            {
+                                Console.Write("Enter password: ");
+                                doctorPassword = Console.ReadLine();
+
+                                if (string.IsNullOrWhiteSpace(doctorPassword) ||
+                                 !doctorPassword.Any(char.IsLetter) ||
+                                 !doctorPassword.Any(char.IsDigit) ||
+                                 !doctorPassword.Any(ch => !char.IsLetterOrDigit(ch)))
+                                {
+                                    Console.WriteLine("Password must contain letters, numbers, and at least one symbol.");
+                                    continue;
+                                }
+                                break;
+                            }
 
                             Console.Write("Enter specialization: ");
                             string specialization = Console.ReadLine();
@@ -390,20 +427,28 @@ namespace HealthCenterSystem
                                 Console.WriteLine($"{i + 1}. {superAdmin.BranchesList[i].BranchName}");
                             }
 
-                            Console.Write("Select branch number to assign this doctor to: ");
-                            if (!int.TryParse(Console.ReadLine(), out int branchChoice) ||
-                            branchChoice < 1 || branchChoice > superAdmin.BranchesList.Count)
+                            int branchChoice;
+                            while (true)
                             {
-                                Console.WriteLine("Invalid branch selection.");
-                                break;
+                                Console.Write("Select branch number to assign this doctor to: ");
+                                if (!int.TryParse(Console.ReadLine(), out branchChoice) ||
+                                branchChoice < 1 || branchChoice > superAdmin.BranchesList.Count)
+                                {
+                                    Console.WriteLine("Invalid branch selection.");
+                                    continue;
+                                }
+                                    break;
                             }
 
                             Branch selectedBranch = superAdmin.BranchesList[branchChoice - 1];
                             string doctorEmail = superAdmin.GenerateEmail(doctorName, "doctor");
+
                             Doctor newDoctor = new Doctor(doctorId, doctorName, doctorEmail, doctorPassword, specialization);
                             newDoctor.BranchId = selectedBranch.BranchId;
                             superAdmin.UsersList.Add(newDoctor);
+
                             Console.WriteLine($"Doctor added successfully with email: {doctorEmail}");
+                            Console.ReadKey();
                             break;
 
 
