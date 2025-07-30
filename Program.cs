@@ -477,131 +477,170 @@ namespace HealthCenterSystem
                                     case 1:
                                         Console.Write("Enter Branch Name: ");
                                         string branchName = Console.ReadLine();
+
                                         Console.Write("Enter Branch Location: ");
                                         string branchLocation = Console.ReadLine();
-                                        Console.Write("Enter Number of Floors: ");
-                                        int noOfFloors = int.Parse(Console.ReadLine());
-                                        Console.Write("Enter Number of Rooms: ");
-                                        int noOfRooms = int.Parse(Console.ReadLine());
+
+                                        int noOfFloors;
+                                        while (true)
+                                        {
+                                            Console.Write("Enter Number of Floors: ");
+                                            string floorsInput = Console.ReadLine();
+                                            if (!int.TryParse(floorsInput, out noOfFloors))
+                                            {
+                                                Console.WriteLine("Invalid input. Number of floors must be a numeric value.");
+                                                continue; 
+                                            }
+                                            break;
+                                        }
+
+                                        int noOfRooms;
+                                        while (true)
+                                        {
+                                            Console.Write("Enter Number of Rooms: ");
+                                            string roomsInput = Console.ReadLine();
+                                            if (!int.TryParse(roomsInput, out noOfRooms))
+                                            {
+                                                Console.WriteLine("Invalid input. Number of rooms must be a numeric value.");
+                                                continue; 
+                                            }
+                                            break;
+                                        }
 
                                         superAdmin.AddBranch(branchName, branchLocation, noOfFloors, noOfRooms, "", "");
                                         Console.WriteLine("Branch added successfully.");
                                         Console.WriteLine("Press any key to continue...");
                                         Console.ReadKey();
                                         break;
-                                    case 2:
-                                        Console.Write("Enter Branch Name to update: ");
-                                        string updateName = Console.ReadLine();
 
-                                        Console.Write("Enter New Branch Name: ");
-                                        string newName = Console.ReadLine();
-                                        Console.Write("Enter New Location: ");
-                                        string newLoc = Console.ReadLine();
+                                    //case 2:
+                                    //    Console.Write("Enter Branch ID to update: ");
+                                    //    if (!int.TryParse(Console.ReadLine(), out int updateId))
+                                    //    {
+                                    //        Console.WriteLine("Invalid ID format.");
+                                    //        break;
+                                    //    }
 
-                                        Console.Write("Enter New Number of Floors: ");
-                                        int newFloors = int.Parse(Console.ReadLine());
+                                    //    var branch = superAdmin.BranchesList.FirstOrDefault(b => b.BranchId == updateId);
+                                    //    if (branch == null)
+                                    //    {
+                                    //        Console.WriteLine("Branch with this ID does not exist.");
+                                    //        break;
+                                    //    }
 
-                                        Console.Write("Enter New Number of Rooms: ");
-                                        int newRooms = int.Parse(Console.ReadLine());
+                                    //    Console.Write("Enter New Branch Name: ");
+                                    //    string newName = Console.ReadLine();
 
-                                        // Call method with 5 parameters
-                                        if (superAdmin.UpdateBranchByName(updateName, newName, newLoc, newFloors, newRooms))
-                                        {
-                                            Console.WriteLine("Branch updated successfully.");
-                                        }
-                                        else
-                                        {
-                                            Console.WriteLine("Branch not found.");
-                                        }
+                                    //    Console.Write("Enter New Location: ");
+                                    //    string newLocation = Console.ReadLine();
 
-                                        Console.WriteLine("Press any key to continue...");
-                                        Console.ReadKey();
-                                        break;
-                                    case 3:
-                                        Console.Write("Enter Branch Name to delete: ");
-                                        string deleteName = Console.ReadLine();
-                                        if (superAdmin.RemoveBranchByName(deleteName))
-                                        {
-                                            Console.WriteLine("Branch deleted successfully.");
-                                        }
-                                        else
-                                        {
-                                            Console.WriteLine("Branch not found.");
-                                        }
-                                        Console.WriteLine("Press any key to continue...");
-                                        Console.ReadKey();
-                                        break;
+                                    //    Console.Write("Enter New Number of Floors: ");
+                                    //    if (!int.TryParse(Console.ReadLine(), out int newFloors))
+                                    //    {
+                                    //        Console.WriteLine("Invalid number of floors.");
+                                    //        break;
+                                    //    }
 
-                                    case 4:
-                                        Console.Write("Enter Branch ID to add department(s): ");
-                                        if (!int.TryParse(Console.ReadLine(), out int BranchId))
-                                        {
-                                            Console.WriteLine("Invalid ID.");
-                                            break;
-                                        }
+                                    //    Console.Write("Enter New Number of Rooms: ");
+                                    //    if (!int.TryParse(Console.ReadLine(), out int newRooms))
+                                    //    {
+                                    //        Console.WriteLine("Invalid number of rooms.");
+                                    //        break;
+                                    //    }
 
-                                        // Find the branch by ID
-                                        var branch = superAdmin.BranchesList.FirstOrDefault(b => b.BranchId == BranchId);
-                                        if (branch == null)
-                                        {
-                                            Console.WriteLine("Branch not found.");
-                                            break;
-                                        }
+                                    //    bool updated = superAdmin.UpdateBranch(updateId, newName, newLocation, newFloors, newRooms);
 
-                                        Console.Write("How many departments do you want to add? ");
-                                        if (!int.TryParse(Console.ReadLine(), out int deptCount) || deptCount <= 0)
-                                        {
-                                            Console.WriteLine("Invalid number of departments.");
-                                            break;
-                                        }
+                                    //    if (updated)
+                                    //    Console.WriteLine("Branch updated successfully.");
 
-                                        for (int i = 0; i < deptCount; i++)
-                                        {
-                                            Console.Write($"Enter name of department #{i + 1}: ");
-                                            string deptName = Console.ReadLine();
+                                    //    else
+                                    //        Console.WriteLine("Failed to update branch.");
+                                    //    break;
 
-                                            Department newDept = new Department();
-                                            newDept.DepName = deptName;
-                                            newDept.Clinics = new List<Clinic>();
+                                    //case 3:
+                                    //    Console.Write("Enter Branch Name to delete: ");
+                                    //    string deleteName = Console.ReadLine();
+                                    //    if (superAdmin.RemoveBranchByName(deleteName))
+                                    //    {
+                                    //        Console.WriteLine("Branch deleted successfully.");
+                                    //    }
+                                    //    else
+                                    //    {
+                                    //        Console.WriteLine("Branch not found.");
+                                    //    }
+                                    //    Console.WriteLine("Press any key to continue...");
+                                    //    Console.ReadKey();
+                                    //    break;
 
-                                            Console.Write($"How many clinics in department '{deptName}'? ");
-                                            if (!int.TryParse(Console.ReadLine(), out int clinicCount) || clinicCount < 0)
-                                            {
-                                                Console.WriteLine("Invalid clinic count. Skipping this department.");
-                                                continue;
-                                            }
+                                    //case 4:
+                                    //    Console.Write("Enter Branch ID to add department(s): ");
+                                    //    if (!int.TryParse(Console.ReadLine(), out int BranchId))
+                                    //    {
+                                    //        Console.WriteLine("Invalid ID.");
+                                    //        break;
+                                    //    }
 
-                                            for (int j = 0; j < clinicCount; j++)
-                                            {
-                                                Console.Write($"\tEnter name of clinic #{j + 1} in department '{deptName}': ");
-                                                string clinicName = Console.ReadLine();
-                                                Clinic newClinic = new Clinic
-                                                {
-                                                    Name = clinicName,
-                                                    IsActive = true
-                                                };
-                                                newDept.Clinics.Add(newClinic);
-                                            }
+                                    //    // Find the branch by ID
+                                    //    var branch = superAdmin.BranchesList.FirstOrDefault(b => b.BranchId == BranchId);
+                                    //    if (branch == null)
+                                    //    {
+                                    //        Console.WriteLine("Branch not found.");
+                                    //        break;
+                                    //    }
 
-                                            branch.Departments.Add(newDept);
-                                        }
+                                    //    Console.Write("How many departments do you want to add? ");
+                                    //    if (!int.TryParse(Console.ReadLine(), out int deptCount) || deptCount <= 0)
+                                    //    {
+                                    //        Console.WriteLine("Invalid number of departments.");
+                                    //        break;
+                                    //    }
 
-                                        Console.WriteLine($"{deptCount} department(s) added successfully to branch '{branch.BranchName}'.");
-                                        Console.WriteLine("Press any key to continue...");
-                                        Console.ReadKey();
-                                        break;
+                                    //    for (int i = 0; i < deptCount; i++)
+                                    //    {
+                                    //        Console.Write($"Enter name of department #{i + 1}: ");
+                                    //        string deptName = Console.ReadLine();
 
+                                    //        Department newDept = new Department();
+                                    //        newDept.DepName = deptName;
+                                    //        newDept.Clinics = new List<Clinic>();
 
-                                    case 5:
-                                        Console.WriteLine("List of Branches:");
-                                        superAdmin.ViewBranches();
-                                        Console.WriteLine("Press any key to continue...");
-                                        Console.ReadKey();
-                                        break;
+                                    //        Console.Write($"How many clinics in department '{deptName}'? ");
+                                    //        if (!int.TryParse(Console.ReadLine(), out int clinicCount) || clinicCount < 0)
+                                    //        {
+                                    //            Console.WriteLine("Invalid clinic count. Skipping this department.");
+                                    //            continue;
+                                    //        }
+
+                                    //        for (int j = 0; j < clinicCount; j++)
+                                    //        {
+                                    //            Console.Write($"\tEnter name of clinic #{j + 1} in department '{deptName}': ");
+                                    //            string clinicName = Console.ReadLine();
+                                    //            Clinic newClinic = new Clinic
+                                    //            {
+                                    //                Name = clinicName,
+                                    //                IsActive = true
+                                    //            };
+                                    //            newDept.Clinics.Add(newClinic);
+                                    //        }
+
+                                    //        branch.Departments.Add(newDept);
+                                    //    }
+
+                                    //    Console.WriteLine($"{deptCount} department(s) added successfully to branch '{branch.BranchName}'.");
+                                    //    Console.WriteLine("Press any key to continue...");
+                                    //    Console.ReadKey();
+                                    //    break;
+
+                                    //case 5:
+                                    //    Console.WriteLine("List of Branches:");
+                                    //    superAdmin.ViewBranches();
+                                    //    Console.WriteLine("Press any key to continue...");
+                                    //    Console.ReadKey();
+                                    //    break;
+
                                     case 0:
                                         return; // Exit Branch Management menu
 
-                                    //break;
                                     default:
                                         Console.WriteLine("Invalid choice. Please try again.");
                                         break;

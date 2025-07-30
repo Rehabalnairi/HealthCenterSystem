@@ -118,19 +118,19 @@ namespace HealthCenterSystem.Models
             return false;
         }
 
-        //public static bool UpdateBranch(int branchId, string name, string location, int floors, int rooms)
-        //{
-        //    var branch = BranchList.FirstOrDefault(b => b.BranchId == branchId);
-        //    if (branch != null)
-        //    {
-        //        branch.BranchName = name;
-        //        branch.BranchLocation = location;
-        //        branch.NoOfFloors = floors;
-        //        branch.NoOfRooms = rooms;
-        //        return true;
-        //    }
-        //    return false;
-        //}
+        public static bool UpdateBranchById(int branchId, string newName, string newLocation, int floors, int rooms)
+        {
+            var branch = BranchList.FirstOrDefault(b => b.BranchId == branchId);
+            if (branch != null)
+            {
+                branch.BranchName = newName;
+                branch.BranchLocation = newLocation;
+                branch.NoOfFloors = floors;
+                branch.NoOfRooms = rooms;
+                return true;
+            }
+            return false;
+        }
 
         public void ViewBranches()
         {
