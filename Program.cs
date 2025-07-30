@@ -604,22 +604,28 @@ namespace HealthCenterSystem
                                             Console.ReadKey();
                                         }
                                         break;
-                                
 
-                                    //case 3:
-                                    //    Console.Write("Enter Branch Name to delete: ");
-                                    //    string deleteName = Console.ReadLine();
-                                    //    if (superAdmin.RemoveBranchByName(deleteName))
-                                    //    {
-                                    //        Console.WriteLine("Branch deleted successfully.");
-                                    //    }
-                                    //    else
-                                    //    {
-                                    //        Console.WriteLine("Branch not found.");
-                                    //    }
-                                    //    Console.WriteLine("Press any key to continue...");
-                                    //    Console.ReadKey();
-                                    //    break;
+
+                                    case 3:
+                                        Console.Write("Enter Branch ID to delete: ");
+                                        if (!int.TryParse(Console.ReadLine(), out int deleteId))
+                                        {
+                                            Console.WriteLine("Invalid ID format. Please enter a numeric ID.");
+                                        }
+                                        else
+                                        {
+                                            if (superAdmin.RemoveBranch(deleteId))
+                                            {
+                                                Console.WriteLine("Branch deleted successfully.");
+                                            }
+                                            else
+                                            {
+                                                Console.WriteLine("Branch not found.");
+                                            }
+                                        }
+                                        Console.WriteLine("Press any key to continue...");
+                                        Console.ReadKey();
+                                        break;
 
                                     //case 4:
                                     //    Console.Write("Enter Branch ID to add department(s): ");
