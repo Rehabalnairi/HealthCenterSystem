@@ -10,6 +10,7 @@ namespace HealthCenterSystem.Models
     {
        // public string DoctorNI { get; set; }
         public string Specialization { get; set; } // property to hold doctor's specialization
+        public List<DateTime> AvailableAppointments { get; set; } = new List<DateTime>(); // list to hold available appointments for the doctor
         public List<PatientRecord> PatientRecords { get; set; } // list to hold patient records associated with the doctor
         public List<Clinic> Clinics { get; set; } // list to hold clinics associated with the doctor
         public List<Department> Departments { get; set; } // list to hold departments associated with the doctor

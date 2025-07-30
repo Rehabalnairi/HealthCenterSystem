@@ -497,7 +497,7 @@ namespace HealthCenterSystem
                 Console.WriteLine("2. Update Or Delete Doctor");
                 Console.WriteLine("3. Add Appointment");
                 Console.WriteLine("4. Book Appointments For Patient");
-                Console.WriteLine("Views");
+                Console.WriteLine("5.Views");
                 Console.WriteLine("0. Exit Admin Menu");
                 //Console.WriteLine("5. View All Departments and Clinic");
                 // Console.WriteLine("2. View All Doctors");
@@ -607,7 +607,40 @@ namespace HealthCenterSystem
                            
                             break;
                         case 3:
-                            
+
+                            Console.Write("Enter doctor number: ");
+                            if (!int.TryParse(Console.ReadLine(), out int docIndex) || docIndex < 1 || docIndex > doctors.Count())
+                            {
+                                Console.WriteLine("Invalid selection.");
+                                return;
+                            }
+
+                            Doctor selDoctor = doctors[docIndex - 1];
+
+                            Console.Write("How many appointments do you want to add? ");
+                            if (!int.TryParse(Console.ReadLine(), out int count) || count <= 0)
+                            {
+                                Console.WriteLine("Invalid number.");
+                                return;
+                            }
+
+                            for (int i = 0; i < count; i++)
+                            {
+                                Console.Write($"Enter appointment date and time (e.g., 2025-08-01 10:00): ");
+                                if (DateTime.TryParse(Console.ReadLine(), out DateTime appointment))
+                                {
+                                    selDoctor.AvailableAppointments.Add(appointment);
+                                    Console.WriteLine("Appointment added.");
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Invalid date format.");
+                                }
+                            }
+                            Console.WriteLine("Appointments added successfully.");
+                            Console.ReadKey();
+
+
                             break;
                         case 4:
                             
@@ -618,6 +651,122 @@ namespace HealthCenterSystem
                             Console.WriteLine("Invalid choice. Please try again.");
                             break;
                     }
+                }
+            }
+        }
+
+          public static void DoctorMenu(Doctor doctor)
+          {
+             while (true)
+             {
+                Console.Clear();
+                Console.WriteLine($"== Doctor Menu: Dr. {doctor.Name} ==");
+                Console.WriteLine("1. View My Appointments");
+                Console.WriteLine("2. Add Medical Report");
+                Console.WriteLine("3. View My Patients Reports");
+                Console.WriteLine("4. Update Medical Report");
+                Console.WriteLine("5. Logout");
+                Console.Write("Select an option: ");
+                string choice = Console.ReadLine();
+
+                switch (choice)
+                {
+                    case "1":
+                        
+                        break;
+                    case "2":
+                        Console.Write("Enter Patient ID: ");
+                        if (!int.TryParse(Console.ReadLine(), out int patientId))
+                        {
+                            Console.WriteLine("Invalid Patient ID");
+                            Console.ReadKey();
+                            break;
+                        }
+
+                        Patient patient = superAdmin.UsersList.OfType<Patient>().FirstOrDefault(p => p.UserId == patientId);
+                        if (patient == null)
+                        {
+                            Console.WriteLine("Patient not found.");
+                            Console.ReadKey();
+                            break;
+                        }
+
+                        Console.Write("Enter Diagnosis: ");
+                        string diagnosis = Console.ReadLine();
+
+                        Console.Write("Enter Treatment: ");
+                        string treatment = Console.ReadLine();
+
+                        Console.Write("Enter Notes: ");
+                        string notes = Console.ReadLine();
+
+                        recordService.AddRecord(patient, doctor, diagnosis, treatment, notes);
+                        Console.ReadKey();
+                        break;
+                    case "3":
+                        var records = recordService.GetAllRecords()
+                            .Where(r => r.Doctor.UserId == doctor.UserId).ToList();
+
+                        if (!records.Any())
+                        {
+                            Console.WriteLine("No reports found.");
+                        }
+                        else
+                        {
+                            foreach (var record in records)
+                            {
+                                Console.WriteLine(record.ToString());
+                            }
+                        }
+                        Console.ReadKey();
+                        break;
+
+                    case "4":
+                        Console.Write("Enter Record ID to update: ");
+                        if (!int.TryParse(Console.ReadLine(), out int recordId))
+                        {
+                            Console.WriteLine("Invalid Record ID");
+                            Console.ReadKey();
+                            break;
+                        }
+
+                        var recordToUpdate = recordService.GetAllRecords().FirstOrDefault(r => r.RecordId == recordId);
+                        if (recordToUpdate == null)
+                        {
+                            Console.WriteLine("Record not found.");
+                            Console.ReadKey();
+                            break;
+                        }
+
+                        Console.WriteLine($"Current Diagnosis: {recordToUpdate.Diagnosis}");
+                        Console.WriteLine($"Current Treatment: {recordToUpdate.Treatment}");
+                        Console.WriteLine($"Current Notes: {recordToUpdate.Notes}");
+
+                        Console.Write("Enter new Diagnosis: ");
+                        string newDiagnosis = Console.ReadLine();
+
+                        Console.Write("Enter new Treatment: ");
+                        string newTreatment = Console.ReadLine();
+
+                        Console.Write("Enter new Notes: ");
+                        string newNotes = Console.ReadLine();
+
+                        if (recordService.UpdateRecord(recordId, newDiagnosis, newTreatment, newNotes))
+                            Console.WriteLine("Record updated successfully.");
+                        else
+                            Console.WriteLine("Failed to update record.");
+
+                        Console.ReadKey();
+                        break;
+
+
+                    case "5":
+                        Console.WriteLine("Logging out...");
+                        return;
+                    default:
+                        Console.WriteLine("Invalid option. Try again.");
+                        Console.ReadKey();
+                        break;
                 }
             }
         }
