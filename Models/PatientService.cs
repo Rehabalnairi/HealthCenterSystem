@@ -12,15 +12,12 @@ namespace HealthCenterSystem.Models
         private List<Patient> patients = new List<Patient>(); // List to hold all patients in the system
 
         /// Adds a new patient to the system with the provided details
-        public void AddPatient(int UserId,string name, string email, string password, string phoneNumber)
+        public void AddPatient(int UserId, string name, string email, string password, string phoneNumber, string gender, DateTime dateOfBirth, string address)
         {
-            string gender = "Unknow";
-            DateTime dateOfBirth = new DateTime(2000, 01, 15); // Default to current date
-            string address = "Unknown"; // Default address
-
-            Patient newpatient = new Patient(UserId,name, email, password, phoneNumber, gender, dateOfBirth, address);
-            patients.Add(newpatient);
+            Patient newPatient = new Patient(UserId, name, email, password, phoneNumber, gender, dateOfBirth, address);
+            patients.Add(newPatient);
         }
+
 
         /// Updates an existing patient's information based on their ID
         public void UpdatePatient(int id, string name, string email, string password, string phoneNumber)
