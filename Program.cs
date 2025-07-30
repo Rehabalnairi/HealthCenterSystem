@@ -551,7 +551,7 @@ namespace HealthCenterSystem
                 Console.Clear();
                 Console.WriteLine("Admin Menu:");
                 Console.WriteLine("1. Assign Exisiting Doctoer to Department and clinic");
-               
+
                 Console.WriteLine("2. Update Or Delete Doctor");
                 Console.WriteLine("3. Add Appointment");
                 Console.WriteLine("4. Book Appointments For Patient");
