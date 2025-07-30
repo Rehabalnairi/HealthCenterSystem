@@ -129,6 +129,7 @@ namespace HealthCenterSystem
                             Console.WriteLine($"Welcome Dr. {foundDoctor.Name}");
                             Console.ReadKey();
                             DoctorMenu(foundDoctor);
+
                         }
 
                         break;
@@ -259,31 +260,33 @@ namespace HealthCenterSystem
             //SuperAdmin menu
             void SuperAdminMenu(List<Branch> branches, List<Clinic> clinics)
             {
-                Console.Clear();
-                Console.WriteLine("SuperAdmin Menu:");
-
-                Console.WriteLine("1. Add Admin");
-                Console.WriteLine("2. Add Doctor");
-                Console.WriteLine("3. Add Branch");
-                Console.WriteLine("4. View Users");
-                Console.WriteLine("0. Exit");
                 int superAdminChoice = -1;
+
                 while (superAdminChoice != 0)
                 {
+                    Console.Clear();
+                    Console.WriteLine("SuperAdmin Menu: Select an option");
 
-                    Console.Write("Select an option: ");
+                    Console.WriteLine("1. Add Admin");
+                    Console.WriteLine("2. Add Doctor");
+                    Console.WriteLine("3. Add Branch");
+                    Console.WriteLine("4. View Users");
+                    Console.WriteLine("0. Exit");
+
+
                     if (!int.TryParse(Console.ReadLine(), out superAdminChoice))
                     {
                         Console.WriteLine("Invalid input. Please enter a number between 1 and 5.");
                         continue;
                     }
+
                     switch (superAdminChoice)
                     {
                         case 1:
                             int adminId;
                             while (true)
                             {
-                                Console.WriteLine("Enter Admin ID 'The Id must be morr than 6 digits' :");
+                                Console.WriteLine("Enter Admin ID: (The Id must be more than 6 digits) :");
                                 string inputId = Console.ReadLine();
                                 if (!int.TryParse(inputId, out adminId))
                                 {
@@ -295,47 +298,120 @@ namespace HealthCenterSystem
                                     Console.WriteLine("ID must be at least 6 digits long. Please try again.");
                                     continue;
                                 }
-                                Console.WriteLine("Enter Admin Name: ");
-                                string adminName = Console.ReadLine();
+                                break;
+                            }
+                            string adminName;
+                            while (true)
+                            {
+                                Console.WriteLine("Enter Admin Name: (name must contain letters only)");
+                                adminName = Console.ReadLine();
 
-                                Console.WriteLine("Enter Admin Password: ");
-                                string adminPassword = Console.ReadLine();
-                                Console.WriteLine("Enter Admin Phone Number: ");
-                                string adminPhoneNumber = Console.ReadLine();
-                                if (string.IsNullOrWhiteSpace(adminName) || string.IsNullOrWhiteSpace(adminPassword) || string.IsNullOrWhiteSpace(adminPhoneNumber))
+                                if (string.IsNullOrWhiteSpace(adminName) || !adminName.All(char.IsLetter))
                                 {
-                                    Console.WriteLine("Admin Name, Password, and Phone Number cannot be empty. Please try again.");
+                                    Console.WriteLine(" Admin name must contain letters only (no digits or symbols).");
                                     continue;
                                 }
-                                string adminEmail = superAdmin.AddAdmin(adminId, adminName, adminPassword, adminPhoneNumber);
-                                Console.WriteLine($"Admin added successfully. Email: {adminEmail}");
-                                Console.ReadKey();
-                                break; // Exit the loop if a valid ID is entered
-
-                            }
-                            break;
-                        case 2:
-                            Console.Write("Enter doctor ID: ");
-                            if (!int.TryParse(Console.ReadLine(), out int doctorId))
-                            {
-                                Console.WriteLine("Invalid ID format.");
                                 break;
                             }
 
-                            bool idExists = superAdmin.UsersList
+                            string adminPassword;
+                            while (true)
+                            {
+                                Console.WriteLine("Enter Admin Password: (Password must contain letters, numbers, and at least one symbol)");
+                                adminPassword = Console.ReadLine();
+
+                                if (string.IsNullOrWhiteSpace(adminPassword) ||
+                                !adminPassword.Any(char.IsLetter) ||
+                                !adminPassword.Any(char.IsDigit) ||
+                                !adminPassword.Any(ch => !char.IsLetterOrDigit(ch)))
+                                {
+                                    Console.WriteLine(" Password must contain letters, numbers, and at least one symbol.");
+                                    continue;
+                                }
+                                break;
+                            }
+
+                            string adminPhoneNumber;
+                            while (true)
+                            {
+
+                                Console.WriteLine("Enter Admin Phone Number: ( must be at least 8 numbers) ");
+                                adminPhoneNumber = Console.ReadLine();
+                                if (string.IsNullOrWhiteSpace(adminPhoneNumber) ||
+                                adminPhoneNumber.Length < 8 ||
+                               !adminPhoneNumber.All(char.IsDigit))
+                                {
+                                    Console.WriteLine(" Phone number must be at least 8 digits and contain digits only.");
+                                    continue;
+                                }
+                                break;
+                            }
+
+                            string adminEmail = superAdmin.AddAdmin(adminId, adminName, adminPassword, adminPhoneNumber);
+                            Console.WriteLine($"Admin added successfully. Email: {adminEmail}");
+                            Console.ReadKey();
+                            break; // Exit the loop if a valid ID is entered
+                    
+
+                        case 2:
+                            int doctorId;
+                            while (true)
+                            { 
+                                Console.Write("Enter doctor ID: (The Id must be more than 6 digits) ");
+                                string inputDoctorId = Console.ReadLine();
+                                if (!int.TryParse(inputDoctorId, out doctorId))
+                            {
+                                Console.WriteLine("Invalid input. Please enter a numeric ID");
+                                    continue;
+                                }
+                                if (inputDoctorId.Length < 6)
+                                {
+                                    Console.WriteLine("ID must be at least 6 digits long. Please try again.");
+                                    continue;
+                                }
+
+                             bool idExists = superAdmin.UsersList
                             .OfType<Doctor>()
                             .Any(d => d.UserId == doctorId);
 
                             if (idExists)
                             {
                                 Console.WriteLine("This doctor ID is already in use.");
+                                continue;
+                            }
                                 break;
                             }
-                            Console.Write("Enter doctor name: ");
-                            string doctorName = Console.ReadLine();
 
-                            Console.Write("Enter password: ");
-                            string doctorPassword = Console.ReadLine();
+                            string doctorName;
+                            while (true)
+                            {
+                                Console.Write("Enter doctor name: (name must contain letters only ) ");
+                                doctorName = Console.ReadLine();
+
+                                if (string.IsNullOrWhiteSpace(doctorName) || !doctorName.All(char.IsLetter))
+                                {
+                                    Console.WriteLine("Doctor name must contain letters only (no digits or symbols).");
+                                    continue;
+                                }
+                                break;
+                            }
+
+                            string doctorPassword;
+                            while (true)
+                            {
+                                Console.Write("Enter password: ( must contain letters, numbers, and at least one symbol )");
+                                doctorPassword = Console.ReadLine();
+
+                                if (string.IsNullOrWhiteSpace(doctorPassword) ||
+                                 !doctorPassword.Any(char.IsLetter) ||
+                                 !doctorPassword.Any(char.IsDigit) ||
+                                 !doctorPassword.Any(ch => !char.IsLetterOrDigit(ch)))
+                                {
+                                    Console.WriteLine("Password must contain letters, numbers, and at least one symbol.");
+                                    continue;
+                                }
+                                break;
+                            }
 
                             Console.Write("Enter specialization: ");
                             string specialization = Console.ReadLine();
@@ -352,20 +428,28 @@ namespace HealthCenterSystem
                                 Console.WriteLine($"{i + 1}. {superAdmin.BranchesList[i].BranchName}");
                             }
 
-                            Console.Write("Select branch number to assign this doctor to: ");
-                            if (!int.TryParse(Console.ReadLine(), out int branchChoice) ||
-                            branchChoice < 1 || branchChoice > superAdmin.BranchesList.Count)
+                            int branchChoice;
+                            while (true)
                             {
-                                Console.WriteLine("Invalid branch selection.");
-                                break;
+                                Console.Write("Select branch number to assign this doctor to: ");
+                                if (!int.TryParse(Console.ReadLine(), out branchChoice) ||
+                                branchChoice < 1 || branchChoice > superAdmin.BranchesList.Count)
+                                {
+                                    Console.WriteLine("Invalid branch selection.");
+                                    continue;
+                                }
+                                    break;
                             }
 
                             Branch selectedBranch = superAdmin.BranchesList[branchChoice - 1];
                             string doctorEmail = superAdmin.GenerateEmail(doctorName, "doctor");
+
                             Doctor newDoctor = new Doctor(doctorId, doctorName, doctorEmail, doctorPassword, specialization);
                             newDoctor.BranchId = selectedBranch.BranchId;
                             superAdmin.UsersList.Add(newDoctor);
+
                             Console.WriteLine($"Doctor added successfully with email: {doctorEmail}");
+                            Console.ReadKey();
                             break;
 
 
@@ -532,13 +616,17 @@ namespace HealthCenterSystem
                             //Console.WriteLine("Branch added successfully.");
                             Console.ReadLine();
                             break;
+
                         case 4:
                             superAdmin.ViewUsers();
-                            Console.WriteLine("Users viewed successfully.");
+                            Console.WriteLine("Press any key to continue...");
+                            Console.ReadKey();
                             break;
+
                         case 5:
                             Console.WriteLine("Exiting Super Admin menu.");
                             return; // Exit Super Admin menu
+
                         default:
                             Console.WriteLine("Invalid choice. Please try again.");
                             break;
@@ -905,12 +993,12 @@ namespace HealthCenterSystem
                 
 
 
-        public static void DoctorMenu(Doctor doctor)
+        public static void DoctorMenu(Doctor loggedInDoctor)
         {
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine($"== Doctor Menu: Dr. {doctor.Name} ==");
+                Console.WriteLine($"== Doctor Menu: Dr. {loggedInDoctor.Name} ==");
                 Console.WriteLine("1. View My Appointments");
                 Console.WriteLine("2. Add Medical Report");
                 Console.WriteLine("3. View My Patients Reports");
@@ -922,6 +1010,21 @@ namespace HealthCenterSystem
                 switch (choice)
                 {
                     case "1":
+                        Console.Clear();
+                        Console.WriteLine("== Your Available Appointments ==");
+                        if (loggedInDoctor.AvailableAppointments.Count == 0)
+                        {
+                            Console.WriteLine("No appointments available.");
+                        }
+                        else
+                        {
+                            foreach (var app in loggedInDoctor.AvailableAppointments)
+                            {
+                                Console.WriteLine($"- {app}");
+                            }
+                        }
+                        Console.WriteLine("Press any key to continue...");
+                        Console.ReadKey();
 
                         break;
                     case "2":
@@ -950,12 +1053,13 @@ namespace HealthCenterSystem
                         Console.Write("Enter Notes: ");
                         string notes = Console.ReadLine();
 
-                        recordService.AddRecord(patient, doctor, diagnosis, treatment, notes);
+                        recordService.AddRecord(patient, loggedInDoctor, diagnosis, treatment, notes);
                         Console.ReadKey();
                         break;
                     case "3":
                         var records = recordService.GetAllRecords()
-                            .Where(r => r.Doctor.UserId == doctor.UserId).ToList();
+                            .Where(r => r.Doctor.UserId == loggedInDoctor.UserId)
+;
 
                         if (!records.Any())
                         {
