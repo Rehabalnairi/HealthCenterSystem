@@ -128,6 +128,7 @@ namespace HealthCenterSystem
                             Console.WriteLine($"Welcome Dr. {foundDoctor.Name}");
                             Console.ReadKey();
                             DoctorMenu(foundDoctor);
+
                         }
 
                         break;
@@ -794,12 +795,12 @@ namespace HealthCenterSystem
         }
 
 
-        public static void DoctorMenu(Doctor doctor)
+        public static void DoctorMenu(Doctor loggedInDoctor)
         {
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine($"== Doctor Menu: Dr. {doctor.Name} ==");
+                Console.WriteLine($"== Doctor Menu: Dr. {loggedInDoctor.Name} ==");
                 Console.WriteLine("1. View My Appointments");
                 Console.WriteLine("2. Add Medical Report");
                 Console.WriteLine("3. View My Patients Reports");
@@ -811,6 +812,21 @@ namespace HealthCenterSystem
                 switch (choice)
                 {
                     case "1":
+                        Console.Clear();
+                        Console.WriteLine("== Your Available Appointments ==");
+                        if (loggedInDoctor.AvailableAppointments.Count == 0)
+                        {
+                            Console.WriteLine("No appointments available.");
+                        }
+                        else
+                        {
+                            foreach (var app in loggedInDoctor.AvailableAppointments)
+                            {
+                                Console.WriteLine($"- {app}");
+                            }
+                        }
+                        Console.WriteLine("Press any key to continue...");
+                        Console.ReadKey();
 
                         break;
                     case "2":
@@ -839,12 +855,13 @@ namespace HealthCenterSystem
                         Console.Write("Enter Notes: ");
                         string notes = Console.ReadLine();
 
-                        recordService.AddRecord(patient, doctor, diagnosis, treatment, notes);
+                        recordService.AddRecord(patient, loggedInDoctor, diagnosis, treatment, notes);
                         Console.ReadKey();
                         break;
                     case "3":
                         var records = recordService.GetAllRecords()
-                            .Where(r => r.Doctor.UserId == doctor.UserId).ToList();
+                            .Where(r => r.Doctor.UserId == loggedInDoctor.UserId)
+;
 
                         if (!records.Any())
                         {
