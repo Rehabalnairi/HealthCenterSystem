@@ -1073,9 +1073,11 @@ namespace HealthCenterSystem
                     case "1":
                         RegisterPatient();
                         break;
+
                     case "2":
                         Console.Write("Enter your email: ");
                         string email = Console.ReadLine();
+
                         Console.Write("Enter your password: ");
                         string password = Console.ReadLine();
 
@@ -1084,25 +1086,30 @@ namespace HealthCenterSystem
 
                         if (patient != null)
                         {
-                            Console.WriteLine("Login successful!");
+                            Console.WriteLine("Login successful! Press any key to continue...");
                             Console.ReadKey();
-                            PatientLoginMenu(patient);
+                            PatientLoginMenu(patient);  // Enter patient sub-menu
                         }
                         else
                         {
-                            Console.WriteLine("Invalid credentials.");
+                            Console.WriteLine("Invalid credentials. Press any key to try again...");
                             Console.ReadKey();
                         }
                         break;
+
                     case "0":
+                        Console.WriteLine("Returning to Main Menu...");
+                        Console.ReadKey();
                         return;
+
                     default:
-                        Console.WriteLine("Invalid option.");
+                        Console.WriteLine("Invalid option. Press any key to try again...");
                         Console.ReadKey();
                         break;
                 }
             }
         }
+
         public static void PatientLoginMenu(Patient patient)
         {
             while (true)
@@ -1111,7 +1118,7 @@ namespace HealthCenterSystem
                 Console.WriteLine($"== Welcome, {patient.Name} ==");
                 Console.WriteLine("1. View My Appointments");
                 Console.WriteLine("2. View My Medical Reports");
-                Console.WriteLine("3. Logout");
+                Console.WriteLine("3. Logout"); // logout to patient login screen
                 Console.WriteLine("0. Back to Main Menu");
                 Console.Write("Select an option: ");
                 string choice = Console.ReadLine();
@@ -1155,16 +1162,19 @@ namespace HealthCenterSystem
                         break;
 
                     case "3":
+                        Console.WriteLine("Logging out...");
+                        return; // returns to login
                     case "0":
-                        return;
-
+                        Console.WriteLine("Returning to main menu...");
+                        return; // also returns
                     default:
-                        Console.WriteLine("Invalid option.");
+                        Console.WriteLine("Invalid option. Press any key to try again.");
                         Console.ReadKey();
                         break;
                 }
             }
         }
+
         public static void RegisterPatient()
         {
             Console.Clear();
