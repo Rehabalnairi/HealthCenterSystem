@@ -172,6 +172,7 @@ namespace HealthCenterSystem
                                     }
                                     break;
 
+
                                     case 2:
                                     PatientRecordService recordService = new PatientRecordService();
                                     var records = recordService.GetRecordsByPatient(loggedPatient);
