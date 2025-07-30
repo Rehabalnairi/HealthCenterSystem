@@ -16,8 +16,6 @@ namespace HealthCenterSystem.Models
         }
 
 
-
-
     }
 }
 
