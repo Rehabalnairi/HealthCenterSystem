@@ -17,7 +17,7 @@ namespace HealthCenterSystem.Models
             PatientRecord record = new PatientRecord(newId, patient, doctor, visitDate, diagnosis, treatment, notes);
 
             records.Add(record);
-            patient.Records.Add(record); // Link directly to the patient
+            //patient.Records.Add(record); // Link directly to the patient
 
             Console.WriteLine("✔ Medical record added successfully.");
         }
@@ -52,7 +52,7 @@ namespace HealthCenterSystem.Models
             if (record != null)
             {
                 records.Remove(record);
-                record.Patient.Records.Remove(record); // Remove from patient's list too
+                //record.Patient.Records.Remove(record); // Remove from patient's list too
                 return true;
             }
             return false;
