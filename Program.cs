@@ -477,11 +477,33 @@ namespace HealthCenterSystem
                                 switch (branchOption)
                                 {
                                     case 1:
-                                        Console.Write("Enter Branch Name: ");
-                                        string branchName = Console.ReadLine();
+                                        string branchName;
+                                        while (true)
+                                        {
+                                            Console.Write("Enter Branch Name: ");
+                                            branchName = Console.ReadLine()?.Trim();
 
-                                        Console.Write("Enter Branch Location: ");
-                                        string branchLocation = Console.ReadLine();
+                                            if (string.IsNullOrWhiteSpace(branchName) || branchName.Any(char.IsDigit))
+                                            {
+                                                Console.WriteLine("Invalid branch name. It must contain letters only and cannot be empty.");
+                                                continue;
+                                            }
+                                            break;
+                                        }
+
+                                        string branchLocation;
+                                        while (true)
+                                        {
+                                            Console.Write("Enter Branch Location: ");
+                                            branchLocation = Console.ReadLine()?.Trim();
+
+                                            if (string.IsNullOrWhiteSpace(branchLocation) || branchLocation.Any(char.IsDigit))
+                                            {
+                                                Console.WriteLine("Invalid branch location. It must contain letters only and cannot be empty.");
+                                                continue;
+                                            }
+                                            break;
+                                        }
 
                                         int noOfFloors;
                                         while (true)
