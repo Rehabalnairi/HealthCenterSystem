@@ -28,8 +28,8 @@ namespace HealthCenterSystem
 
             List<Clinic> clinics = new List<Clinic>
             {
-                     new Clinic(1, "Cardiology Clinic", "Muscat", 100.00m, "12345678", "cardio@clinic.com"),
-                     new Clinic(2, "Pediatrics Clinic", "Muscat", 80.00m, "87654321", "pediatrics@clinic.com")
+                     //new Clinic(1, "Cardiology Clinic", "Muscat", 100.00m, "12345678", "cardio@clinic.com"),
+                     //new Clinic(2, "Pediatrics Clinic", "Muscat", 80.00m, "87654321", "pediatrics@clinic.com")
             };
 
             DoctorService doctorService = new DoctorService();
