@@ -259,31 +259,33 @@ namespace HealthCenterSystem
             //SuperAdmin menu
             void SuperAdminMenu(List<Branch> branches, List<Clinic> clinics)
             {
-                Console.Clear();
-                Console.WriteLine("SuperAdmin Menu:");
-
-                Console.WriteLine("1. Add Admin");
-                Console.WriteLine("2. Add Doctor");
-                Console.WriteLine("3. Add Branch");
-                Console.WriteLine("4. View Users");
-                Console.WriteLine("0. Exit");
                 int superAdminChoice = -1;
+
                 while (superAdminChoice != 0)
                 {
+                    Console.Clear();
+                    Console.WriteLine("SuperAdmin Menu: Select an option");
 
-                    Console.Write("Select an option: ");
+                    Console.WriteLine("1. Add Admin");
+                    Console.WriteLine("2. Add Doctor");
+                    Console.WriteLine("3. Add Branch");
+                    Console.WriteLine("4. View Users");
+                    Console.WriteLine("0. Exit");
+
+
                     if (!int.TryParse(Console.ReadLine(), out superAdminChoice))
                     {
                         Console.WriteLine("Invalid input. Please enter a number between 1 and 5.");
                         continue;
                     }
+
                     switch (superAdminChoice)
                     {
                         case 1:
                             int adminId;
                             while (true)
                             {
-                                Console.WriteLine("Enter Admin ID 'The Id must be morr than 6 digits' :");
+                                Console.WriteLine("Enter Admin ID: (The Id must be more than 6 digits) :");
                                 string inputId = Console.ReadLine();
                                 if (!int.TryParse(inputId, out adminId))
                                 {
@@ -295,27 +297,63 @@ namespace HealthCenterSystem
                                     Console.WriteLine("ID must be at least 6 digits long. Please try again.");
                                     continue;
                                 }
-                                Console.WriteLine("Enter Admin Name: ");
-                                string adminName = Console.ReadLine();
+                                break;
+                            }
+                            string adminName;
+                            while (true)
+                            {
+                                Console.WriteLine("Enter Admin Name: (name must contain letters only)");
+                                adminName = Console.ReadLine();
 
-                                Console.WriteLine("Enter Admin Password: ");
-                                string adminPassword = Console.ReadLine();
-                                Console.WriteLine("Enter Admin Phone Number: ");
-                                string adminPhoneNumber = Console.ReadLine();
-                                if (string.IsNullOrWhiteSpace(adminName) || string.IsNullOrWhiteSpace(adminPassword) || string.IsNullOrWhiteSpace(adminPhoneNumber))
+                                if (string.IsNullOrWhiteSpace(adminName) || !adminName.All(char.IsLetter))
                                 {
-                                    Console.WriteLine("Admin Name, Password, and Phone Number cannot be empty. Please try again.");
+                                    Console.WriteLine(" Admin name must contain letters only (no digits or symbols).");
                                     continue;
                                 }
-                                string adminEmail = superAdmin.AddAdmin(adminId, adminName, adminPassword, adminPhoneNumber);
-                                Console.WriteLine($"Admin added successfully. Email: {adminEmail}");
-                                Console.ReadKey();
-                                break; // Exit the loop if a valid ID is entered
-
+                                break;
                             }
-                            break;
+
+                            string adminPassword;
+                            while (true)
+                            {
+                                Console.WriteLine("Enter Admin Password: (Password must contain letters, numbers, and at least one symbol)");
+                                adminPassword = Console.ReadLine();
+
+                                if (string.IsNullOrWhiteSpace(adminPassword) ||
+                                !adminPassword.Any(char.IsLetter) ||
+                                !adminPassword.Any(char.IsDigit) ||
+                                !adminPassword.Any(ch => !char.IsLetterOrDigit(ch)))
+                                {
+                                    Console.WriteLine(" Password must contain letters, numbers, and at least one symbol.");
+                                    continue;
+                                }
+                                break;
+                            }
+
+                            string adminPhoneNumber;
+                            while (true)
+                            {
+
+                                Console.WriteLine("Enter Admin Phone Number: ( must be at least 8 numbers) ");
+                                adminPhoneNumber = Console.ReadLine();
+                                if (string.IsNullOrWhiteSpace(adminPhoneNumber) ||
+                                adminPhoneNumber.Length < 8 ||
+                               !adminPhoneNumber.All(char.IsDigit))
+                                {
+                                    Console.WriteLine(" Phone number must be at least 8 digits and contain digits only.");
+                                    continue;
+                                }
+                                break;
+                            }
+
+                            string adminEmail = superAdmin.AddAdmin(adminId, adminName, adminPassword, adminPhoneNumber);
+                            Console.WriteLine($"Admin added successfully. Email: {adminEmail}");
+                            Console.ReadKey();
+                            break; // Exit the loop if a valid ID is entered
+                    
+
                         case 2:
-                            Console.Write("Enter doctor ID: ");
+                            Console.Write("Enter doctor ID: 'The Id must be more than 6 digits' ");
                             if (!int.TryParse(Console.ReadLine(), out int doctorId))
                             {
                                 Console.WriteLine("Invalid ID format.");
