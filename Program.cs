@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
+using System.Net.Mail;
 using System.Numerics;
 using HealthCenterSystem.Models;
 using HealthCenterSystem.Services;
@@ -684,10 +685,7 @@ namespace HealthCenterSystem
                 Console.WriteLine("4. Book Appointments For Patient");
                 Console.WriteLine("5.Views");
                 Console.WriteLine("0. Exit Admin Menu");
-                //Console.WriteLine("5. View All Departments and Clinic");
-                // Console.WriteLine("2. View All Doctors");
-                // Console.WriteLine("7. View All Appointments");
-                //Console.WriteLine("9. View Patients");
+
                 int adminChoice = -1;
                 while (adminChoice != 0)
                 {
@@ -906,19 +904,132 @@ namespace HealthCenterSystem
 
                             break;
                         case 4:
+                            {
+                                while (true)
+                                {
+                                    Console.Clear();
+                                    Console.WriteLine("==View Menu==");
+                                    Console.WriteLine("1. View All Departments and Clinics");
+                                    Console.WriteLine("2. View All Doctors");
+                                    Console.WriteLine("3. View All Appointments");
+                                    Console.WriteLine("4. View Patients");
+                                    Console.WriteLine("0. Back to Admin Menu");
+                                    Console.Write("Select an option: ");
+                                    string viewChoice = Console.ReadLine();
 
-                            break;
-                        case 0:
-                            return; // Exit Admin menu
-                        default:
-                            Console.WriteLine("Invalid choice. Please try again.");
-                            break;
+                                    switch (viewChoice)
+                                    {
+                                        case "1":
+                                            Console.Clear();
+                                            Console.WriteLine("All Departments and Clinics:");
+                                            var branches = Branch.GetAllBranches(); // لازم تخزن الفرع هنا
+                                            if (branches.Count == 0)
+                                            {
+                                                Console.WriteLine("NO Branches Available");
+                                                break;
+                                            }
+                                            foreach (var br in branches)
+                                            {
+                                                Console.WriteLine($"Branch: {br.BranchName} - Location: {br.BranchLocation}");
+                                                if (br.Departments == null || br.Departments.Count == 0)
+                                                {
+                                                    Console.WriteLine("  No Departments Available");
+                                                    continue;
+                                                }
+                                                foreach (var dep in br.Departments)
+                                                {
+                                                    Console.WriteLine($"  Department: {dep.DepName}");
+                                                    if (dep.Clinics == null || dep.Clinics.Count == 0)
+                                                    {
+                                                        Console.WriteLine("No Clinics Available");
+                                                        continue;
+                                                    }
+                                                    foreach (var clinic in dep.Clinics)
+                                                    {
+                                                        Console.WriteLine($"    Clinic: {clinic.Name}");
+                                                    }
+                                                }
+                                            }
+                                            break;
+
+                                        case "2":
+                                            Console.Clear();
+                                            Console.WriteLine("All Doctors:");
+                                            var allDoctors = users.OfType<Doctor>().ToList();
+                                            if (allDoctors.Count == 0)
+                                            {
+                                                Console.WriteLine("No Doctors Available");
+                                                break;
+                                            }
+                                            foreach (var Doctor in allDoctors)
+                                            {
+                                                Console.WriteLine($"Doctor ID: {Doctor.UserId}, Name: {Doctor.Name}, Email: {Doctor.Email}, Specialization: {Doctor.Specialization}, Phone: {Doctor.PhoneNumber}");
+                                            }
+                                            break;
+
+                                        case "3":
+                                            Console.Clear();
+                                            Console.WriteLine("All Appointments:");
+                                            var Doctors = users.OfType<Doctor>().ToList();
+                                            foreach (var doc in Doctors)
+                                            {
+                                                Console.WriteLine($"\nDr. {doc.Name}'s Appointments:");
+                                                if (doc.AvailableAppointments == null || doc.AvailableAppointments.Count == 0)
+                                                {
+                                                    Console.WriteLine("\tNo appointments.");
+                                                    continue;
+                                                }
+                                                foreach (var app in doc.AvailableAppointments)
+                                                {
+                                                    Console.WriteLine($"\t- {app}");
+                                                }
+                                            }
+                                            break;
+
+                                        case "4":
+                                            Console.Clear();
+                                            Console.WriteLine("All Patients:");
+                                            var allPatients = users.OfType<Patient>().ToList();
+                                            if (allPatients.Count == 0)
+                                            {
+                                                Console.WriteLine("No Patients Available");
+                                                break;
+                                            }
+                                            foreach (var patient in allPatients)
+                                            {
+                                                Console.WriteLine($"Patient ID: {patient.UserId}, Name: {patient.Name}, Email: {patient.Email}, Phone: {patient.PhoneNumber}");
+                                            }
+                                            break;
+
+                                        case "0":
+                                            return;
+
+                                        default:
+                                            Console.WriteLine("Invalid choice. Please try again.");
+                                            break;
+                                            Console.WriteLine("Press any key to continue...");
+                                            Console.ReadKey();
+                                    }
+                                }
+                            }
+                                        case 0:
+                                        return; // Exit Admin menu
+                                    default:
+                                        Console.WriteLine("Invalid choice. Please try again.");
+                                        break;
+                                    }
+                                }
+
+                            }
                     }
-                }
+                
+            
+        
+                
+            
+        
 
-            }
-
-        }
+                
 
 
         public static void DoctorMenu(Doctor loggedInDoctor)
@@ -1052,6 +1163,11 @@ namespace HealthCenterSystem
                 }
             }
         }
-
+     
     }
+
 }
+
+
+
+
