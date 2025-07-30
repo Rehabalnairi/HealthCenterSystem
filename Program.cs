@@ -33,7 +33,7 @@ namespace HealthCenterSystem
 
             Console.WriteLine("Welcome to Codeline Health System");
 
-            int choice =0;
+            int choice = 0;
             while (choice != 4)
             {
                 Console.Clear();
@@ -97,16 +97,123 @@ namespace HealthCenterSystem
                         Console.WriteLine("You are logged in as Doctor.");
                         Console.WriteLine("Doctor functionality coming soon...");
                         break;
-
                     case 4:
-                        Console.WriteLine("You are logged in as Patient.");
-                        Console.WriteLine("Patient functionality coming soon...");
+                        Console.Clear();
+                        Console.WriteLine("Patient Menu:");
+                        Console.WriteLine("1. Register");
+                        Console.WriteLine("2. Login");
+                        Console.WriteLine("0. Back to main menu");
+
+                        Console.Write("Enter your choice: ");
+                        int patientChoice = int.Parse(Console.ReadLine());
+
+                        switch (patientChoice)
+                        {
+                            case 1: // Registration
+                                Console.Write("Enter your name: ");
+                                string pname = Console.ReadLine();
+
+                                Console.Write("Enter your email: ");
+                                string pemail = Console.ReadLine();
+
+                                Console.Write("Enter password: ");
+                                string ppassword = Console.ReadLine();
+
+                                Console.Write("Enter your phone number: ");
+                                string pphone = Console.ReadLine();
+
+                                PatientService patientService = new PatientService();
+                                int newPatientId = users.Count + 1;
+
+                                patientService.AddPatient(newPatientId, pname, pemail, ppassword, pphone);
+                                users.Add(new Patient(newPatientId, pname, pemail, ppassword, pphone, "Unknown", DateTime.Now, "Unknown"));
+                                Console.WriteLine("Registration successful.");
+                                Console.ReadKey();
+                                break;
+
+                            case 2: // Login
+                                Console.Write("Enter your email: ");
+                                string loginEmail = Console.ReadLine();
+
+                                Console.Write("Enter your password: ");
+                                string loginPassword = Console.ReadLine();
+
+                                var loggedPatient = users.FirstOrDefault(u => u.Email == loginEmail && u.Password == loginPassword && u.Role == "Patient") as Patient;
+
+                                if (loggedPatient != null)
+                                {
+                                    Console.WriteLine($"Welcome {loggedPatient.Name}!");
+                                    // Display patient dashboard
+                                    int pMenu = -1;
+                                    while (pMenu != 0)
+                                    {
+                                        Console.WriteLine("\nPatient Dashboard:");
+                                        Console.WriteLine("1. View Appointments");
+                                        Console.WriteLine("2. View Medical Reports");
+                                        Console.WriteLine("0. Logout");
+
+                                        Console.Write("Choice: ");
+                                        int.TryParse(Console.ReadLine(), out pMenu);
+
+                                        switch (pMenu)
+                                        {
+                                            case 1:
+                                                
+                                                //AppointmentService appService = new AppointmentService();
+                                                //var appointments = appService.GetAppointmentsByPatient(loggedPatient.UserId);
+
+                                                //foreach (var app in appointments)
+                                                //{
+                                                //    Console.WriteLine(app.ToString());
+                                                //}
+                                                //break;
+
+                                            case 2:
+                                                //PatientRecordService recordService = new PatientRecordService();
+                                                //var records = recordService.GetRecordsByPatient(loggedPatient);
+
+                                                //foreach (var record in records)
+                                                //{
+                                                //    Console.WriteLine(record.ToString());
+                                                //}
+                                                break;
+
+                                            case 0:
+                                                Console.WriteLine("Logging out...");
+                                                break;
+
+                                            default:
+                                                Console.WriteLine("Invalid option.");
+                                                break;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Login failed. Invalid credentials.");
+                                }
+
+                                Console.ReadKey();
+                                break;
+
+                            case 0:
+                                break;
+
+                            default:
+                                Console.WriteLine("Invalid option.");
+                                break;
+                        }
+                        break;
+
+
+
+
                         break;
 
                     case 0:
                         return; // Exit the application
-                        //Console.WriteLine("Exiting the system. Goodbye!");
-                        //break;
+                                //Console.WriteLine("Exiting the system. Goodbye!");
+                                //break;
 
                     default:
                         Console.WriteLine("Invalid choice. Please try again.");
@@ -160,7 +267,7 @@ namespace HealthCenterSystem
                                 string adminPassword = Console.ReadLine();
                                 Console.WriteLine("Enter Admin Phone Number: ");
                                 string adminPhoneNumber = Console.ReadLine();
-                                if(string.IsNullOrWhiteSpace(adminName) || string.IsNullOrWhiteSpace(adminPassword) || string.IsNullOrWhiteSpace(adminPhoneNumber))
+                                if (string.IsNullOrWhiteSpace(adminName) || string.IsNullOrWhiteSpace(adminPassword) || string.IsNullOrWhiteSpace(adminPhoneNumber))
                                 {
                                     Console.WriteLine("Admin Name, Password, and Phone Number cannot be empty. Please try again.");
                                     continue;
@@ -182,7 +289,7 @@ namespace HealthCenterSystem
                             Console.Write("Enter specialization: ");
                             string specialization = Console.ReadLine();
 
-                          
+
                             if (superAdmin.BranchesList.Count == 0)
                             {
                                 Console.WriteLine("No branches available. Please add a branch first.");
@@ -244,18 +351,18 @@ namespace HealthCenterSystem
                                         int noOfFloors = int.Parse(Console.ReadLine());
                                         Console.Write("Enter Number of Rooms: ");
                                         int noOfRooms = int.Parse(Console.ReadLine());
-                                       
-                                        superAdmin.AddBranch(branchName, branchLocation, noOfFloors, noOfRooms,"","");
+
+                                        superAdmin.AddBranch(branchName, branchLocation, noOfFloors, noOfRooms, "", "");
                                         Console.WriteLine("Branch added successfully.");
                                         Console.WriteLine("Press any key to continue...");
                                         Console.ReadKey();
                                         break;
                                     case 2:
                                         Console.Write("Enter Branch Name to update: ");
-                                        string updateName = Console.ReadLine(); 
+                                        string updateName = Console.ReadLine();
 
                                         Console.Write("Enter New Branch Name: ");
-                                        string newName = Console.ReadLine(); 
+                                        string newName = Console.ReadLine();
                                         Console.Write("Enter New Location: ");
                                         string newLoc = Console.ReadLine();
 
@@ -336,7 +443,8 @@ namespace HealthCenterSystem
                                             {
                                                 Console.Write($"\tEnter name of clinic #{j + 1} in department '{deptName}': ");
                                                 string clinicName = Console.ReadLine();
-                                                Clinic newClinic = new Clinic {
+                                                Clinic newClinic = new Clinic
+                                                {
                                                     Name = clinicName,
                                                     IsActive = true
                                                 };
@@ -361,7 +469,7 @@ namespace HealthCenterSystem
                                     case 0:
                                         return; // Exit Branch Management menu
 
-                                        //break;
+                                    //break;
                                     default:
                                         Console.WriteLine("Invalid choice. Please try again.");
                                         break;
@@ -476,3 +584,4 @@ namespace HealthCenterSystem
         }
     }
 }
+
