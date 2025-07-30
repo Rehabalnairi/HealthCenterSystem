@@ -14,6 +14,7 @@ namespace HealthCenterSystem.Models
         public List<Clinic> Clinics { get; set; } // list to hold clinics associated with the doctor
         public List<Department> Departments { get; set; } // list to hold departments associated with the doctor
         public int DepartmentId { get; set; } // property to hold department ID
+        public int? BranchId { get; set; }
         public Doctor(int userId, string name, string email, string password,string Specialization)
             :   base(userId, name, email, password, "98376256", "Doctor") // constructor to initialize doctor properties
         {
@@ -23,6 +24,7 @@ namespace HealthCenterSystem.Models
             this.Clinics = new List<Clinic>(); // initialize the list of clinics
             this.Departments = new List<Department>(); // initialize the list of departments
         }
+
         public void AddPatientRecord(PatientRecord record) // method to add a patient record
         {
             this.PatientRecords.Add(record); // add the record to the list of patient records

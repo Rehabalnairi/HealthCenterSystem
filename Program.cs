@@ -94,8 +94,40 @@ namespace HealthCenterSystem
                             break;
 
                     case 3:
-                        Console.WriteLine("You are logged in as Doctor.");
-                        Console.WriteLine("Doctor functionality coming soon...");
+
+                        Console.WriteLine("== Doctor Login ==");
+                        Console.WriteLine("Enter your ID: ");
+                        string doctorID = Console.ReadLine();
+                        Console.WriteLine("Enter your Password: ");
+                        string doctorPassword = Console.ReadLine();
+
+                      
+                        if (!int.TryParse(doctorID, out int doctorUserId))
+                        {
+                            Console.WriteLine("Invalid ID. The ID must be numeric.");
+                            Console.ReadKey();
+                            break;
+                        }
+
+                        
+                        Doctor foundDoctor = superAdmin.UsersList
+                            .OfType<Doctor>()
+                            .FirstOrDefault(d => d.UserId == doctorUserId && d.Password == doctorPassword);
+
+                        if (foundDoctor == null)
+                        {
+                            Console.WriteLine("Invalid doctor ID or password.");
+                            Console.ReadKey();
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Login successful. Welcome Dr. {foundDoctor.Name}");
+                            Console.WriteLine($"Welcome Dr. {foundDoctor.Name}");
+                            Console.ReadKey();
+
+                        }
+                        break;
+
                         break;
                     case 4:
                         Console.Clear();
@@ -280,6 +312,22 @@ namespace HealthCenterSystem
                             }
                             break;
                         case 2:
+                            Console.Write("Enter doctor ID: ");
+                            if (!int.TryParse(Console.ReadLine(), out int doctorId))
+                            {
+                                Console.WriteLine("Invalid ID format.");
+                                break;
+                            }
+
+                            bool idExists = superAdmin.UsersList
+                            .OfType<Doctor>()
+                            .Any(d => d.UserId == doctorId);
+
+                            if (idExists)
+                            {
+                                Console.WriteLine("This doctor ID is already in use.");
+                                break;
+                            }
                             Console.Write("Enter doctor name: ");
                             string doctorName = Console.ReadLine();
 
@@ -288,7 +336,6 @@ namespace HealthCenterSystem
 
                             Console.Write("Enter specialization: ");
                             string specialization = Console.ReadLine();
-
 
                             if (superAdmin.BranchesList.Count == 0)
                             {
@@ -303,20 +350,19 @@ namespace HealthCenterSystem
                             }
 
                             Console.Write("Select branch number to assign this doctor to: ");
-                            int branchChoice = int.Parse(Console.ReadLine());
-
-                            if (branchChoice < 1 || branchChoice > superAdmin.BranchesList.Count)
+                            if (!int.TryParse(Console.ReadLine(), out int branchChoice) ||
+                            branchChoice < 1 || branchChoice > superAdmin.BranchesList.Count)
                             {
                                 Console.WriteLine("Invalid branch selection.");
                                 break;
                             }
 
                             Branch selectedBranch = superAdmin.BranchesList[branchChoice - 1];
-
-                            string doctorEmail = superAdmin.AddDoctor(doctorName, doctorPassword, specialization);
-
+                            string doctorEmail = superAdmin.GenerateEmail(doctorName, "doctor");
+                            Doctor newDoctor = new Doctor(doctorId, doctorName, doctorEmail, doctorPassword, specialization);
+                            newDoctor.BranchId = selectedBranch.BranchId;
+                            superAdmin.UsersList.Add(newDoctor);
                             Console.WriteLine($"Doctor added successfully with email: {doctorEmail}");
-
                             break;
 
 

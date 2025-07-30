@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 namespace HealthCenterSystem.Services
 {
     /// This interface defines the methods for managing doctors in a health center system.
-    interface IDoctorService
+    public interface IDoctorService
     {
-        void AddDoctor(string name, string email, string password, string phoneNumber, string specialization); // Adds a new doctor to the system
+        void AddDoctor(int userId, string name, string email, string password, string phoneNumber, string specialization); // Adds a new doctor to the system
         void UpdateDoctor(int id, string name, string email, string password, string phoneNumber, string specialization); /// Updates an existing doctor's information by ID
         void DeleteDoctor(int id); // Deletes a doctor from the system by ID
         List<Doctor> GetAllDoctors(); // Retrieves a list of all doctors in the system

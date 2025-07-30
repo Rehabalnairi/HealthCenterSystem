@@ -14,10 +14,9 @@ namespace HealthCenterSystem.Models
 
 
         /// Adds a new doctor to the system with the provided details
-        public void AddDoctor(string name, string email, string password, string phoneNumber, string specialization)
+        public void AddDoctor( int userId, string name, string email, string password, string phoneNumber, string specialization)
         {
-            int newId = doctors.Count + 1;
-            Doctor newDoctor = new Doctor(newId, name, email, password, specialization);
+            Doctor newDoctor = new Doctor(userId, name, email, password, specialization);
             newDoctor.PhoneNumber = phoneNumber; // Set the phone number for the doctor
             doctors.Add(newDoctor);
         }
