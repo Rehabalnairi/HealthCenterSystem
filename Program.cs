@@ -126,118 +126,7 @@ namespace HealthCenterSystem
                         }
 
                         break;
-                    case 4:
-                        Console.Clear();
-                        Console.WriteLine("Patient Menu:");
-                        Console.WriteLine("1. Register");
-                        Console.WriteLine("2. Login");
-                        Console.WriteLine("0. Back to main menu");
-
-                        Console.Write("Enter your choice: ");
-                        int patientChoice = int.Parse(Console.ReadLine());
-
-                        switch (patientChoice)
-                        {
-                            case 1: // Registration
-                                Console.Write("Enter your name: ");
-                                string pname = Console.ReadLine();
-
-                                Console.Write("Enter your email: ");
-                                string pemail = Console.ReadLine();
-
-                                Console.Write("Enter password: ");
-                                string ppassword = Console.ReadLine();
-
-                                Console.Write("Enter your phone number: ");
-                                string pphone = Console.ReadLine();
-
-                                PatientService patientService = new PatientService();
-                                int newPatientId = users.Count + 1;
-
-                                //patientService.AddPatient(newPatientId, pname, pemail, ppassword, pphone);
-                                users.Add(new Patient(newPatientId, pname, pemail, ppassword, pphone, "Unknown", DateTime.Now, "Unknown"));
-                                Console.WriteLine("Registration successful.");
-                                Console.ReadKey();
-                                break;
-
-                            case 2: // Login
-                                Console.Write("Enter your email: ");
-                                string loginEmail = Console.ReadLine();
-
-                                Console.Write("Enter your password: ");
-                                string loginPassword = Console.ReadLine();
-
-                                var loggedPatient = users.FirstOrDefault(u => u.Email == loginEmail && u.Password == loginPassword && u.Role == "Patient") as Patient;
-
-                                if (loggedPatient != null)
-                                {
-                                    Console.WriteLine($"Welcome {loggedPatient.Name}!");
-                                    // Display patient dashboard
-                                    int pMenu = -1;
-                                    while (pMenu != 0)
-                                    {
-                                        Console.WriteLine("\nPatient Dashboard:");
-                                        Console.WriteLine("1. View Appointments");
-                                        Console.WriteLine("2. View Medical Reports");
-                                        Console.WriteLine("0. Logout");
-
-                                        Console.Write("Choice: ");
-                                        int.TryParse(Console.ReadLine(), out pMenu);
-
-                                        switch (pMenu)
-                                        {
-                                            case 1:
-
-                                            //AppointmentService appService = new AppointmentService();
-                                            //var appointments = appService.GetAppointmentsByPatient(loggedPatient.UserId);
-
-                                            //foreach (var app in appointments)
-                                            //{
-                                            //    Console.WriteLine(app.ToString());
-                                            //}
-                                            //break;
-
-                                            case 2:
-                                                //PatientRecordService recordService = new PatientRecordService();
-                                                //var records = recordService.GetRecordsByPatient(loggedPatient);
-
-                                                //foreach (var record in records)
-                                                //{
-                                                //    Console.WriteLine(record.ToString());
-                                                //}
-                                                break;
-
-                                            case 0:
-                                                Console.WriteLine("Logging out...");
-                                                break;
-
-                                            default:
-                                                Console.WriteLine("Invalid option.");
-                                                break;
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    Console.WriteLine("Login failed. Invalid credentials.");
-                                }
-
-                                Console.ReadKey();
-                                break;
-
-                            case 0:
-                                break;
-
-                            default:
-                                Console.WriteLine("Invalid option.");
-                                break;
-                        }
-                        break;
-
-
-
-
-                        break;
+                    case 4: PatientMenu();break;
 
                     case 0:
                         return; // Exit the application
@@ -1167,6 +1056,150 @@ namespace HealthCenterSystem
 
             }
         }
+        public static void PatientMenu()
+        {
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("== Patient Menu ==");
+                Console.WriteLine("1. Register");
+                Console.WriteLine("2. Login");
+                Console.WriteLine("0. Back to Main Menu");
+                Console.Write("Select an option: ");
+                string choice = Console.ReadLine();
+
+                switch (choice)
+                {
+                    case "1":
+                        RegisterPatient();
+                        break;
+                    case "2":
+                        Console.Write("Enter your email: ");
+                        string email = Console.ReadLine();
+                        Console.Write("Enter your password: ");
+                        string password = Console.ReadLine();
+
+                        var patient = users.OfType<Patient>()
+                            .FirstOrDefault(p => p.Email == email && p.Password == password);
+
+                        if (patient != null)
+                        {
+                            Console.WriteLine("Login successful!");
+                            Console.ReadKey();
+                            PatientLoginMenu(patient);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid credentials.");
+                            Console.ReadKey();
+                        }
+                        break;
+                    case "0":
+                        return;
+                    default:
+                        Console.WriteLine("Invalid option.");
+                        Console.ReadKey();
+                        break;
+                }
+            }
+        }
+        public static void PatientLoginMenu(Patient patient)
+        {
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine($"== Welcome, {patient.Name} ==");
+                Console.WriteLine("1. View My Appointments");
+                Console.WriteLine("2. View My Medical Reports");
+                Console.WriteLine("3. Logout");
+                Console.WriteLine("0. Back to Main Menu");
+                Console.Write("Select an option: ");
+                string choice = Console.ReadLine();
+
+                switch (choice)
+                {
+                    case "1":
+                        Console.Clear();
+                        Console.WriteLine("== Available Appointments from All Doctors ==");
+                        var allDoctors = users.OfType<Doctor>().ToList();
+                        foreach (var doc in allDoctors)
+                        {
+                            foreach (var app in doc.AvailableAppointments)
+                            {
+                                Console.WriteLine($"Doctor: Dr. {doc.Name} | Appointment: {app}");
+                            }
+                        }
+                        Console.WriteLine("Press any key to continue...");
+                        Console.ReadKey();
+                        break;
+
+                    case "2":
+                        Console.Clear();
+                        Console.WriteLine("== Your Medical Reports ==");
+                        var reports = recordService.GetAllRecords()
+                            .Where(r => r.Patient.UserId == patient.UserId).ToList();
+
+                        if (!reports.Any())
+                        {
+                            Console.WriteLine("No reports found.");
+                        }
+                        else
+                        {
+                            foreach (var r in reports)
+                            {
+                                Console.WriteLine(r.ToString());
+                            }
+                        }
+                        Console.WriteLine("Press any key to continue...");
+                        Console.ReadKey();
+                        break;
+
+                    case "3":
+                    case "0":
+                        return;
+
+                    default:
+                        Console.WriteLine("Invalid option.");
+                        Console.ReadKey();
+                        break;
+                }
+            }
+        }
+        public static void RegisterPatient()
+        {
+            Console.Clear();
+            Console.WriteLine("== Register New Patient ==");
+
+            Console.Write("Enter Name: ");
+            string name = Console.ReadLine();
+
+            Console.Write("Enter Email: ");
+            string email = Console.ReadLine();
+
+            Console.Write("Enter Password: ");
+            string password = Console.ReadLine();
+
+            Console.Write("Enter Phone Number: ");
+            string phone = Console.ReadLine();
+
+            Console.Write("Enter Date of Birth (yyyy-mm-dd): ");
+            if (!DateTime.TryParse(Console.ReadLine(), out DateTime dob))
+            {
+                Console.WriteLine("Invalid date format.");
+                Console.ReadKey();
+                return;
+            }
+
+            int newId = users.Any() ? users.Max(u => u.UserId) + 1 : 1;
+            Patient newPatient = new Patient(newId, name, email, password, phone, "Patient", dob, "Active");
+            users.Add(newPatient);
+
+            Console.WriteLine("Registration successful!");
+            Console.ReadKey();
+        }
+
+
+
         public static void DoctorMenu(Doctor loggedInDoctor)
         {
             while (true)
