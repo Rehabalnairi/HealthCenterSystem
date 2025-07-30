@@ -8,11 +8,12 @@ namespace HealthCenterSystem.Models
 {
     class Admins : User
     {
-        public string AdminsNI { get; set; }
-        public Admins (int UserId,string name, string email, string password,string Department,string clinic ) : base(UserId, name, email, password, "", "") // constructor to initialize admin properties
+        public Admins(int userId, string name, string email, string password, string phoneNumber,string role)
+    : base(userId, name, email, password, phoneNumber,role)
         {
-            this.IsActive = true; // default active status is true
+            this.IsActive = true;
         }
+
     }
 }
 
