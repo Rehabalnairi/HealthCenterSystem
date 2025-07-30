@@ -14,6 +14,8 @@ namespace HealthCenterSystem
         static SuperAdmin superAdmin = new SuperAdmin(users); // static SuperAdmin instance
         public static List<Admins> admins = new List<Admins>();
         static List<Branch> branches = new List<Branch>();
+        static PatientRecordService recordService = new PatientRecordService();
+
         static void Main(string[] args)
         {
             List<Branch> branches = new List<Branch>
@@ -677,6 +679,9 @@ namespace HealthCenterSystem
                 }
             }
         }
+
+               
+        
           public static void DoctorMenu(Doctor doctor)
           {
              while (true)
@@ -685,8 +690,9 @@ namespace HealthCenterSystem
                 Console.WriteLine($"== Doctor Menu: Dr. {doctor.Name} ==");
                 Console.WriteLine("1. View My Appointments");
                 Console.WriteLine("2. Add Medical Report");
-                Console.WriteLine("3. Update Medical Report");
-                Console.WriteLine("4. Logout");
+                Console.WriteLine("3. View My Patients Reports");
+                Console.WriteLine("4. Update Medical Report");
+                Console.WriteLine("5. Logout");
                 Console.Write("Select an option: ");
                 string choice = Console.ReadLine();
 
@@ -696,12 +702,92 @@ namespace HealthCenterSystem
                         
                         break;
                     case "2":
-                        
+                        Console.Write("Enter Patient ID: ");
+                        if (!int.TryParse(Console.ReadLine(), out int patientId))
+                        {
+                            Console.WriteLine("Invalid Patient ID");
+                            Console.ReadKey();
+                            break;
+                        }
+
+                        Patient patient = superAdmin.UsersList.OfType<Patient>().FirstOrDefault(p => p.UserId == patientId);
+                        if (patient == null)
+                        {
+                            Console.WriteLine("Patient not found.");
+                            Console.ReadKey();
+                            break;
+                        }
+
+                        Console.Write("Enter Diagnosis: ");
+                        string diagnosis = Console.ReadLine();
+
+                        Console.Write("Enter Treatment: ");
+                        string treatment = Console.ReadLine();
+
+                        Console.Write("Enter Notes: ");
+                        string notes = Console.ReadLine();
+
+                        recordService.AddRecord(patient, doctor, diagnosis, treatment, notes);
+                        Console.ReadKey();
                         break;
                     case "3":
-                        
+                        var records = recordService.GetAllRecords()
+                            .Where(r => r.Doctor.UserId == doctor.UserId).ToList();
+
+                        if (!records.Any())
+                        {
+                            Console.WriteLine("No reports found.");
+                        }
+                        else
+                        {
+                            foreach (var record in records)
+                            {
+                                Console.WriteLine(record.ToString());
+                            }
+                        }
+                        Console.ReadKey();
                         break;
+
                     case "4":
+                        Console.Write("Enter Record ID to update: ");
+                        if (!int.TryParse(Console.ReadLine(), out int recordId))
+                        {
+                            Console.WriteLine("Invalid Record ID");
+                            Console.ReadKey();
+                            break;
+                        }
+
+                        var recordToUpdate = recordService.GetAllRecords().FirstOrDefault(r => r.RecordId == recordId);
+                        if (recordToUpdate == null)
+                        {
+                            Console.WriteLine("Record not found.");
+                            Console.ReadKey();
+                            break;
+                        }
+
+                        Console.WriteLine($"Current Diagnosis: {recordToUpdate.Diagnosis}");
+                        Console.WriteLine($"Current Treatment: {recordToUpdate.Treatment}");
+                        Console.WriteLine($"Current Notes: {recordToUpdate.Notes}");
+
+                        Console.Write("Enter new Diagnosis: ");
+                        string newDiagnosis = Console.ReadLine();
+
+                        Console.Write("Enter new Treatment: ");
+                        string newTreatment = Console.ReadLine();
+
+                        Console.Write("Enter new Notes: ");
+                        string newNotes = Console.ReadLine();
+
+                        if (recordService.UpdateRecord(recordId, newDiagnosis, newTreatment, newNotes))
+                            Console.WriteLine("Record updated successfully.");
+                        else
+                            Console.WriteLine("Failed to update record.");
+
+                        Console.ReadKey();
+                        break;
+
+
+                    case "5":
                         Console.WriteLine("Logging out...");
                         return;
                     default:
@@ -711,6 +797,7 @@ namespace HealthCenterSystem
                 }
              }
           }
+
     }
 }
 
