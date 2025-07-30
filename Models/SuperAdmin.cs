@@ -46,10 +46,17 @@ namespace HealthCenterSystem.Models
 
         public void ViewUsers()
         {
-            Console.WriteLine("List of Users:");
-            foreach (var user in UsersList)
+            var nonSuperAdminUsers = UsersList.Where(u => u.Role != "Super Admin").ToList();
+
+            if (nonSuperAdminUsers.Count == 0)
             {
-                if (user.Role == "Super Admin") continue;
+                Console.WriteLine("No users have been registered yet.");
+                return;
+            }
+
+            Console.WriteLine("List of Users:");
+            foreach (var user in nonSuperAdminUsers)
+            {
                 Console.WriteLine($"User ID: {user.UserId}, Name: {user.Name}, Email: {user.Email}, Role: {user.Role}, Active: {user.IsActive}");
             }
         }
