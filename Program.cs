@@ -549,7 +549,6 @@ namespace HealthCenterSystem
                 Console.Clear();
                 Console.WriteLine("Admin Menu:");
                 Console.WriteLine("1. Assign Exisiting Doctoer to Department and clinic");
-               
                 Console.WriteLine("2. Update Or Delete Doctor");
                 Console.WriteLine("3. Add Appointment");
                 Console.WriteLine("4. Book Appointments For Patient");
@@ -660,7 +659,77 @@ namespace HealthCenterSystem
                             
                             
                         case 2:
-                           
+                            //Console.Clear();
+                            //Console.WriteLine("==Update Or Delete Doctor");
+
+                            //var doctorsList=users.OfType<Doctor>().ToList();
+                            //if(doctorsList.Count > 0)
+                            //{
+                            //    Console.WriteLine("No Docter Found.");
+                            //    break ;
+                            //}
+                            //Console.WriteLine("\nAvailable Doctors:");
+                            //foreach (var d in doctorsList)
+                            //    Console.WriteLine($"ID:{d.UserId},Name{d.Name},Specialization: {d.Specialization}");
+                            //Console.WriteLine("Enter Doctor ID to update/delete:");
+                            //if (!int.TryParse(Console.ReadLine(), out int updateDocId))
+                            //{
+                            //    Console.WriteLine("Invaild input.");
+                            //    break;
+                            //}
+                            //var selectedDoctor=doctorsList.FirstOrDefault(d => d.UserId == updateDocId);
+                            //if (selectedDoctor == null)
+                            //{
+                            //    Console.WriteLine("Doctor Not Found");
+                            //    break;
+                            //}
+                            //Console.WriteLine("Select an option:");
+                            //Console.WriteLine("\n1. Update Doctor\n2. Delete Doctor");
+                            //if (!int.TryParse(Console.ReadLine(), out int updateChoice))
+                            //    {
+                            //    Console.WriteLine("Invaild input");
+                            //    break;
+                            //}
+                            //if (updateChoice == 1)
+                            //{
+                            //    Console.WriteLine("Enter new name (or press Enter to skip): ");
+                            //    string newName= Console.ReadLine();
+                            //    if(!string.IsNullOrEmpty(newName))
+                            //        selectedDoctor.Name = newName;
+
+                            //    Console.WriteLine("Enter new specialization (or press Enter to skip): ");
+                            //    string newSpec= Console.ReadLine();
+                            //    if(!string.IsNullOrEmpty(newSpec))
+                            //        selectedDoctor.Specialization = newSpec;
+
+                            //    Console.WriteLine("Enter new Phone Number (or press Enter to skip):");
+                            //    string newNumber= Console.ReadLine();
+                            //    if (string.IsNullOrEmpty(newNumber))
+                            //        selectedDoctor.PhoneNumber = newNumber;
+
+                            //    Console.WriteLine("Doctor information updated successfully.");
+                            //}
+                            //else if (updateChoice == 2)
+                            //{
+                            //    Console.WriteLine("Are you sure you want to delete this doctor? (yes/no)");
+                            //    string confirm = Console.ReadLine().ToLower();
+                            //    if (confirm == "yes")
+                            //    {
+                            //        users.Remove(selectedDoctor);
+                            //        Console.WriteLine("Doctor deleted successfully.");
+                            //    }
+                            //    else
+                            //    {
+                            //        Console.WriteLine("Deletion cancelled.");
+                            //    }
+                            //}
+                            //else
+                            //{
+                            //    Console.WriteLine("Invalid choice.");
+                            //}
+                            //Console.WriteLine("Press any key to continue...");
+                            //Console.ReadKey();
+
                             break;
                         case 3:
                             
