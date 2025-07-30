@@ -159,30 +159,30 @@ namespace HealthCenterSystem
 
                                     Console.WriteLine("Patient registered successfully.");
 
-                                    switch (pMenu)
-                                    {
-                                        case 1:
+                                    //switch (pMenu)
+                                    //{
+                                    //    case 1:
 
-                                        AppointmentService appService = new AppointmentService();
-                                        var appointments = appService.GetAppointmentsByPatient(loggedPatient.UserId);
+                                    //    AppointmentService appService = new AppointmentService();
+                                    //    var appointments = appService.GetAppointmentsByPatient(loggedPatient.UserId);
 
-                                            foreach (var app in appointments)
+                                    //        foreach (var app in appointments)
 
-                                                Console.WriteLine(app.ToString());
-                                    }
-                                    break;
+                                    //            Console.WriteLine(app.ToString());
+                                    //}
+                                    //break;
 
 
-                                    case 2:
-                                    PatientRecordService recordService = new PatientRecordService();
-                                    var records = recordService.GetRecordsByPatient(loggedPatient);
+                                    //case 2:
+                                    //PatientRecordService recordService = new PatientRecordService();
+                                    //var records = recordService.GetRecordsByPatient(loggedPatient);
 
-                                    foreach (var record in records)
-                                    {
-                                        Console.WriteLine(record.ToString());
-                                    }
-                                    break;
-                                    }
+                                    //foreach (var record in records)
+                                    //{
+                                    //    Console.WriteLine(record.ToString());
+                                    //}
+                                    //break;
+                                    //}
                                         case 2: // Login
                                             Console.Write("Enter email: ");
                                             string pemail = Console.ReadLine();
