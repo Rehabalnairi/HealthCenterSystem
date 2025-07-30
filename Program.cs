@@ -76,7 +76,8 @@ namespace HealthCenterSystem
                         string adminID = Console.ReadLine();
                         Console.WriteLine("Enter You Passowerd");
                         string AdPassowerd = Console.ReadLine();
-                        if(!int.TryParse(adminID, out int userId)){ 
+                        if (!int.TryParse(adminID, out int userId))
+                        {
                             Console.WriteLine("Invaild ID.The Id must be numric");
                             Console.ReadKey();
                         }
@@ -91,7 +92,7 @@ namespace HealthCenterSystem
                             Console.WriteLine("Login successful.");
                             AdminMenu();
                         }
-                            break;
+                        break;
 
                     case 3:
 
@@ -101,7 +102,7 @@ namespace HealthCenterSystem
                         Console.WriteLine("Enter your Password: ");
                         string doctorPassword = Console.ReadLine();
 
-                      
+
                         if (!int.TryParse(doctorID, out int doctorUserId))
                         {
                             Console.WriteLine("Invalid ID. The ID must be numeric.");
@@ -109,7 +110,7 @@ namespace HealthCenterSystem
                             break;
                         }
 
-                        
+
                         Doctor foundDoctor = superAdmin.UsersList
                             .OfType<Doctor>()
                             .FirstOrDefault(d => d.UserId == doctorUserId && d.Password == doctorPassword);
@@ -124,9 +125,8 @@ namespace HealthCenterSystem
                             Console.WriteLine($"Login successful. Welcome Dr. {foundDoctor.Name}");
                             Console.WriteLine($"Welcome Dr. {foundDoctor.Name}");
                             Console.ReadKey();
-
+                            DoctorMenu(foundDoctor);
                         }
-                        break;
 
                         break;
                     case 4:
@@ -190,15 +190,15 @@ namespace HealthCenterSystem
                                         switch (pMenu)
                                         {
                                             case 1:
-                                                
-                                                //AppointmentService appService = new AppointmentService();
-                                                //var appointments = appService.GetAppointmentsByPatient(loggedPatient.UserId);
 
-                                                //foreach (var app in appointments)
-                                                //{
-                                                //    Console.WriteLine(app.ToString());
-                                                //}
-                                                //break;
+                                            //AppointmentService appService = new AppointmentService();
+                                            //var appointments = appService.GetAppointmentsByPatient(loggedPatient.UserId);
+
+                                            //foreach (var app in appointments)
+                                            //{
+                                            //    Console.WriteLine(app.ToString());
+                                            //}
+                                            //break;
 
                                             case 2:
                                                 //PatientRecordService recordService = new PatientRecordService();
@@ -254,7 +254,7 @@ namespace HealthCenterSystem
             }
 
             //SuperAdmin menu
-             void SuperAdminMenu(List<Branch> branches, List<Clinic> clinics)
+            void SuperAdminMenu(List<Branch> branches, List<Clinic> clinics)
             {
                 Console.Clear();
                 Console.WriteLine("SuperAdmin Menu:");
@@ -304,7 +304,7 @@ namespace HealthCenterSystem
                                     Console.WriteLine("Admin Name, Password, and Phone Number cannot be empty. Please try again.");
                                     continue;
                                 }
-                                string adminEmail = superAdmin.AddAdmin(adminId,adminName, adminPassword,adminPhoneNumber);
+                                string adminEmail = superAdmin.AddAdmin(adminId, adminName, adminPassword, adminPhoneNumber);
                                 Console.WriteLine($"Admin added successfully. Email: {adminEmail}");
                                 Console.ReadKey();
                                 break; // Exit the loop if a valid ID is entered
@@ -544,12 +544,12 @@ namespace HealthCenterSystem
             }
 
 
-             void AdminMenu()
+            void AdminMenu()
             {
                 Console.Clear();
                 Console.WriteLine("Admin Menu:");
                 Console.WriteLine("1. Assign Exisiting Doctoer to Department and clinic");
-               
+
                 Console.WriteLine("2. Update Or Delete Doctor");
                 Console.WriteLine("3. Add Appointment");
                 Console.WriteLine("4. Book Appointments For Patient");
@@ -581,7 +581,7 @@ namespace HealthCenterSystem
                             }
                             //view available branches
                             Console.WriteLine("\nAvailable Branches");
-                            
+
                             foreach (var b in branches)
                                 Console.WriteLine($"{b.BranchId}.\n{b.BranchName}");
                             //select branch
@@ -591,13 +591,13 @@ namespace HealthCenterSystem
                                 Console.WriteLine("Invaild Input!");
                                 break;
                             }
-                            var selectBranch=branches.FirstOrDefault(b=>b.BranchId == branchId);
-                            if(selectBranch == null)
+                            var selectBranch = branches.FirstOrDefault(b => b.BranchId == branchId);
+                            if (selectBranch == null)
                             {
                                 Console.WriteLine("Branch not found");
                                 break;
                             }
-                            if(selectBranch.Departments.Count == 0)
+                            if (selectBranch.Departments.Count == 0)
                             {
                                 Console.WriteLine("This Branch has no department");
                                 break;
@@ -629,7 +629,7 @@ namespace HealthCenterSystem
                                 Console.WriteLine($"{clinic.Name}");
                             //select clinic
                             Console.WriteLine("Enter Clinic ID to assign doctor:");
-                            if(!int.TryParse(Console.ReadLine(), out int clinicId))
+                            if (!int.TryParse(Console.ReadLine(), out int clinicId))
                             {
                                 Console.WriteLine("Invalid Input!");
                                 break;
@@ -641,12 +641,12 @@ namespace HealthCenterSystem
                                 break;
                             }
                             Console.WriteLine("Enter Doctoer ID to assign:");
-                            if(!int.TryParse(Console.ReadLine(), out int doctorId))
+                            if (!int.TryParse(Console.ReadLine(), out int doctorId))
                             {
                                 Console.WriteLine("Invalid Input!");
                                 break;
                             }
-                            Doctor doctor=users.OfType<Doctor>().FirstOrDefault(d => d.UserId == doctorId);
+                            Doctor doctor = users.OfType<Doctor>().FirstOrDefault(d => d.UserId == doctorId);
                             if (doctor == null)
                             {
                                 Console.WriteLine("Doctor not found.");
@@ -657,16 +657,16 @@ namespace HealthCenterSystem
                             Console.WriteLine("Press any key to continue...");
                             Console.ReadKey();
                             break;
-                            
-                            
+
+
                         case 2:
-                           
+
                             break;
                         case 3:
-                            
+
                             break;
                         case 4:
-                            
+
                             break;
                         case 0:
                             return; // Exit Admin menu
@@ -677,6 +677,40 @@ namespace HealthCenterSystem
                 }
             }
         }
+          public static void DoctorMenu(Doctor doctor)
+          {
+             while (true)
+             {
+                Console.Clear();
+                Console.WriteLine($"== Doctor Menu: Dr. {doctor.Name} ==");
+                Console.WriteLine("1. View My Appointments");
+                Console.WriteLine("2. Add Medical Report");
+                Console.WriteLine("3. Update Medical Report");
+                Console.WriteLine("4. Logout");
+                Console.Write("Select an option: ");
+                string choice = Console.ReadLine();
+
+                switch (choice)
+                {
+                    case "1":
+                        
+                        break;
+                    case "2":
+                        
+                        break;
+                    case "3":
+                        
+                        break;
+                    case "4":
+                        Console.WriteLine("Logging out...");
+                        return;
+                    default:
+                        Console.WriteLine("Invalid option. Try again.");
+                        Console.ReadKey();
+                        break;
+                }
+             }
+          }
     }
 }
 
