@@ -22,15 +22,9 @@ namespace HealthCenterSystem
         static void Main(string[] args)
         {
             List<Branch> branches = new List<Branch>();
-
-
-
             List<Clinic> clinics = new List<Clinic>();
-
             DoctorService doctorService = new DoctorService();
-
             Console.WriteLine("Welcome to Codeline Health System");
-
             int choice = -1;
             while (choice != 0)
             {
@@ -41,7 +35,6 @@ namespace HealthCenterSystem
                 Console.WriteLine("3. Doctor");
                 Console.WriteLine("4. Patient");
                 Console.WriteLine("0. Exit");
-
                 if (!int.TryParse(Console.ReadLine(), out choice))
                 {
                     Console.WriteLine("Invalid input. Please enter a number between 1 and 4.");
@@ -99,16 +92,12 @@ namespace HealthCenterSystem
                         string doctorID = Console.ReadLine();
                         Console.WriteLine("Enter your Password: ");
                         string doctorPassword = Console.ReadLine();
-
-
                         if (!int.TryParse(doctorID, out int doctorUserId))
                         {
                             Console.WriteLine("Invalid ID. The ID must be numeric.");
                             Console.ReadKey();
                             break;
                         }
-
-
                         Doctor foundDoctor = superAdmin.UsersList
                             .OfType<Doctor>()
                             .FirstOrDefault(d => d.UserId == doctorUserId && d.Password == doctorPassword);
@@ -123,12 +112,9 @@ namespace HealthCenterSystem
                             Console.WriteLine($"Login successful. Welcome Dr. {foundDoctor.Name}");
                             Console.ReadKey();
                             DoctorMenu(foundDoctor);
-
                         }
-
                         break;
                     case 4: PatientMenu();break;
-
                     case 0:
                         return; // Exit the application
                         Console.WriteLine("Exiting the system. Goodbye!");
@@ -141,7 +127,6 @@ namespace HealthCenterSystem
                         break;
                 }
             }
-
             //SuperAdmin menu
             void SuperAdminMenu(List<Branch> branches, List<Clinic> clinics)
             {
@@ -157,14 +142,11 @@ namespace HealthCenterSystem
                     Console.WriteLine("3. Add Branch");
                     Console.WriteLine("4. View Users");
                     Console.WriteLine("0. Exit");
-
-
                     if (!int.TryParse(Console.ReadLine(), out superAdminChoice))
                     {
                         Console.WriteLine("Invalid input. Please enter a number between 1 and 5.");
                         continue;
                     }
-
                     switch (superAdminChoice)
                     {
                         case 1:
@@ -242,8 +224,6 @@ namespace HealthCenterSystem
                             Console.WriteLine($"Admin added successfully. Email: {adminEmail}");
                             Console.ReadKey();
                             break; // Exit the loop if a valid ID is entered
-
-
                         case 2:
                             if (superAdmin.BranchesList.Count == 0)
                             {
@@ -351,8 +331,6 @@ namespace HealthCenterSystem
                             Console.WriteLine($"Doctor added successfully with email: {doctorEmail}");
                             Console.ReadKey();
                             break;
-
-                        
                         case 3:
                             Console.Clear();
                             int branchOption = -1;
@@ -724,20 +702,14 @@ namespace HealthCenterSystem
                             }
                             //Console.ReadLine();
                             break;
-
-
                         case 4:
                             superAdmin.ViewUsers();
                             Console.WriteLine("Press any key to continue...");
                             Console.ReadKey();
                             break;
-
-
                         case 0:
                             Console.WriteLine("Exiting Super Admin menu.");
                             return; // Exit Super Admin menu
-
-
                         default:
                             Console.WriteLine("Invalid choice. Please try again.");
                             Console.ReadKey();
@@ -745,8 +717,6 @@ namespace HealthCenterSystem
                     }
                 }
             }
-
-
             void AdminMenu()
             {
                 Console.Clear();
@@ -1445,7 +1415,6 @@ namespace HealthCenterSystem
                 }
             }
         }
-
         public static void RegisterPatient()
         {
             Console.Clear();
@@ -1486,8 +1455,6 @@ namespace HealthCenterSystem
                 }
                 break;
             }
-
-
             string email;
             while (true)
             {
@@ -1500,7 +1467,6 @@ namespace HealthCenterSystem
                 }
                 break;
             }
-
             string password;
             while (true)
             {
@@ -1516,7 +1482,6 @@ namespace HealthCenterSystem
                 }
                 break;
             }
-
             string phone;
             while (true)
             {
@@ -1529,7 +1494,6 @@ namespace HealthCenterSystem
                 }
                 break;
             }
-
             string gender;
             while (true)
             {
@@ -1551,7 +1515,6 @@ namespace HealthCenterSystem
                 }
                 break;
             }
-
             string address;
             while (true)
             {
@@ -1584,10 +1547,6 @@ namespace HealthCenterSystem
             Console.WriteLine($"Registration successful! Your Patient ID is: {newPatient.UserId}");
             Console.ReadKey();
         }
-
-
-
-
         public static void DoctorMenu(Doctor loggedInDoctor)
         {
             while (true)
