@@ -4,8 +4,10 @@ using System.Diagnostics;
 using System.Net;
 using System.Net.Mail;
 using System.Numerics;
+using System.Reflection;
 using HealthCenterSystem.Models;
 using HealthCenterSystem.Services;
+using static HealthCenterSystem.Models.HelperClass;
 
 namespace HealthCenterSystem
 {
@@ -119,7 +121,6 @@ namespace HealthCenterSystem
                         else
                         {
                             Console.WriteLine($"Login successful. Welcome Dr. {foundDoctor.Name}");
-                            Console.WriteLine($"Welcome Dr. {foundDoctor.Name}");
                             Console.ReadKey();
                             DoctorMenu(foundDoctor);
 
@@ -717,11 +718,11 @@ namespace HealthCenterSystem
                 Console.Clear();
                 Console.WriteLine("Admin Menu:");
                 Console.WriteLine("1. Assign Exisiting Doctoer to Department and clinic");
-                Console.WriteLine("2.Add Patient.");
-                Console.WriteLine("3. Update Or Delete Doctor");
-                Console.WriteLine("4. Add Appointment");
-                Console.WriteLine("5. Book Appointments For Patient");
-                Console.WriteLine("6.Views");
+
+                Console.WriteLine("2. Update Or Delete Doctor");
+                Console.WriteLine("3. Add Appointment");
+                Console.WriteLine("4. Book Appointments For Patient");
+                Console.WriteLine("5.Views");
                 Console.WriteLine("0. Exit Admin Menu");
 
                 int adminChoice = -1;
@@ -1123,7 +1124,7 @@ namespace HealthCenterSystem
                                         case "1":
                                             Console.Clear();
                                             Console.WriteLine("All Departments and Clinics:");
-                                            var branches = Branch.GetAllBranches(); // لازم تخزن الفرع هنا
+                                            var branches = Branch.GetAllBranches();
                                             if (branches.Count == 0)
                                             {
                                                 Console.WriteLine("NO Branches Available");
@@ -1259,14 +1260,12 @@ namespace HealthCenterSystem
                         }
                         else
                         {
-                            Console.WriteLine("Invalid credentials. Press any key to try again...");
+                            Console.WriteLine("Invalid Email or password");
                             Console.ReadKey();
                         }
                         break;
 
                     case "0":
-                        Console.WriteLine("Returning to Main Menu...");
-                        Console.ReadKey();
                         return;
 
                     default:
@@ -1286,7 +1285,6 @@ namespace HealthCenterSystem
                 Console.WriteLine("1. View My Appointments");
                 Console.WriteLine("2. View My Medical Reports");
                 Console.WriteLine("3. Logout"); // logout to patient login screen
-                Console.WriteLine("0. Back to Main Menu");
                 Console.Write("Select an option: ");
                 string choice = Console.ReadLine();
 
@@ -1294,18 +1292,24 @@ namespace HealthCenterSystem
                 {
                     case "1":
                         Console.Clear();
-                        Console.WriteLine("== Available Appointments from All Doctors ==");
-                        var allDoctors = users.OfType<Doctor>().ToList();
-                        foreach (var doc in allDoctors)
+                        Console.WriteLine("== Your Booked Appointments ==");
+
+                        if (patient.BookedAppointments.Any())
                         {
-                            foreach (var app in doc.AvailableAppointments)
+                            foreach (var appointment in patient.BookedAppointments)
                             {
-                                Console.WriteLine($"Doctor: Dr. {doc.Name} | Appointment: {app}");
+                                Console.WriteLine($"- {appointment}");
                             }
                         }
+                        else
+                        {
+                            Console.WriteLine("You have no booked appointments.");
+                        }
+
                         Console.WriteLine("Press any key to continue...");
                         Console.ReadKey();
                         break;
+
 
                     case "2":
                         Console.Clear();
@@ -1331,9 +1335,7 @@ namespace HealthCenterSystem
                     case "3":
                         Console.WriteLine("Logging out...");
                         return; // returns to login
-                    case "0":
-                        Console.WriteLine("Returning to main menu...");
-                        return; // also returns
+
                     default:
                         Console.WriteLine("Invalid option. Press any key to try again.");
                         Console.ReadKey();
@@ -1347,33 +1349,140 @@ namespace HealthCenterSystem
             Console.Clear();
             Console.WriteLine("== Register New Patient ==");
 
-            Console.Write("Enter Name: ");
-            string name = Console.ReadLine();
-
-            Console.Write("Enter Email: ");
-            string email = Console.ReadLine();
-
-            Console.Write("Enter Password: ");
-            string password = Console.ReadLine();
-
-            Console.Write("Enter Phone Number: ");
-            string phone = Console.ReadLine();
-
-            Console.Write("Enter Date of Birth (yyyy-mm-dd): ");
-            if (!DateTime.TryParse(Console.ReadLine(), out DateTime dob))
+            int userId;
+            while (true)
             {
-                Console.WriteLine("Invalid date format.");
-                Console.ReadKey();
-                return;
+                Console.Write("Enter Desired Patient ID: (number, at least 6 digits)");
+                string inputId = Console.ReadLine();
+                if (!int.TryParse(inputId, out userId))
+                {
+                Console.WriteLine("Invalid ID format.Please enter numbers only.");
+                    continue;
+            }
+                if (inputId.Length < 6)
+                {
+                    Console.WriteLine("ID must be at least 6 digits long.");
+                    continue;
+                }
+                if (users.Any(u => u.UserId == userId))
+                {
+                    Console.WriteLine("This Patient ID is already taken. Please try a different one.");
+                    continue;
+                }
+                break;
             }
 
-            int newId = users.Any() ? users.Max(u => u.UserId) + 1 : 1;
-            Patient newPatient = new Patient(newId, name, email, password, phone, "Patient", dob, "Active");
+            string name;
+            while (true)
+            {
+                Console.Write("Enter your Name (letters only): ");
+                name = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(name) || !name.All(char.IsLetter))
+                {
+                    Console.WriteLine("Name must contain letters only.");
+                    continue;
+                }
+                break;
+            }
+
+
+            string email;
+            while (true)
+            {
+                Console.Write("Enter Email: ");
+                email = Console.ReadLine();
+                if (!ValidationHelper.IsValidEmail(email))
+                {
+                    Console.WriteLine("Invalid email format.");
+                    continue;
+                }
+                break;
+            }
+
+            string password;
+            while (true)
+            {
+                Console.Write("Enter Password (must contain letters, numbers, and at least one symbol): ");
+                password = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(password) ||
+                    !password.Any(char.IsLetter) ||
+                    !password.Any(char.IsDigit) ||
+                    !password.Any(ch => !char.IsLetterOrDigit(ch)))
+                {
+                    Console.WriteLine("Password must contain letters, numbers, and at least one symbol.");
+                    continue;
+                }
+                break;
+            }
+
+            string phone;
+            while (true)
+            {
+                Console.Write("Enter Phone Number (at least 8 digits): ");
+                phone = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(phone) || phone.Length < 8 || !phone.All(char.IsDigit))
+                {
+                    Console.WriteLine("Phone number must be at least 8 digits and contain digits only.");
+                    continue;
+                }
+                break;
+            }
+
+            string gender;
+            while (true)
+            {
+                Console.Write("Enter Gender (Male/Female): ");
+                gender = Console.ReadLine()?.Trim();
+
+                if (string.IsNullOrWhiteSpace(gender))
+                {
+                    Console.WriteLine("Gender cannot be empty.");
+                    continue;
+                }
+
+                string genderLower = gender.ToLower();
+
+                if (genderLower != "male" && genderLower != "female" && genderLower != "other")
+                {
+                    Console.WriteLine("Invalid gender. Please enter Male, Female, or Other.");
+                    continue;
+                }
+                break;
+            }
+
+            string address;
+            while (true)
+            {
+                Console.Write("Enter Address (letters and spaces only): ");
+                address = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(address) || address.Any(ch => !char.IsLetter(ch) && !char.IsWhiteSpace(ch)))
+                {
+                    Console.WriteLine("Address must contain letters and spaces only.");
+                    continue;
+                }
+                break;
+            }
+
+            DateTime dob;
+            while (true)
+            {
+                Console.Write("Enter Date of Birth (yyyy-mm-dd): ");
+                string inputDob = Console.ReadLine();
+                if (!DateTime.TryParse(inputDob, out dob))
+                {
+                    Console.WriteLine("Invalid date format. Please try again.");
+                    continue;
+                }
+                break;
+            }
+
+            Patient newPatient = new Patient(userId, name, email, password, phone, gender, dob, address);
             users.Add(newPatient);
 
-            Console.WriteLine("Registration successful!");
+            Console.WriteLine($"Registration successful! Your Patient ID is: {newPatient.UserId}");
             Console.ReadKey();
         }
+
 
 
 
@@ -1382,12 +1491,11 @@ namespace HealthCenterSystem
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine($"== Doctor Menu: Dr. {loggedInDoctor.Name} ==");
+                Console.WriteLine($"== Doctor Menu: == ");
                 Console.WriteLine("1. View My Appointments");
                 Console.WriteLine("2. Add Medical Report");
                 Console.WriteLine("3. View My Patients Reports");
                 Console.WriteLine("4. Update Medical Report");
-                Console.WriteLine("5. Logout");
                 // back to main menu
                 Console.WriteLine("0. Back to Main Menu");
                 Console.Write("Select an option: ");
@@ -1413,6 +1521,7 @@ namespace HealthCenterSystem
                         Console.ReadKey();
 
                         break;
+
                     case "2":
                         Console.Write("Enter Patient ID: ");
                         if (!int.TryParse(Console.ReadLine(), out int patientId))
@@ -1442,6 +1551,7 @@ namespace HealthCenterSystem
                         recordService.AddRecord(patient, loggedInDoctor, diagnosis, treatment, notes);
                         Console.ReadKey();
                         break;
+
                     case "3":
                         var records = recordService.GetAllRecords()
                             .Where(r => r.Doctor.UserId == loggedInDoctor.UserId)
@@ -1499,14 +1609,11 @@ namespace HealthCenterSystem
                         Console.ReadKey();
                         break;
 
-
-                    case "5":
-                        Console.WriteLine("Logging out...");
-                        return;
                     default:
                         Console.WriteLine("Invalid option. Try again.");
                         Console.ReadKey();
                         break;
+
                     case "0":
                         return; // Back to main menu
                 }

@@ -12,9 +12,15 @@ namespace HealthCenterSystem.Models
         private List<Patient> patients = new List<Patient>(); // List to hold all patients in the system
 
         /// Adds a new patient to the system with the provided details
-        public void AddPatient(int UserId, string name, string email, string password, string phoneNumber, string gender, DateTime dateOfBirth, string address)
+        public void AddPatient(int userId, string name, string email, string password, string phoneNumber, string gender, DateTime dateOfBirth, string address)
         {
-            Patient newPatient = new Patient(UserId, name, email, password, phoneNumber, gender, dateOfBirth, address);
+            if (patients.Any(p => p.UserId == userId))
+            {
+                Console.WriteLine("A patient with this ID already exists.");
+                return;
+            }
+
+            Patient newPatient = new Patient(userId, name, email, password, phoneNumber, gender, dateOfBirth, address);
             patients.Add(newPatient);
         }
 
@@ -54,5 +60,10 @@ namespace HealthCenterSystem.Models
             return patients.FirstOrDefault(p => p.UserId == id);
 
         }
+        public bool PatientIdExists(int id)
+        {
+            return patients.Any(p => p.UserId == id);
+        }
+
     }
 }
