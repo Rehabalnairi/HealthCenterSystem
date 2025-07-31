@@ -747,9 +747,13 @@ namespace HealthCenterSystem
             }
 
 
-            void AdminMenu()
+             void  AdminMenu()
             {
-                Console.Clear();
+                int adminChoice = -1;
+
+                while (adminChoice != 0)
+                {
+                    Console.Clear();
                 Console.WriteLine("Admin Menu:");
                 Console.WriteLine("1. Assign Exisiting Doctoer to Department and clinic");
                 Console.WriteLine("2. Add Patient");
@@ -759,13 +763,11 @@ namespace HealthCenterSystem
                 Console.WriteLine("6. Views");
                 Console.WriteLine("0. Exit Admin Menu");
 
-                int adminChoice = -1;
-                while (adminChoice != 0)
-                {
                     Console.Write("Select an option: ");
                     if (!int.TryParse(Console.ReadLine(), out adminChoice))
                     {
                         Console.WriteLine("Invalid input. Please enter a number between 0 and 4.");
+                        Console.ReadKey();
                         continue;
                     }
                     switch (adminChoice)
@@ -859,6 +861,7 @@ namespace HealthCenterSystem
                             break;
 
                         case 2:
+                            while (true) { 
                             Console.Clear();
                             Console.WriteLine("==Add Patient==");
                             // Patient ID
@@ -879,7 +882,7 @@ namespace HealthCenterSystem
                                     Console.WriteLine("This Patient ID already exists. Please enter a unique ID.");
                                     continue;
                                 }
-
+                                
                                 break;
                             }
 
@@ -991,8 +994,16 @@ namespace HealthCenterSystem
 
                             users.Add(newPatient);
                             Console.WriteLine("Patient Add successfully");
-                            Console.ReadKey();
-                            break;
+                            Console.WriteLine("\nDo you want to:");
+                            Console.WriteLine("1. Add another patient");
+                            Console.WriteLine("2. Return to Admin Menu");
+                            Console.Write("Enter your choice: ");
+                            string choice = Console.ReadLine();
+
+                            if (choice == "2")
+                                break;
+                    }
+                    break;
 
                         case 3:
                             Console.Clear();
@@ -1069,7 +1080,7 @@ namespace HealthCenterSystem
                             if (doctors.Count() == 0)
                             {
                                 Console.WriteLine("No doctors available.");
-                                return;
+                                break;
                             }
 
                             Console.WriteLine("Select a doctor to add appointments:");
