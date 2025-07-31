@@ -350,7 +350,6 @@ namespace HealthCenterSystem
                             Console.ReadKey();
                             break;
 
-
                         
                         case 3:
                             Console.Clear();
@@ -374,6 +373,8 @@ namespace HealthCenterSystem
                                 switch (branchOption)
                                 {
                                     case 1:
+                                        do 
+                                        { 
                                         string branchName;
                                         while (true)
                                         {
@@ -431,6 +432,10 @@ namespace HealthCenterSystem
                                         Branch newBranch = superAdmin.AddBranch(branchName, branchLocation, noOfFloors, noOfRooms, "", "");
                                         branches.Add(newBranch); //add new branch to the list
                                         Console.WriteLine("Branch added successfully.");
+
+                                            Console.Write("Do you want to add another branch? (Y/N): ");
+                                        }
+                                        while (Console.ReadLine().Trim().ToUpper() == "Y");
 
                                         Console.WriteLine("Press any key to continue...");
                                         Console.ReadKey();
@@ -576,6 +581,7 @@ namespace HealthCenterSystem
                                         Console.ReadKey();
                                         break;
 
+
                                     case 4:
                                         Console.Clear();
                                         int branchId;
@@ -698,9 +704,11 @@ namespace HealthCenterSystem
                                         Console.ReadKey();
                                         break;
 
+
                                     case 0:
                                         Console.WriteLine("Returning to SuperAdmin menu...");
                                         break;
+
 
                                     default:
                                         Console.WriteLine("Invalid choice. Please try again.");
@@ -710,15 +718,18 @@ namespace HealthCenterSystem
                             Console.ReadLine();
                             break;
 
+
                         case 4:
                             superAdmin.ViewUsers();
                             Console.WriteLine("Press any key to continue...");
                             Console.ReadKey();
                             break;
 
+
                         case 5:
                             Console.WriteLine("Exiting Super Admin menu.");
                             return; // Exit Super Admin menu
+
 
                         default:
                             Console.WriteLine("Invalid choice. Please try again.");

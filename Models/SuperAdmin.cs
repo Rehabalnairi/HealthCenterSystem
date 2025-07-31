@@ -105,12 +105,6 @@ namespace HealthCenterSystem.Models
                         }
                     }
                 }
-                
-                else
-                {
-                    Console.WriteLine("  No floors found.");
-                }
-                Console.WriteLine($"Total Branches: {BranchesList.Count}");
             }
         }
 
