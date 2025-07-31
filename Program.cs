@@ -849,6 +849,7 @@ namespace HealthCenterSystem
                             Console.WriteLine("Press any key to continue...");
                             Console.ReadKey();
                             break;
+
                         case 2:
                             Console.Clear();
                             Console.WriteLine("==Add Patient==");
@@ -881,7 +882,7 @@ namespace HealthCenterSystem
                                 patientEmail = Console.ReadLine()?.Trim();
                                 if (!string.IsNullOrWhiteSpace(patientEmail) && patientEmail.Contains("@") && patientEmail.Contains("."))
                                     break;
-                                Console.WriteLine("Invalid Email format.(e.g. example@domain.com)");
+                                Console.WriteLine("Invalid Email format.");
                             }
 
                             // Patient Phone
@@ -1021,6 +1022,7 @@ namespace HealthCenterSystem
                             Console.WriteLine("Press any key to continue...");
                             Console.ReadKey();
                             break;
+
                         case 4:
                             var doctors = users.OfType<Doctor>().ToList();
 
@@ -1070,6 +1072,7 @@ namespace HealthCenterSystem
 
 
                             break;
+
                         case 5:
                             Console.Clear();
                             Console.WriteLine("==Book Appointments For Patient==");
@@ -1131,6 +1134,7 @@ namespace HealthCenterSystem
                             Console.WriteLine("Press any key to continue...");
                             Console.ReadKey();
                             break;
+
                         case 6:
                             {
                                 while (true)
@@ -1240,8 +1244,10 @@ namespace HealthCenterSystem
                                     }
                                 }
                             }
+
                         case 0:
                             return; // Exit Admin menu
+
                         default:
                             Console.WriteLine("Invalid choice. Please try again.");
                             break;
