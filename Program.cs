@@ -1209,50 +1209,53 @@ namespace HealthCenterSystem
                                     {
                                         case "1":
                                             Console.Clear();
-                                            Console.WriteLine("All Departments and Clinics:");
-                                            var branches = Branch.GetAllBranches();
-                                            if (branches.Count == 0)
+                                            Console.WriteLine("All Branches,Departments and Clinics:");
+                                            //var branches = Branch.GetAllBranches();
+                                            if (branches == null || branches.Count == 0)
                                             {
                                                 Console.WriteLine("NO Branches Available");
-                                                break;
+
                                             }
-                                            foreach (var br in branches)
+                                            else
                                             {
-                                                Console.WriteLine($"Branch: {br.BranchName} - Location: {br.BranchLocation}");
-                                                if (br.Departments == null || br.Departments.Count == 0)
+                                                foreach (var br in branches)
                                                 {
-                                                    Console.WriteLine("  No Departments Available");
-                                                    continue;
-                                                }
-                                                foreach (var dep in br.Departments)
-                                                {
-                                                    Console.WriteLine($"  Department: {dep.DepName}");
-                                                    if (dep.Clinics == null || dep.Clinics.Count == 0)
+                                                    Console.WriteLine($"Branch:{br.BranchName}");
+                                                    foreach(var dep in br.Departments)
                                                     {
-                                                        Console.WriteLine("No Clinics Available");
-                                                        continue;
+                                                        Console.WriteLine($"\tDepartment: {dep.DepName}");
+                                                        foreach (var clinic in dep.Clinics)
+                                                        {
+                                                            Console.WriteLine($"\t\tClinic: {clinic.Name}, Active: {clinic.IsActive}");
+                                                        }
                                                     }
-                                                    foreach (var clinic in dep.Clinics)
-                                                    {
-                                                        Console.WriteLine($"    Clinic: {clinic.Name}");
-                                                    }
+
                                                 }
                                             }
+                                            Console.WriteLine("Press any key to continue...");
+                                            Console.ReadKey();
                                             break;
 
                                         case "2":
                                             Console.Clear();
                                             Console.WriteLine("All Doctors:");
+
                                             var allDoctors = users.OfType<Doctor>().ToList();
-                                            if (allDoctors.Count == 0)
+
+                                            if (allDoctors == null || allDoctors.Count == 0)
                                             {
                                                 Console.WriteLine("No Doctors Available");
                                                 break;
                                             }
-                                            foreach (var Doctor in allDoctors)
+                                            else
                                             {
-                                                Console.WriteLine($"Doctor ID: {Doctor.UserId}, Name: {Doctor.Name}, Email: {Doctor.Email}, Specialization: {Doctor.Specialization}, Phone: {Doctor.PhoneNumber}");
+                                                foreach (var Doctor in allDoctors)
+                                                {
+                                                    Console.WriteLine($"Doctor ID: {Doctor.UserId}, Name: {Doctor.Name}, Email: {Doctor.Email}, Specialization: {Doctor.Specialization}, Phone: {Doctor.PhoneNumber}");
+                                                }
                                             }
+                                            Console.WriteLine("Press any key to continue...");
+                                            Console.ReadKey();
                                             break;
 
                                         case "3":
@@ -1272,21 +1275,30 @@ namespace HealthCenterSystem
                                                     Console.WriteLine($"\t- {app}");
                                                 }
                                             }
+                                            Console.WriteLine("Press any key to continue...");
+                                            Console.ReadKey();
                                             break;
 
                                         case "4":
                                             Console.Clear();
                                             Console.WriteLine("All Patients:");
+
                                             var allPatients = users.OfType<Patient>().ToList();
-                                            if (allPatients.Count == 0)
+
+                                            if (allPatients == null || allPatients.Count == 0)
                                             {
                                                 Console.WriteLine("No Patients Available");
                                                 break;
                                             }
-                                            foreach (var Patient in allPatients)
+                                            else
                                             {
-                                                Console.WriteLine($"Patient ID: {Patient.UserId}, Name: {Patient.Name}, Email: {Patient.Email}, Phone: {Patient.PhoneNumber}");
+                                                foreach (var Patient in allPatients)
+                                                {
+                                                    Console.WriteLine($"Patient ID: {Patient.UserId}, Name: {Patient.Name}, Email: {Patient.Email}, Phone: {Patient.PhoneNumber}");
+                                                }
                                             }
+                                            Console.WriteLine("Press any key to continue...");
+                                            Console.ReadKey();
                                             break;
 
                                         case "0":
@@ -1294,9 +1306,10 @@ namespace HealthCenterSystem
 
                                         default:
                                             Console.WriteLine("Invalid choice. Please try again.");
-                                            break;
-                                            Console.WriteLine("Press any key to continue...");
                                             Console.ReadKey();
+                                            break;
+                                           
+                                            
                                     }
                                 }
                             }
