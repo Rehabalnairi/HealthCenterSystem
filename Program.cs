@@ -29,8 +29,8 @@ namespace HealthCenterSystem
 
             Console.WriteLine("Welcome to Codeline Health System");
 
-            int choice = 0;
-            while (choice != 4)
+            int choice = -1;
+            while (choice != 0)
             {
                 Console.Clear();
                 Console.WriteLine("\nPlease select your role:");
