@@ -897,8 +897,21 @@ namespace HealthCenterSystem
                             }
 
                             // Password
-                            Console.Write("Enter Patient Password: ");
-                            string patientPassword = Console.ReadLine();
+                            string patientPassword;
+                            while (true)
+                            {
+                                Console.Write("Enter Patient Password (at least 8 characters, with a letter, number, and symbol): ");
+                                patientPassword = Console.ReadLine();
+                                if (!string.IsNullOrWhiteSpace(patientPassword) &&
+                                    patientPassword.Length >= 8 &&
+                                    patientPassword.Any(char.IsLetter) &&
+                                    patientPassword.Any(char.IsDigit) &&
+                                    patientPassword.Any(ch => !char.IsLetterOrDigit(ch)))
+                                {
+                                    break;
+                                }
+                                Console.WriteLine("Invalid Password. It must be at least 8 characters and contain a letter, number, and symbol.");
+                            }
 
                             // Gender
                             string gender = " ";
@@ -934,8 +947,15 @@ namespace HealthCenterSystem
                             }
 
                             // Address
-                            Console.Write("Enter Address: ");
-                            string address = Console.ReadLine();
+                            string address;
+                            while (true)
+                            {
+                                Console.Write("Enter Address (letters only): ");
+                                address = Console.ReadLine()?.Trim();
+                                if (!string.IsNullOrWhiteSpace(address) && address.All(ch => char.IsLetter(ch) || ch == ' '))
+                                    break;
+                                Console.WriteLine("Invalid Address. It must contain only letters and no numbers.");
+                            }
 
 
                             Patient newPatient = new Patient(
