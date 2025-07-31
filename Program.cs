@@ -131,11 +131,13 @@ namespace HealthCenterSystem
 
                     case 0:
                         return; // Exit the application
-                                //Console.WriteLine("Exiting the system. Goodbye!");
-                                //break;
+                        Console.WriteLine("Exiting the system. Goodbye!");
+                        break;
 
                     default:
                         Console.WriteLine("Invalid choice. Please try again.");
+                        Console.WriteLine("Press any key to continue...");
+                        Console.ReadKey();
                         break;
                 }
             }
