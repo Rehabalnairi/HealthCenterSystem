@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 
 namespace HealthCenterSystem.Models
@@ -26,7 +27,6 @@ namespace HealthCenterSystem.Models
         //Static list to hold all branches globally
         public static List<Branch> BranchList { get; set; } = new List<Branch>();
 
- 
         public Branch()
         {
             BranchId = _idCounter++; // Auto-incrementing ID

@@ -81,6 +81,8 @@ namespace HealthCenterSystem.Models
             foreach (var b in BranchesList)
             {
                 Console.WriteLine($"ID: {b.BranchId}, Name: {b.BranchName}, Location: {b.BranchLocation}");
+                Console.WriteLine($"  Number of Floors: {b.NoOfFloors}");
+                Console.WriteLine($"  Number of Rooms: {b.NoOfRooms}");
 
                 if (b.Departments != null && b.Departments.Count > 0)
                 {
@@ -103,12 +105,12 @@ namespace HealthCenterSystem.Models
                         }
                     }
                 }
+                
                 else
                 {
-                    Console.WriteLine(" No departments found.");
+                    Console.WriteLine("  No floors found.");
                 }
-
-                Console.WriteLine();
+                Console.WriteLine($"Total Branches: {BranchesList.Count}");
             }
         }
 
