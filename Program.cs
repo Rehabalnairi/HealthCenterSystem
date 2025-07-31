@@ -1126,43 +1126,59 @@ namespace HealthCenterSystem
                                 break;
                             }
                             Doctor selectedDoctorForAppointment = doctorList[doctorChoice - 1];
-                            if(selectedDoctorForAppointment == null || selectedDoctorForAppointment.AvailableAppointments.Count == 0)
+                            DateTime appointmentDateTime;
+                            while (true)
                             {
-                                Console.WriteLine("This doctor has no available appointments.");
-                                break;
+                                Console.Write("Enter appointment date and time (e.g. 2025-08-05 14:30): ");
+                                string input = Console.ReadLine();
+
+                                if (DateTime.TryParse(input, out appointmentDateTime))
+                                {
+                                    if (appointmentDateTime < DateTime.Now)
+                                    {
+                                        Console.WriteLine("Appointment cannot be in the past.");
+                                        continue;
+                                    }
+                                    break;
+                                }
+                                Console.WriteLine("Invalid date/time format. Please use yyyy-MM-dd HH:mm.");
                             }
 
-                            Console.WriteLine($"Available appointments for Dr. {selectedDoctorForAppointment.Name}:");
-                            for (int i = 0; i < selectedDoctorForAppointment.AvailableAppointments.Count; i++)
-                            {
-                                Console.WriteLine($"{i + 1}. {selectedDoctorForAppointment.AvailableAppointments[i]}");
-                            }
-                            Console.Write("Select an appointment by number: ");
-                            if (!int.TryParse(Console.ReadLine(), out int appointmentChoice) || appointmentChoice < 1 || appointmentChoice > selectedDoctorForAppointment.AvailableAppointments.Count)
-                            {
-                                Console.WriteLine("Invalid selection.");
-                                break;
-                            }
-                            DateTime selectedAppointment = selectedDoctorForAppointment.AvailableAppointments[appointmentChoice - 1];
                             Console.Write("Enter Patient ID to book this appointment: ");
                             if (!int.TryParse(Console.ReadLine(), out int PatientId))
                             {
                                 Console.WriteLine("Invalid Patient ID.");
                                 break;
                             }
+
                             Patient patient = users.OfType<Patient>().FirstOrDefault(p => p.UserId == PatientId);
                             if (patient == null)
                             {
                                 Console.WriteLine("Patient not found.");
                                 break;
                             }
-                            if(patient.BookedAppointments == null)
+
+                            if (patient.BookedAppointments != null && patient.BookedAppointments.Contains(appointmentDateTime))
                             {
-                                patient.BookedAppointments = new List<DateTime>();
+                                Console.WriteLine("This patient has already booked this appointment.");
+                                break;
                             }
-                            patient.BookedAppointments.Add(selectedAppointment);
-                            selectedDoctorForAppointment.AvailableAppointments.RemoveAt(appointmentChoice - 1);
-                            Console.WriteLine($"Appointment on {selectedAppointment} booked for Patient {patient.Name}.");
+    
+                            if (patient.BookedAppointments == null)
+                                patient.BookedAppointments = new List<DateTime>();
+
+                            if (selectedDoctorForAppointment.AvailableAppointments == null)
+                                selectedDoctorForAppointment.AvailableAppointments = new List<DateTime>();
+
+                            if (!selectedDoctorForAppointment.AvailableAppointments.Contains(appointmentDateTime))
+                            {
+                                selectedDoctorForAppointment.AvailableAppointments.Add(appointmentDateTime);
+                            }
+
+                            patient.BookedAppointments.Add(appointmentDateTime);
+                            selectedDoctorForAppointment.AvailableAppointments.Remove(appointmentDateTime);
+
+                            Console.WriteLine($"Appointment on {appointmentDateTime} booked for Patient {patient.Name}.");
                             Console.WriteLine("Press any key to continue...");
                             Console.ReadKey();
                             break;
