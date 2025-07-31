@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 namespace HealthCenterSystem.Models
 {
      public class Patient : User
-    { 
-        
+    {
+        public List<DateTime> BookedAppointments { get; set; } = new List<DateTime>();
         public string Gender { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string Address { get; set; }
