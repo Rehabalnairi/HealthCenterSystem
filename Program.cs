@@ -181,6 +181,12 @@ namespace HealthCenterSystem
                                     Console.WriteLine("ID must be at least 6 digits long. Please try again.");
                                     continue;
                                 }
+                                if (superAdmin.UsersList.Any(u => u.UserId == adminId))
+                                {
+                                    Console.WriteLine("This ID is already used by another user. Please try a different one.");
+                                    continue;
+                                }
+
                                 break;
                             }
                             string adminName;
@@ -259,15 +265,12 @@ namespace HealthCenterSystem
                                     continue;
                                 }
 
-                                bool idExists = superAdmin.UsersList
-                               .OfType<Doctor>()
-                               .Any(d => d.UserId == doctorId);
-
-                                if (idExists)
+                                if (superAdmin.UsersList.Any(u => u.UserId == doctorId))
                                 {
-                                    Console.WriteLine("This doctor ID is already in use.");
+                                    Console.WriteLine("This ID is already used by another user. Please try a different one.");
                                     continue;
                                 }
+
                                 break;
                             }
 
