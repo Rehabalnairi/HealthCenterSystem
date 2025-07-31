@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Net;
 using System.Net.Mail;
 using System.Numerics;
+using System.Reflection;
 using HealthCenterSystem.Models;
 using HealthCenterSystem.Services;
 
@@ -1192,18 +1193,24 @@ namespace HealthCenterSystem
                 {
                     case "1":
                         Console.Clear();
-                        Console.WriteLine("== Available Appointments from All Doctors ==");
-                        var allDoctors = users.OfType<Doctor>().ToList();
-                        foreach (var doc in allDoctors)
+                        Console.WriteLine("== Your Booked Appointments ==");
+
+                        if (patient.BookedAppointments.Any())
                         {
-                            foreach (var app in doc.AvailableAppointments)
+                            foreach (var appointment in patient.BookedAppointments)
                             {
-                                Console.WriteLine($"Doctor: Dr. {doc.Name} | Appointment: {app}");
+                                Console.WriteLine($"- {appointment}");
                             }
                         }
+                        else
+                        {
+                            Console.WriteLine("You have no booked appointments.");
+                        }
+
                         Console.WriteLine("Press any key to continue...");
                         Console.ReadKey();
                         break;
+
 
                     case "2":
                         Console.Clear();
@@ -1245,6 +1252,22 @@ namespace HealthCenterSystem
             Console.Clear();
             Console.WriteLine("== Register New Patient ==");
 
+            Console.Write("Enter Desired Patient ID (number): ");
+            if (!int.TryParse(Console.ReadLine(), out int userId))
+            {
+                Console.WriteLine("Invalid ID format.");
+                Console.ReadKey();
+                return;
+            }
+
+            // Check for duplicate ID
+            if (users.Any(u => u.UserId == userId))
+            {
+                Console.WriteLine("This Patient ID is already taken. Please try a different one.");
+                Console.ReadKey();
+                return;
+            }
+
             Console.Write("Enter Name: ");
             string name = Console.ReadLine();
 
@@ -1257,6 +1280,12 @@ namespace HealthCenterSystem
             Console.Write("Enter Phone Number: ");
             string phone = Console.ReadLine();
 
+            Console.Write("Enter Gender: ");
+            string gender = Console.ReadLine();
+
+            Console.Write("Enter Address: ");
+            string address = Console.ReadLine();
+
             Console.Write("Enter Date of Birth (yyyy-mm-dd): ");
             if (!DateTime.TryParse(Console.ReadLine(), out DateTime dob))
             {
@@ -1265,13 +1294,13 @@ namespace HealthCenterSystem
                 return;
             }
 
-            int newId = users.Any() ? users.Max(u => u.UserId) + 1 : 1;
-            Patient newPatient = new Patient(newId, name, email, password, phone, "Patient", dob, "Active");
+            Patient newPatient = new Patient(userId, name, email, password, phone, gender, dob, address);
             users.Add(newPatient);
 
-            Console.WriteLine("Registration successful!");
+            Console.WriteLine($"Registration successful! Your Patient ID is: {newPatient.UserId}");
             Console.ReadKey();
         }
+
 
 
 
