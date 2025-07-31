@@ -717,11 +717,11 @@ namespace HealthCenterSystem
                 Console.Clear();
                 Console.WriteLine("Admin Menu:");
                 Console.WriteLine("1. Assign Exisiting Doctoer to Department and clinic");
-
-                Console.WriteLine("2. Update Or Delete Doctor");
-                Console.WriteLine("3. Add Appointment");
-                Console.WriteLine("4. Book Appointments For Patient");
-                Console.WriteLine("5.Views");
+                Console.WriteLine("2.Add Patient.");
+                Console.WriteLine("3. Update Or Delete Doctor");
+                Console.WriteLine("4. Add Appointment");
+                Console.WriteLine("5. Book Appointments For Patient");
+                Console.WriteLine("6.Views");
                 Console.WriteLine("0. Exit Admin Menu");
 
                 int adminChoice = -1;
@@ -822,9 +822,111 @@ namespace HealthCenterSystem
                             Console.WriteLine("Press any key to continue...");
                             Console.ReadKey();
                             break;
-
-
                         case 2:
+                            Console.Clear();
+                            Console.WriteLine("==Add Patient==");
+                            // Patient ID
+                            int patientId;
+                            while (true)
+                            {
+                                Console.Write("Enter Patient ID (at least 6 digits): ");
+                                if (int.TryParse(Console.ReadLine(), out patientId) && patientId.ToString().Length >= 6)
+                                    break;
+                                Console.WriteLine("Invalid Patient ID. It must be a number with at least 6 digits.");
+                            }
+
+                            // Patient Name
+                            string patientName;
+                            while (true)
+                            {
+                                Console.Write("Enter Patient Name (letters only): ");
+                                patientName = Console.ReadLine()?.Trim();
+                                if (!string.IsNullOrWhiteSpace(patientName) && patientName.All(char.IsLetter))
+                                    break;
+                                Console.WriteLine("Invalid Patient Name. It must contain letters only.");
+                            }
+
+                            // Patient Email
+                            string patientEmail;
+                            while (true)
+                            {
+                                Console.Write("Enter Patient Email(e.g. example@domain.com): ");
+                                patientEmail = Console.ReadLine()?.Trim();
+                                if (!string.IsNullOrWhiteSpace(patientEmail) && patientEmail.Contains("@") && patientEmail.Contains("."))
+                                    break;
+                                Console.WriteLine("Invalid Email format.(e.g. example@domain.com)");
+                            }
+
+                            // Patient Phone
+                            string patientPhone;
+                            while (true)
+                            {
+                                Console.Write("Enter Patient Phone Number: ");
+                                patientPhone = Console.ReadLine()?.Trim();
+                                if (!string.IsNullOrWhiteSpace(patientPhone) && patientPhone.All(char.IsDigit) && patientPhone.Length >= 8)
+                                    break;
+                                Console.WriteLine("Invalid Phone Number. It must contain at least 8 digits.");
+                            }
+
+                            // Password
+                            Console.Write("Enter Patient Password: ");
+                            string patientPassword = Console.ReadLine();
+
+                            // Gender
+                            string gender = " ";
+                            while (true)
+                            {
+                                Console.WriteLine("Select Gender:");
+                                Console.WriteLine("1. Male");
+                                Console.WriteLine("2. Female");
+                                Console.Write("Enter choice (1 or 2): ");
+                                string genderChoice = Console.ReadLine()?.Trim();
+
+                                if (genderChoice == "1")
+                                {
+                                    gender = "Male";
+                                    break;
+                                }
+                                if (genderChoice == "2")
+                                {
+                                    gender = "Female";
+                                    break;
+                                }
+                                Console.WriteLine("Invalid choice. Please enter 1 or 2.");
+                            }
+
+                            // Date of Birth
+                            DateTime dob;
+                            while (true)
+                            {
+                                Console.Write("Enter Date of Birth (yyyy-mm-dd): ");
+                                if (DateTime.TryParse(Console.ReadLine(), out dob))
+                                    break;
+                                Console.WriteLine("Invalid date format.");
+                            }
+
+                            // Address
+                            Console.Write("Enter Address: ");
+                            string address = Console.ReadLine();
+
+
+                            Patient newPatient = new Patient(
+                             patientId,
+                             patientName,
+                             patientEmail,
+                             patientPassword,  
+                             patientPhone,
+                             gender,
+                             dob,
+                             address
+                              );
+
+                            users.Add(newPatient);
+                            Console.WriteLine("Patient Add successfully");
+                            Console.ReadKey();
+                            break;
+
+                        case 3:
                             Console.Clear();
                             Console.WriteLine("==Update Or Delete Doctor");
                             var doctorsList = users.OfType<Doctor>().ToList();
@@ -892,7 +994,7 @@ namespace HealthCenterSystem
                             Console.WriteLine("Press any key to continue...");
                             Console.ReadKey();
                             break;
-                        case 3:
+                        case 4:
                             var doctors = users.OfType<Doctor>().ToList();
 
                             if (doctors.Count() == 0)
@@ -941,7 +1043,7 @@ namespace HealthCenterSystem
 
 
                             break;
-                        case 4:
+                        case 5:
                             Console.Clear();
                             Console.WriteLine("==Book Appointments For Patient==");
                             var doctorList = users.OfType<Doctor>().ToList();
@@ -981,12 +1083,12 @@ namespace HealthCenterSystem
                             }
                             DateTime selectedAppointment = selectedDoctorForAppointment.AvailableAppointments[appointmentChoice - 1];
                             Console.Write("Enter Patient ID to book this appointment: ");
-                            if (!int.TryParse(Console.ReadLine(), out int patientId))
+                            if (!int.TryParse(Console.ReadLine(), out int PatientId))
                             {
                                 Console.WriteLine("Invalid Patient ID.");
                                 break;
                             }
-                            Patient patient = users.OfType<Patient>().FirstOrDefault(p => p.UserId == patientId);
+                            Patient patient = users.OfType<Patient>().FirstOrDefault(p => p.UserId == PatientId);
                             if (patient == null)
                             {
                                 Console.WriteLine("Patient not found.");
@@ -1002,7 +1104,7 @@ namespace HealthCenterSystem
                             Console.WriteLine("Press any key to continue...");
                             Console.ReadKey();
                             break;
-                        case 5:
+                        case 6:
                             {
                                 while (true)
                                 {
