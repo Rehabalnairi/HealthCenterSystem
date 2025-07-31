@@ -714,8 +714,10 @@ namespace HealthCenterSystem
 
                                     default:
                                         Console.WriteLine("Invalid choice. Please try again.");
+                                        Console.ReadKey();
                                         break;
                                 }
+
                             }
                             Console.ReadLine();
                             break;
@@ -735,6 +737,7 @@ namespace HealthCenterSystem
 
                         default:
                             Console.WriteLine("Invalid choice. Please try again.");
+                            Console.ReadKey();
                             break;
                     }
                 }
@@ -1300,6 +1303,7 @@ namespace HealthCenterSystem
 
                         default:
                             Console.WriteLine("Invalid choice. Please try again.");
+                            Console.ReadKey();
                             break;
                     }
                 }
