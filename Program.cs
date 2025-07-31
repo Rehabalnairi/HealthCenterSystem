@@ -302,9 +302,20 @@ namespace HealthCenterSystem
                                 break;
                             }
 
-                            Console.Write("Enter specialization: ");
-                            string specialization = Console.ReadLine();
+                            string specialization;
+                            while (true)
+                            {
+                                Console.Write("Enter specialization (letters only): ");
+                                specialization = Console.ReadLine();
 
+                                if (string.IsNullOrWhiteSpace(specialization) || !specialization.All(char.IsLetter))
+                                {
+                                    Console.WriteLine("Specialization must contain letters only. No numbers or symbols allowed.");
+                                    continue;
+                                }
+
+                                break;
+                            }
 
                             Console.WriteLine("Available Branches:");
                             for (int i = 0; i < superAdmin.BranchesList.Count; i++)
