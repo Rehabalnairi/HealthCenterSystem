@@ -1157,14 +1157,12 @@ namespace HealthCenterSystem
                         }
                         else
                         {
-                            Console.WriteLine("Invalid credentials. Press any key to try again...");
+                            Console.WriteLine("Invalid Email or password");
                             Console.ReadKey();
                         }
                         break;
 
                     case "0":
-                        Console.WriteLine("Returning to Main Menu...");
-                        Console.ReadKey();
                         return;
 
                     default:
@@ -1184,7 +1182,6 @@ namespace HealthCenterSystem
                 Console.WriteLine("1. View My Appointments");
                 Console.WriteLine("2. View My Medical Reports");
                 Console.WriteLine("3. Logout"); // logout to patient login screen
-                Console.WriteLine("0. Back to Main Menu");
                 Console.Write("Select an option: ");
                 string choice = Console.ReadLine();
 
@@ -1235,9 +1232,7 @@ namespace HealthCenterSystem
                     case "3":
                         Console.WriteLine("Logging out...");
                         return; // returns to login
-                    case "0":
-                        Console.WriteLine("Returning to main menu...");
-                        return; // also returns
+
                     default:
                         Console.WriteLine("Invalid option. Press any key to try again.");
                         Console.ReadKey();
