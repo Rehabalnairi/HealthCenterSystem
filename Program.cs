@@ -7,6 +7,7 @@ using System.Numerics;
 using System.Reflection;
 using HealthCenterSystem.Models;
 using HealthCenterSystem.Services;
+using static HealthCenterSystem.Models.HelperClass;
 
 namespace HealthCenterSystem
 {
@@ -1250,46 +1251,131 @@ namespace HealthCenterSystem
             Console.Clear();
             Console.WriteLine("== Register New Patient ==");
 
-            Console.Write("Enter Desired Patient ID (number): ");
-            if (!int.TryParse(Console.ReadLine(), out int userId))
+            int userId;
+            while (true)
             {
-                Console.WriteLine("Invalid ID format.");
-                Console.ReadKey();
-                return;
+                Console.Write("Enter Desired Patient ID: (number, at least 6 digits)");
+                string inputId = Console.ReadLine();
+                if (!int.TryParse(inputId, out userId))
+                {
+                Console.WriteLine("Invalid ID format.Please enter numbers only.");
+                    continue;
+            }
+                if (inputId.Length < 6)
+                {
+                    Console.WriteLine("ID must be at least 6 digits long.");
+                    continue;
+                }
+                if (users.Any(u => u.UserId == userId))
+                {
+                    Console.WriteLine("This Patient ID is already taken. Please try a different one.");
+                    continue;
+                }
+                break;
             }
 
-            // Check for duplicate ID
-            if (users.Any(u => u.UserId == userId))
+            string name;
+            while (true)
             {
-                Console.WriteLine("This Patient ID is already taken. Please try a different one.");
-                Console.ReadKey();
-                return;
+                Console.Write("Enter your Name (letters only): ");
+                name = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(name) || !name.All(char.IsLetter))
+                {
+                    Console.WriteLine("Name must contain letters only.");
+                    continue;
+                }
+                break;
             }
 
-            Console.Write("Enter Name: ");
-            string name = Console.ReadLine();
 
-            Console.Write("Enter Email: ");
-            string email = Console.ReadLine();
-
-            Console.Write("Enter Password: ");
-            string password = Console.ReadLine();
-
-            Console.Write("Enter Phone Number: ");
-            string phone = Console.ReadLine();
-
-            Console.Write("Enter Gender: ");
-            string gender = Console.ReadLine();
-
-            Console.Write("Enter Address: ");
-            string address = Console.ReadLine();
-
-            Console.Write("Enter Date of Birth (yyyy-mm-dd): ");
-            if (!DateTime.TryParse(Console.ReadLine(), out DateTime dob))
+            string email;
+            while (true)
             {
-                Console.WriteLine("Invalid date format.");
-                Console.ReadKey();
-                return;
+                Console.Write("Enter Email: ");
+                email = Console.ReadLine();
+                if (!ValidationHelper.IsValidEmail(email))
+                {
+                    Console.WriteLine("Invalid email format.");
+                    continue;
+                }
+                break;
+            }
+
+            string password;
+            while (true)
+            {
+                Console.Write("Enter Password (must contain letters, numbers, and at least one symbol): ");
+                password = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(password) ||
+                    !password.Any(char.IsLetter) ||
+                    !password.Any(char.IsDigit) ||
+                    !password.Any(ch => !char.IsLetterOrDigit(ch)))
+                {
+                    Console.WriteLine("Password must contain letters, numbers, and at least one symbol.");
+                    continue;
+                }
+                break;
+            }
+
+            string phone;
+            while (true)
+            {
+                Console.Write("Enter Phone Number (at least 8 digits): ");
+                phone = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(phone) || phone.Length < 8 || !phone.All(char.IsDigit))
+                {
+                    Console.WriteLine("Phone number must be at least 8 digits and contain digits only.");
+                    continue;
+                }
+                break;
+            }
+
+            string gender;
+            while (true)
+            {
+                Console.Write("Enter Gender (Male/Female): ");
+                gender = Console.ReadLine()?.Trim();
+
+                if (string.IsNullOrWhiteSpace(gender))
+                {
+                    Console.WriteLine("Gender cannot be empty.");
+                    continue;
+                }
+
+                string genderLower = gender.ToLower();
+
+                if (genderLower != "male" && genderLower != "female" && genderLower != "other")
+                {
+                    Console.WriteLine("Invalid gender. Please enter Male, Female, or Other.");
+                    continue;
+                }
+                break;
+            }
+
+            string address;
+            while (true)
+            {
+                Console.Write("Enter Address (letters and spaces only): ");
+                address = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(address) || address.Any(ch => !char.IsLetter(ch) && !char.IsWhiteSpace(ch)))
+                {
+                    Console.WriteLine("Address must contain letters and spaces only.");
+                    continue;
+                }
+                break;
+            }
+
+            DateTime dob;
+            while (true)
+            {
+                Console.Write("Enter Date of Birth (yyyy-mm-dd): ");
+                string inputDob = Console.ReadLine();
+                if (!DateTime.TryParse(inputDob, out dob))
+                {
+                    Console.WriteLine("Invalid date format. Please try again.");
+                    continue;
+                }
+                break;
             }
 
             Patient newPatient = new Patient(userId, name, email, password, phone, gender, dob, address);
