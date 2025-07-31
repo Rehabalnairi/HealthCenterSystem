@@ -120,7 +120,6 @@ namespace HealthCenterSystem
                         else
                         {
                             Console.WriteLine($"Login successful. Welcome Dr. {foundDoctor.Name}");
-                            Console.WriteLine($"Welcome Dr. {foundDoctor.Name}");
                             Console.ReadKey();
                             DoctorMenu(foundDoctor);
 
@@ -718,11 +717,10 @@ namespace HealthCenterSystem
                 Console.Clear();
                 Console.WriteLine("Admin Menu:");
                 Console.WriteLine("1. Assign Exisiting Doctoer to Department and clinic");
-
                 Console.WriteLine("2. Update Or Delete Doctor");
                 Console.WriteLine("3. Add Appointment");
                 Console.WriteLine("4. Book Appointments For Patient");
-                Console.WriteLine("5.Views");
+                Console.WriteLine("5. Views");
                 Console.WriteLine("0. Exit Admin Menu");
 
                 int adminChoice = -1;
@@ -1022,7 +1020,7 @@ namespace HealthCenterSystem
                                         case "1":
                                             Console.Clear();
                                             Console.WriteLine("All Departments and Clinics:");
-                                            var branches = Branch.GetAllBranches(); // لازم تخزن الفرع هنا
+                                            var branches = Branch.GetAllBranches();
                                             if (branches.Count == 0)
                                             {
                                                 Console.WriteLine("NO Branches Available");
@@ -1309,12 +1307,11 @@ namespace HealthCenterSystem
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine($"== Doctor Menu: Dr. {loggedInDoctor.Name} ==");
+                Console.WriteLine($"== Doctor Menu: == ");
                 Console.WriteLine("1. View My Appointments");
                 Console.WriteLine("2. Add Medical Report");
                 Console.WriteLine("3. View My Patients Reports");
                 Console.WriteLine("4. Update Medical Report");
-                Console.WriteLine("5. Logout");
                 // back to main menu
                 Console.WriteLine("0. Back to Main Menu");
                 Console.Write("Select an option: ");
@@ -1340,6 +1337,7 @@ namespace HealthCenterSystem
                         Console.ReadKey();
 
                         break;
+
                     case "2":
                         Console.Write("Enter Patient ID: ");
                         if (!int.TryParse(Console.ReadLine(), out int patientId))
@@ -1369,6 +1367,7 @@ namespace HealthCenterSystem
                         recordService.AddRecord(patient, loggedInDoctor, diagnosis, treatment, notes);
                         Console.ReadKey();
                         break;
+
                     case "3":
                         var records = recordService.GetAllRecords()
                             .Where(r => r.Doctor.UserId == loggedInDoctor.UserId)
@@ -1426,14 +1425,11 @@ namespace HealthCenterSystem
                         Console.ReadKey();
                         break;
 
-
-                    case "5":
-                        Console.WriteLine("Logging out...");
-                        return;
                     default:
                         Console.WriteLine("Invalid option. Try again.");
                         Console.ReadKey();
                         break;
+
                     case "0":
                         return; // Back to main menu
                 }
