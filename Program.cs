@@ -1116,13 +1116,19 @@ namespace HealthCenterSystem
                             {
                                 Console.WriteLine($"{i + 1}. {doctorList[i].Name} - {doctorList[i].Specialization}");
                             }
-                            Console.Write("Select a doctor by number: ");
-                            if(!int.TryParse(Console.ReadLine(), out int doctorChoice) || doctorChoice < 1 || doctorChoice > doctorList.Count)
+
+                            Doctor selectedDoctorForAppointment;
+                            while (true)
                             {
-                                Console.WriteLine("Invalid selection.");
-                                break;
+                                if (int.TryParse(Console.ReadLine(), out int doctorChoice) &&
+                                doctorChoice >= 1 && doctorChoice <= doctorList.Count)
+                                {
+                                    selectedDoctorForAppointment = doctorList[doctorChoice - 1];
+                                    break;
+                                }
+                                Console.WriteLine("Invalid doctor selection. Please try again.");
                             }
-                            Doctor selectedDoctorForAppointment = doctorList[doctorChoice - 1];
+
                             DateTime appointmentDateTime;
                             while (true)
                             {
