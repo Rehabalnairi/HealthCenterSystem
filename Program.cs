@@ -938,6 +938,67 @@ namespace HealthCenterSystem
 
                             break;
                         case 4:
+                            Console.Clear();
+                            Console.WriteLine("==Book Appointments For Patient==");
+                            var doctorList = users.OfType<Doctor>().ToList();
+                            if (doctorList.Count == 0)
+                            {
+                                Console.WriteLine("No doctors available.");
+                                break;
+                            }
+                            Console.WriteLine("Available Doctors:");
+                            for (int i = 0; i < doctorList.Count; i++)
+                            {
+                                Console.WriteLine($"{i + 1}. {doctorList[i].Name} - {doctorList[i].Specialization}");
+                            }
+                            Console.Write("Select a doctor by number: ");
+                            if(!int.TryParse(Console.ReadLine(), out int doctorChoice) || doctorChoice < 1 || doctorChoice > doctorList.Count)
+                            {
+                                Console.WriteLine("Invalid selection.");
+                                break;
+                            }
+                            Doctor selectedDoctorForAppointment = doctorList[doctorChoice - 1];
+                            if(selectedDoctorForAppointment == null || selectedDoctorForAppointment.AvailableAppointments.Count == 0)
+                            {
+                                Console.WriteLine("This doctor has no available appointments.");
+                                break;
+                            }
+
+                            Console.WriteLine($"Available appointments for Dr. {selectedDoctorForAppointment.Name}:");
+                            for (int i = 0; i < selectedDoctorForAppointment.AvailableAppointments.Count; i++)
+                            {
+                                Console.WriteLine($"{i + 1}. {selectedDoctorForAppointment.AvailableAppointments[i]}");
+                            }
+                            Console.Write("Select an appointment by number: ");
+                            if (!int.TryParse(Console.ReadLine(), out int appointmentChoice) || appointmentChoice < 1 || appointmentChoice > selectedDoctorForAppointment.AvailableAppointments.Count)
+                            {
+                                Console.WriteLine("Invalid selection.");
+                                break;
+                            }
+                            DateTime selectedAppointment = selectedDoctorForAppointment.AvailableAppointments[appointmentChoice - 1];
+                            Console.Write("Enter Patient ID to book this appointment: ");
+                            if (!int.TryParse(Console.ReadLine(), out int patientId))
+                            {
+                                Console.WriteLine("Invalid Patient ID.");
+                                break;
+                            }
+                            Patient patient = users.OfType<Patient>().FirstOrDefault(p => p.UserId == patientId);
+                            if (patient == null)
+                            {
+                                Console.WriteLine("Patient not found.");
+                                break;
+                            }
+                            if(patient.BookedAppointments == null)
+                            {
+                                patient.BookedAppointments = new List<DateTime>();
+                            }
+                            patient.BookedAppointments.Add(selectedAppointment);
+                            selectedDoctorForAppointment.AvailableAppointments.RemoveAt(appointmentChoice - 1);
+                            Console.WriteLine($"Appointment on {selectedAppointment} booked for Patient {patient.Name}.");
+                            Console.WriteLine("Press any key to continue...");
+                            Console.ReadKey();
+                            break;
+                        case 5:
                             {
                                 while (true)
                                 {
@@ -1029,9 +1090,9 @@ namespace HealthCenterSystem
                                                 Console.WriteLine("No Patients Available");
                                                 break;
                                             }
-                                            foreach (var patient in allPatients)
+                                            foreach (var Patient in allPatients)
                                             {
-                                                Console.WriteLine($"Patient ID: {patient.UserId}, Name: {patient.Name}, Email: {patient.Email}, Phone: {patient.PhoneNumber}");
+                                                Console.WriteLine($"Patient ID: {Patient.UserId}, Name: {Patient.Name}, Email: {Patient.Email}, Phone: {Patient.PhoneNumber}");
                                             }
                                             break;
 
