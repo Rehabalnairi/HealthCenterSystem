@@ -26,6 +26,7 @@ namespace HealthCenterSystem.Models
             this.PhoneNumber = PhoneNumber; // initialize phone number
             this.Role = role; // default role is User
             this.IsActive = true; // default active status is true
+
         }
     }
 

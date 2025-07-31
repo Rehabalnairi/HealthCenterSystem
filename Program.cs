@@ -604,14 +604,19 @@ namespace HealthCenterSystem
 
                                             for (int i = 0; i < deptCount; i++)
                                             {
+                                                string deptName;
+                                            while (true)
+                                            {
                                                 Console.Write($"\nEnter name of department #{i + 1}: ");
-                                                string deptName = Console.ReadLine()?.Trim();
+                                                deptName = Console.ReadLine()?.Trim();
 
                                                 if (string.IsNullOrWhiteSpace(deptName) || deptName.Any(char.IsDigit))
                                                 {
-                                                    Console.WriteLine("Invalid department name. It must contain letters only. Skipping this department.");
+                                                    Console.WriteLine("Invalid department name. It must contain letters only.");
                                                     continue;
                                                 }
+                                                break;
+                                            }
 
                                                 Department newDept = new Department
                                                 {
@@ -637,14 +642,19 @@ namespace HealthCenterSystem
                                                 // Add clinics
                                                 for (int j = 0; j < clinicCount; j++)
                                                 {
-                                                    Console.Write($"\tEnter name of clinic #{j + 1} in '{deptName}': ");
-                                                    string clinicName = Console.ReadLine()?.Trim();
+                                                    string clinicName;
+                                            while (true)
+                                            {
+                                                Console.Write($"\tEnter name of clinic #{j + 1} in '{deptName}': ");
+                                                clinicName = Console.ReadLine()?.Trim();
 
-                                                    if (string.IsNullOrWhiteSpace(clinicName) || clinicName.Any(char.IsDigit))
-                                                    {
-                                                        Console.WriteLine("Invalid clinic name. It must contain letters only. Skipping this clinic.");
-                                                        continue;
-                                                    }
+                                                if (string.IsNullOrWhiteSpace(clinicName) || clinicName.Any(char.IsDigit))
+                                                {
+                                                    Console.WriteLine("Invalid clinic name. It must contain letters only");
+                                                    continue;
+                                                }
+                                                break;
+                                            }
 
                                                     Clinic newClinic = new Clinic
                                                     {
@@ -680,13 +690,7 @@ namespace HealthCenterSystem
                                         Console.WriteLine("Invalid choice. Please try again.");
                                         break;
                                 }
-
                             }
-                            //Console.Write("Enter Departments: ");
-                            //string departments = Console.ReadLine();
-
-                            //superAdmin.AddBranch(branchName, branchLocation, noOfFloors, noOfRooms, departments, clinics);
-                            //Console.WriteLine("Branch added successfully.");
                             Console.ReadLine();
                             break;
 

@@ -15,12 +15,6 @@ namespace HealthCenterSystem.Models
             BranchesList = new List<Branch>();
         }
 
-        //public SuperAdmin() : base(1,"Super Admin", "suadmin@healthsystem.com", "123", "999", "Super Admin")
-        //{
-        //    this.UsersList = new List<User>();
-        //    BranchesList = new List<Branch>();
-        //}
-
         public string GenerateEmail(string name, string role)
         {
             return $"{name.ToLower().Replace(" ", ".")}@{role.ToLower()}.healthsystem.com";
@@ -93,14 +87,14 @@ namespace HealthCenterSystem.Models
                     Console.WriteLine("  Departments:");
                     foreach (var dept in b.Departments)
                     {
-                        Console.WriteLine($"- {dept.DepName}");
+                        Console.WriteLine($" {dept.DepName}");
 
                         if (dept.Clinics != null && dept.Clinics.Count > 0)
                         {
                             Console.WriteLine("Clinics:");
                             foreach (var clinic in dept.Clinics)
                             {
-                                Console.WriteLine($"* {clinic.Name} (Active: {clinic.IsActive})");
+                                Console.WriteLine($" {clinic.Name} (Active: {clinic.IsActive})");
                             }
                         }
                         else
