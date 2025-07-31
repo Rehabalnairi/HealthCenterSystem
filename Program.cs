@@ -730,7 +730,7 @@ namespace HealthCenterSystem
                             break;
 
 
-                        case 5:
+                        case 0:
                             Console.WriteLine("Exiting Super Admin menu.");
                             return; // Exit Super Admin menu
 
