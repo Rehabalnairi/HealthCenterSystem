@@ -6,6 +6,7 @@ namespace HealthCenterSystem.Models
 {
     public class Department
     {
+        private static int IndexDepartmentID = 1; // Static index to keep track of department IDs
         public int DepId { get; set; }
         public string DepName { get; set; }
         public  string Head { get; set; } // Property to hold the head of the department
@@ -14,6 +15,7 @@ namespace HealthCenterSystem.Models
 
         public Department()
         {
+            DepId = IndexDepartmentID++;
             Clinics = new List<Clinic>();
             Doctors = new List<Doctor>();
         }

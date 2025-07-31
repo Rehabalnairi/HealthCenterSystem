@@ -803,7 +803,7 @@ namespace HealthCenterSystem
                             }
                             Console.WriteLine("Available Clinics in this Department:");
                             foreach (var clinic in selectedDepartment.Clinics)
-                                Console.WriteLine($"{clinic.Name}");
+                                Console.WriteLine($"{clinic.ClinicId}{clinic.Name}");
                             //select clinic
                             Console.WriteLine("Enter Clinic ID to assign doctor:");
                             if (!int.TryParse(Console.ReadLine(), out int clinicId))

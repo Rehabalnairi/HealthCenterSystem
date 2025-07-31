@@ -4,6 +4,7 @@ namespace HealthCenterSystem.Models
 {
     public class Clinic
     {
+        private static int IndexClinicID = 1; // Static index to keep track of clinic IDs
         public int ClinicId { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
@@ -13,7 +14,10 @@ namespace HealthCenterSystem.Models
         public bool IsActive { get; set; }
 
         // 
-        public Clinic() { }
+        public Clinic() 
+        {
+            ClinicId = IndexClinicID++;
+        }
 
         // 
         public Clinic(int clinicId, string name, string address, decimal price, string phoneNumber, string email, bool isActive = true)
