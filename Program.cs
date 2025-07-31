@@ -351,7 +351,7 @@ namespace HealthCenterSystem
                             break;
 
 
-                        //
+                        
                         case 3:
                             Console.Clear();
                             int branchOption = -1;
@@ -364,7 +364,7 @@ namespace HealthCenterSystem
                                 Console.WriteLine("3. Delete Branch");
                                 Console.WriteLine("4. Add Department To Branch");
                                 Console.WriteLine("5. View Branches");
-                                Console.WriteLine("0. Exit Branch Management");
+                                Console.WriteLine("0. Exit menu");
 
                                 if (!int.TryParse(Console.ReadLine(), out branchOption))
                                 {
@@ -699,7 +699,8 @@ namespace HealthCenterSystem
                                         break;
 
                                     case 0:
-                                        return; // Exit Branch Management menu
+                                        Console.WriteLine("Returning to SuperAdmin menu...");
+                                        break;
 
                                     default:
                                         Console.WriteLine("Invalid choice. Please try again.");
