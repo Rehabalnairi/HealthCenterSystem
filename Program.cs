@@ -1438,7 +1438,7 @@ namespace HealthCenterSystem
             int userId;
             while (true)
             {
-                Console.Write("Enter Desired Patient ID: (number, at least 6 digits)");
+                Console.Write("Enter Desired Patient ID: (number, at least 6 digits): ");
                 string inputId = Console.ReadLine();
                 if (!int.TryParse(inputId, out userId))
                 {
