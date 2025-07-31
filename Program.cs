@@ -720,6 +720,7 @@ namespace HealthCenterSystem
                                         Console.ReadKey();
                                         break;
                                 }
+
                             }
                             //Console.ReadLine();
                             break;
@@ -732,13 +733,14 @@ namespace HealthCenterSystem
                             break;
 
 
-                        case 5:
+                        case 0:
                             Console.WriteLine("Exiting Super Admin menu.");
                             return; // Exit Super Admin menu
 
 
                         default:
                             Console.WriteLine("Invalid choice. Please try again.");
+                            Console.ReadKey();
                             break;
                     }
                 }
@@ -1304,6 +1306,7 @@ namespace HealthCenterSystem
 
                         default:
                             Console.WriteLine("Invalid choice. Please try again.");
+                            Console.ReadKey();
                             break;
                     }
                 }
