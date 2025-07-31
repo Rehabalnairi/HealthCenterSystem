@@ -370,6 +370,7 @@ namespace HealthCenterSystem
                                 if (!int.TryParse(Console.ReadLine(), out branchOption))
                                 {
                                     Console.WriteLine("Invalid input. Please enter a number between 0 and 5.");
+                                    Console.ReadKey();
                                     continue;
                                 }
                                 switch (branchOption)
@@ -417,6 +418,7 @@ namespace HealthCenterSystem
                                             }
                                             break;
                                         }
+                                            
 
                                         int noOfRooms;
                                         while (true)
@@ -709,15 +711,17 @@ namespace HealthCenterSystem
 
                                     case 0:
                                         Console.WriteLine("Returning to SuperAdmin menu...");
+                                        Console.ReadKey();
                                         break;
 
 
                                     default:
                                         Console.WriteLine("Invalid choice. Please try again.");
+                                        Console.ReadKey();
                                         break;
                                 }
                             }
-                            Console.ReadLine();
+                            //Console.ReadLine();
                             break;
 
 
