@@ -1052,6 +1052,8 @@ namespace HealthCenterSystem
                             if (doctors.Count() == 0)
                             {
                                 Console.WriteLine("No doctors available.");
+                                Console.WriteLine("Press any key to return to menu.");
+                                Console.ReadKey();
                                 break;
                             }
 
@@ -1065,6 +1067,7 @@ namespace HealthCenterSystem
                             if (!int.TryParse(Console.ReadLine(), out int docIndex) || docIndex < 1 || docIndex > doctors.Count())
                             {
                                 Console.WriteLine("Invalid selection.");
+                                Console.ReadKey();
                                 return;
                             }
 
@@ -1074,6 +1077,7 @@ namespace HealthCenterSystem
                             if (!int.TryParse(Console.ReadLine(), out int count) || count <= 0)
                             {
                                 Console.WriteLine("Invalid number.");
+                                Console.ReadKey();
                                 return;
                             }
 
@@ -1084,10 +1088,12 @@ namespace HealthCenterSystem
                                 {
                                     selDoctor.AvailableAppointments.Add(appointment);
                                     Console.WriteLine("Appointment added.");
+                                    Console.ReadKey();
                                 }
                                 else
                                 {
                                     Console.WriteLine("Invalid date format.");
+                                    Console.ReadKey();
                                 }
                             }
                             Console.WriteLine("Appointments added successfully.");
@@ -1204,7 +1210,7 @@ namespace HealthCenterSystem
                                                 foreach (var br in branches)
                                                 {
                                                     Console.WriteLine($"Branch:{br.BranchName}");
-                                                    foreach(var dep in br.Departments)
+                                                    foreach (var dep in br.Departments)
                                                     {
                                                         Console.WriteLine($"\tDepartment: {dep.DepName}");
                                                         foreach (var clinic in dep.Clinics)
@@ -1291,12 +1297,17 @@ namespace HealthCenterSystem
                                             Console.WriteLine("Invalid choice. Please try again.");
                                             Console.ReadKey();
                                             break;
-                                           
-                                            
+
+
                                     }
+
                                 }
                             }
 
+                                
+                            
+
+                            break;
                         case 0:
                             return; // Exit Admin menu
 
@@ -1306,6 +1317,7 @@ namespace HealthCenterSystem
                             break;
                     }
                 }
+                
 
             }
         }
