@@ -21,6 +21,28 @@ namespace HealthCenterSystem.Models
             this.Address = address;
             this.IsActive = true;
         }
+        public string ToFileString()
+        {
+            return $"{UserId}|{Name}|{Email}|{Password}|{PhoneNumber}|{Gender}|{DateOfBirth:yyyy-MM-dd}|{Address}";
+        }
+
+        public static Patient FromFileString(string line)
+        {
+            string[] parts = line.Split('|');
+            if (parts.Length != 8) return null;
+
+            return new Patient(
+                int.Parse(parts[0]),   // UserId
+                parts[1],              // Name
+                parts[2],              // Email
+                parts[3],              // Password
+                parts[4],              // PhoneNumber
+                parts[5],              // Gender
+                DateTime.Parse(parts[6]), // DateOfBirth
+                parts[7]               // Address
+            );
+        }
+
 
     }
 

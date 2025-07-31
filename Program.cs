@@ -18,9 +18,14 @@ namespace HealthCenterSystem
         public static List<Admins> admins = new List<Admins>();
         static List<Branch> branches = new List<Branch>();
         static PatientRecordService recordService = new PatientRecordService();
-
+        //file to save patients
+        static PatientService patientService = new PatientService();
+        const string patientFilePath = "patients.txt";
         static void Main(string[] args)
         {
+            //load patients from file
+            patientService.LoadFromFile(patientFilePath);
+
             List<Branch> branches = new List<Branch>();
             List<Clinic> clinics = new List<Clinic>();
             DoctorService doctorService = new DoctorService();
@@ -1385,7 +1390,9 @@ namespace HealthCenterSystem
                         Console.ReadKey();
                         break;
                 }
+                patientService.SaveToFile(patientFilePath);
             }
+            
         }
 
         public static void PatientLoginMenu(Patient patient)
@@ -1452,7 +1459,8 @@ namespace HealthCenterSystem
                         Console.WriteLine("Invalid option. Press any key to try again.");
                         Console.ReadKey();
                         break;
-                }
+                }//
+                patientService.SaveToFile(patientFilePath);
             }
         }
         public static void RegisterPatient()
@@ -1769,7 +1777,3 @@ namespace HealthCenterSystem
         }
     }
 }
-
-
-
-
