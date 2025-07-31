@@ -748,7 +748,7 @@ namespace HealthCenterSystem
                 Console.WriteLine("3. Update Or Delete Doctor");
                 Console.WriteLine("4. Add Appointment");
                 Console.WriteLine("5. Book Appointments For Patient");
-                Console.WriteLine("6.Views");
+                Console.WriteLine("6. Views");
                 Console.WriteLine("0. Exit Admin Menu");
 
                 int adminChoice = -1;
@@ -858,9 +858,21 @@ namespace HealthCenterSystem
                             while (true)
                             {
                                 Console.Write("Enter Patient ID (at least 6 digits): ");
-                                if (int.TryParse(Console.ReadLine(), out patientId) && patientId.ToString().Length >= 6)
-                                    break;
-                                Console.WriteLine("Invalid Patient ID. It must be a number with at least 6 digits.");
+                                if (!int.TryParse(Console.ReadLine(), out patientId) || patientId.ToString().Length < 6)
+                                {
+                                    Console.WriteLine("Invalid Patient ID. It must be a number with at least 6 digits.");
+                                    continue;
+                                }
+
+                                // Check if ID already exists
+                                bool idExists = users.Any(u => u is Patient && u.UserId == patientId);
+                                if (idExists)
+                                {
+                                    Console.WriteLine("This Patient ID already exists. Please enter a unique ID.");
+                                    continue;
+                                }
+
+                                break;
                             }
 
                             // Patient Name
