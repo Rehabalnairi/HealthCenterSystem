@@ -34,6 +34,8 @@ namespace HealthCenterSystem
             {
                 users.Add(p);
             }
+            Branch.BranchList = BranchFileService.LoadFromFile();
+
 
             List<Branch> branches = new List<Branch>();
             List<Clinic> clinics = new List<Clinic>();
@@ -443,6 +445,7 @@ namespace HealthCenterSystem
                                             Branch newBranch = superAdmin.AddBranch(branchName, branchLocation, noOfFloors, noOfRooms, "", "");
                                             branches.Add(newBranch); //add new branch to the list
                                             Console.WriteLine("Branch added successfully.");
+                                            BranchFileService.SaveToFile(Branch.BranchList);
 
                                             Console.Write("Do you want to add another branch? (Y/N): ");
                                         }
@@ -552,6 +555,8 @@ namespace HealthCenterSystem
                                         if (updated)
                                         {
                                             Console.WriteLine("Branch updated successfully.");
+                                            BranchFileService.SaveToFile(Branch.BranchList);
+
                                             Console.WriteLine("Press any key to continue...");
                                             Console.ReadKey();
                                         }
@@ -698,6 +703,8 @@ namespace HealthCenterSystem
                                                 }
 
                                                 branch.Departments.Add(newDept);
+                                                BranchFileService.SaveToFile(Branch.BranchList);
+
                                                 Console.WriteLine($"Department '{deptName}' with {newDept.Clinics.Count} clinic(s) added successfully.");
                                             }
 
