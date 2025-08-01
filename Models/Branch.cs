@@ -202,6 +202,63 @@ namespace HealthCenterSystem.Models
 
             return $"{BranchId},{BranchName},{BranchLocation},{NoOfFloors},{NoOfRooms},{IsActive},{depts},{clinicsStr}";
         }
+        public static Branch FromFileString(string line)
+        {
+            var parts = line.Split(',');
+
+            if (parts.Length < 8) return null; 
+            Branch branch = new Branch
+            {
+                BranchId = int.Parse(parts[0]),
+                BranchName = parts[1],
+                BranchLocation = parts[2],
+                NoOfFloors = int.Parse(parts[3]),
+                NoOfRooms = int.Parse(parts[4]),
+                IsActive = bool.Parse(parts[5]),
+                Departments = parts[6].Split('|', StringSplitOptions.RemoveEmptyEntries).Select(d => new Department { DepName = d }).ToList(),
+                Clinics = parts[7].Split('|', StringSplitOptions.RemoveEmptyEntries).ToList()
+            };
+
+            
+            if (branch.BranchId >= _idCounter)
+            {
+                _idCounter = branch.BranchId + 1;
+            }
+
+            return branch;
+        }
+
+        public static void SaveBranchesToFile(string filePath)
+        {
+            using (var writer = new StreamWriter(filePath))
+            {
+                foreach (var branch in BranchList)
+                {
+                    writer.WriteLine(branch.ToFileString());
+                }
+            }
+        }
+
+        public static void LoadBranchesFromFile(string filePath)
+        {
+            if (!File.Exists(filePath))
+            {
+                BranchList = new List<Branch>();
+                return;
+            }
+
+            BranchList = new List<Branch>();
+            var lines = File.ReadAllLines(filePath);
+
+            foreach (var line in lines)
+            {
+                var branch = FromFileString(line);
+                if (branch != null)
+                {
+                    BranchList.Add(branch);
+                }
+            }
+        }
 
     }
 }
