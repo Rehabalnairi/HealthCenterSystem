@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
+
 
 namespace HealthCenterSystem.Models
 {
@@ -19,7 +21,7 @@ namespace HealthCenterSystem.Models
             records.Add(record);
             //patient.Records.Add(record); // Link directly to the patient
 
-            Console.WriteLine("✔ Medical record added successfully.");
+            Console.WriteLine(" Medical record added successfully.");
         }
 
         // Get all records for a specific patient
@@ -57,5 +59,53 @@ namespace HealthCenterSystem.Models
             }
             return false;
         }
+
+        public void SaveToFile(string filePath)
+        {
+            using (StreamWriter writer = new StreamWriter(filePath))
+            {
+                foreach (var record in records)
+                {
+                    string line = $"{record.RecordId}|{record.Patient.UserId}|{record.Doctor.UserId}|{record.VisitDate:yyyy-MM-dd}|{record.Diagnosis}|{record.Treatment}|{record.Notes}";
+                    writer.WriteLine(line);
+                }
+            }
+        }
+
+        public void LoadFromFile(string filePath, List<Patient> patients, List<User> users)
+        {
+            records = new List<PatientRecord>();
+
+            if (!File.Exists(filePath))
+                return;
+
+            string[] lines = File.ReadAllLines(filePath);
+
+            foreach (string line in lines)
+            {
+                string[] parts = line.Split('|');
+                if (parts.Length != 7)
+                    continue;
+
+                int recordId = int.Parse(parts[0]);
+                int patientId = int.Parse(parts[1]);
+                int doctorId = int.Parse(parts[2]);
+                DateTime visitDate = DateTime.Parse(parts[3]);
+                string diagnosis = parts[4];
+                string treatment = parts[5];
+                string notes = parts[6];
+
+                Patient patient = patients.FirstOrDefault(p => p.UserId == patientId);
+                Doctor doctor = users.OfType<Doctor>().FirstOrDefault(d => d.UserId == doctorId);
+
+                if (patient != null && doctor != null)
+                {
+                    PatientRecord record = new PatientRecord(recordId, patient, doctor, visitDate, diagnosis, treatment, notes);
+                    records.Add(record);
+                }
+            }
+        }
+
     }
 }
+

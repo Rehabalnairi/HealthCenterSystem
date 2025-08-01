@@ -21,14 +21,29 @@ namespace HealthCenterSystem
         //file to save patients
         static PatientService patientService = new PatientService();
         const string patientFilePath = "patients.txt";
+        const string patientRecordFilePath = "patient_records.txt";
         static void Main(string[] args)
         {
             //load patients from file
             patientService.LoadFromFile(patientFilePath);
+            patientService.LoadFromFile(patientFilePath);
+            recordService.LoadFromFile(patientRecordFilePath, patientService.GetAllPatients(), users);
+            foreach (var p in patientService.GetAllPatients())
+            {
+                users.Add(p);
+            }
 
             List<Branch> branches = new List<Branch>();
             List<Clinic> clinics = new List<Clinic>();
             DoctorService doctorService = new DoctorService();
+
+            //patientService.LoadFromFile(patientFilePath);
+
+            // Now copy loaded patients to global users list
+            foreach (var p in patientService.GetAllPatients())
+            {
+                users.Add(p); // So login can work correctly
+            }
             Console.WriteLine("Welcome to Codeline Health System");
             int choice = -1;
             while (choice != 0)
@@ -122,7 +137,9 @@ namespace HealthCenterSystem
                     case 4: PatientMenu(); break;
                     case 0:
                         return; // Exit the application
+                        
                         Console.WriteLine("Exiting the system. Goodbye!");
+
                         break;
 
                     default:
@@ -131,6 +148,11 @@ namespace HealthCenterSystem
                         Console.ReadKey();
                         break;
                 }
+                patientService.SaveToFile(patientFilePath);
+                recordService.LoadFromFile(patientRecordFilePath, patientService.GetAllPatients(), users);
+                patientService.SaveToFile(patientFilePath);
+                recordService.SaveToFile(patientRecordFilePath);
+
             }
             //SuperAdmin menu
             void SuperAdminMenu(List<Branch> branches, List<Clinic> clinics)
@@ -723,7 +745,6 @@ namespace HealthCenterSystem
                 }
             }
 
-
             void AdminMenu()
             {
                 int adminChoice = -1;
@@ -968,9 +989,13 @@ namespace HealthCenterSystem
                                  dob,
                                  address
                                   );
-
+                                
                                 users.Add(newPatient);
                                 Console.WriteLine("Patient Add successfully");
+                                patientService.AddPatient(newPatient); 
+                                patientService.SaveToFile(patientFilePath); // 
+
+
                                 Console.WriteLine("\nDo you want to:");
                                 Console.WriteLine("1. Add another patient");
                                 Console.WriteLine("2. Return to Admin Menu");
@@ -1339,8 +1364,6 @@ namespace HealthCenterSystem
 
                     }
                 }
-            
-        
         public static void PatientMenu()
         {
             while (true)
@@ -1383,6 +1406,9 @@ namespace HealthCenterSystem
                         break;
 
                     case "0":
+                        patientService.SaveToFile(patientFilePath);
+                        recordService.SaveToFile(patientRecordFilePath);
+
                         return;
 
                     default:
@@ -1390,9 +1416,10 @@ namespace HealthCenterSystem
                         Console.ReadKey();
                         break;
                 }
-                patientService.SaveToFile(patientFilePath);
+                
+
             }
-            
+
         }
 
         public static void PatientLoginMenu(Patient patient)
@@ -1591,6 +1618,8 @@ namespace HealthCenterSystem
 
             Patient newPatient = new Patient(userId, name, email, password, phone, gender, dob, address);
             users.Add(newPatient);
+            patientService.AddPatient(newPatient);
+            patientService.SaveToFile(patientFilePath);
 
             Console.WriteLine($"Registration successful! Your Patient ID is: {newPatient.UserId}");
             Console.ReadKey();
@@ -1671,6 +1700,7 @@ namespace HealthCenterSystem
                         string notes = Console.ReadLine();
 
                         recordService.AddRecord(patient, loggedInDoctor, diagnosis, treatment, notes);
+                        recordService.SaveToFile(patientRecordFilePath);
                         Console.ReadKey();
                         break;
 
