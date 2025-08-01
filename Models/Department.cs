@@ -13,12 +13,14 @@ namespace HealthCenterSystem.Models
         public List<Doctor> Doctors { get; set; }
         public List<Clinic> Clinics { get; set; }
 
-        public Department()
+        public Department(string depName)
         {
-            DepId = IndexDepartmentID++;
-            Clinics = new List<Clinic>();
-            Doctors = new List<Doctor>();
+            this.DepId = 0; 
+            this.DepName = depName;
+            this.Clinics = new List<Clinic>();
+            this.Doctors = new List<Doctor>();
         }
+
         // Constructor
         public Department(int depId, string depName, string head)
         {
