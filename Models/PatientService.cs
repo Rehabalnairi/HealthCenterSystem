@@ -95,6 +95,16 @@ namespace HealthCenterSystem.Models
                 }
             }
         }
+        public void AddPatient(Patient patient)
+        {
+            if (patients.Any(p => p.UserId == patient.UserId))
+            {
+                Console.WriteLine("A patient with this ID already exists.");
+                return;
+            }
+
+            patients.Add(patient);
+        }
 
 
     }

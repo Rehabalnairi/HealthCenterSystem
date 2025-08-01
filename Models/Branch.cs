@@ -187,5 +187,21 @@ namespace HealthCenterSystem.Models
             }
             return false;
         }
+
+        public string ToFileString()
+        {
+            // departments names separated by '|'
+            string depts = Departments != null && Departments.Count > 0
+                ? string.Join("|", Departments.Select(d => d.DepName))
+                : "";
+
+            // clinics separated by '|'
+            string clinicsStr = Clinics != null && Clinics.Count > 0
+                ? string.Join("|", Clinics)
+                : "";
+
+            return $"{BranchId},{BranchName},{BranchLocation},{NoOfFloors},{NoOfRooms},{IsActive},{depts},{clinicsStr}";
+        }
+
     }
 }
