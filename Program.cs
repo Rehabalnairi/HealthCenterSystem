@@ -1219,7 +1219,9 @@ namespace HealthCenterSystem
                                     selectedDoctorForAppointment.AvailableAppointments.Remove(appointmentDateTime);
 
                                     Console.WriteLine($"Appointment on {appointmentDateTime} booked for Patient {patient.Name}.");
-                                    Console.WriteLine("Press any key to continue...");
+                                    patientService.SaveToFile(patientFilePath); 
+
+                            Console.WriteLine("Press any key to continue...");
                                     Console.ReadKey();
                                     break;
 
@@ -1782,6 +1784,8 @@ namespace HealthCenterSystem
                         if (recordService.UpdateRecord(recordId, newDiagnosis, newTreatment, newNotes))
                         {
                             Console.WriteLine("Record updated successfully.");
+                            recordService.SaveToFile(patientRecordFilePath); 
+
                             Console.WriteLine("== Updated Record ==");
                             Console.WriteLine($"Record ID: {recordId}");
                             Console.WriteLine($"Diagnosis: {newDiagnosis}");
