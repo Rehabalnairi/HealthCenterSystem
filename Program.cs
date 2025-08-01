@@ -23,6 +23,9 @@ namespace HealthCenterSystem
         const string patientFilePath = "patients.txt";
         const string patientRecordFilePath = "patient_records.txt";
         const string filePath = "branches.txt";
+        const string adminFilePath = "admins.txt";
+        public static AdminService adminService = new AdminService();
+
 
         static void Main(string[] args)
         {
@@ -35,6 +38,8 @@ namespace HealthCenterSystem
                 users.Add(p);
             }
             Branch.BranchList = BranchFileService.LoadFromFile();
+            adminService.LoadFromFile(adminFilePath);
+            Program.adminService.SaveToFile("admins.txt");
 
 
             List<Branch> branches = new List<Branch>();
@@ -254,6 +259,8 @@ namespace HealthCenterSystem
                             string adminEmail = superAdmin.AddAdmin(adminId, adminName, adminPassword, adminPhoneNumber);
                             Console.WriteLine($"Admin added successfully. Email: {adminEmail}");
                             Console.ReadKey();
+                       //     adminService.AddAdmin(Admins admin);
+                            adminService.SaveToFile(adminFilePath);
                             break; // Exit the loop if a valid ID is entered
                         case 2:
                             if (superAdmin.BranchesList.Count == 0)
@@ -889,10 +896,8 @@ namespace HealthCenterSystem
                                         Console.WriteLine("This Patient ID already exists. Please enter a unique ID.");
                                         continue;
                                     }
-
                                     break;
                                 }
-
                                 // Patient Name
                                 string patientName;
                                 while (true)
@@ -1357,10 +1362,6 @@ namespace HealthCenterSystem
 
                                         }
                                     }
-
-
-
-
                                     break;
                                 case 0:
                                     return; // Exit Admin menu
@@ -1371,8 +1372,6 @@ namespace HealthCenterSystem
                                     break;
                                 }
                             }
-
-
                     }
                 }
         public static void PatientMenu()

@@ -43,7 +43,7 @@ public static class BranchFileService
                     BranchLocation = parts[2],
                     NoOfFloors = int.Parse(parts[3]),
                     NoOfRooms = int.Parse(parts[4]),
-                    Departments = parts[5].Split(',').Where(d => !string.IsNullOrWhiteSpace(d)).Select(name => new Department(name)).ToList(),
+               //     Departments = parts[5].Split(',').Where(d => !string.IsNullOrWhiteSpace(d)).Select(name => new Department(name)).ToList(),
                     Clinics = parts[6].Split(',').Where(c => c != "").ToList(),
                     IsActive = bool.Parse(parts[7])
                 };

@@ -16,7 +16,7 @@ namespace HealthCenterSystem.Models
         }
 
 
-    }
+    
     public string ToFileString()
         {
             return $"{UserId},{Name},{Email},{Password},{PhoneNumber},{Role},{IsActive}";
@@ -40,5 +40,5 @@ namespace HealthCenterSystem.Models
             return admin;
         }
 
-    }
+    } }
 
