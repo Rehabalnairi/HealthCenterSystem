@@ -157,10 +157,10 @@ namespace HealthCenterSystem
                         Console.ReadKey();
                         break;
                 }
-                patientService.SaveToFile(patientFilePath);
-                recordService.LoadFromFile(patientRecordFilePath, patientService.GetAllPatients(), users);
-                patientService.SaveToFile(patientFilePath);
-                recordService.SaveToFile(patientRecordFilePath);
+                //patientService.SaveToFile(patientFilePath);
+                //recordService.LoadFromFile(patientRecordFilePath, patientService.GetAllPatients(), users);
+                //patientService.SaveToFile(patientFilePath);
+                //recordService.SaveToFile(patientRecordFilePath);
 
             }
             //SuperAdmin menu

@@ -1,27 +1,25 @@
-﻿using HealthCenterSystem.Services;
+﻿using HealthCenterSystem.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using HealthCenterSystem.Models;
 
-namespace HealthCenterSystem.Models
+namespace HealthCenterSystem.Services
 {
-    public class DoctorService: IDoctorService
+    public class DoctorService : IDoctorService
     {
-        private List<Doctor> doctors = new List<Doctor>(); // List to hold all doctors in the system
+       
+        private List<Doctor> doctors = new List<Doctor>();
 
-
-        /// Adds a new doctor to the system with the provided details
-        public void AddDoctor( int userId, string name, string email, string password, string phoneNumber, string specialization)
+        
+        public void AddDoctor(int userId, string name, string email, string password, string phoneNumber, string specialization)
         {
             Doctor newDoctor = new Doctor(userId, name, email, password, specialization);
-            newDoctor.PhoneNumber = phoneNumber; // Set the phone number for the doctor
+            newDoctor.PhoneNumber = phoneNumber;
             doctors.Add(newDoctor);
         }
 
-        /// Updates an existing doctor's information based on their ID
+
         public void UpdateDoctor(int id, string name, string email, string password, string phoneNumber, string specialization)
         {
             var doctor = doctors.FirstOrDefault(d => d.UserId == id);
@@ -35,7 +33,7 @@ namespace HealthCenterSystem.Models
             }
         }
 
-        /// Deletes a doctor from the system based on their ID
+       
         public void DeleteDoctor(int id)
         {
             var doctor = doctors.FirstOrDefault(d => d.UserId == id);
@@ -45,31 +43,29 @@ namespace HealthCenterSystem.Models
             }
         }
 
-        /// Retrieves a list of all doctors in the system
+      
         public List<Doctor> GetAllDoctors()
         {
             return doctors;
         }
 
-        /// Retrieves a doctor by their ID
+       
         public Doctor GetDoctorById(int id)
         {
             return doctors.FirstOrDefault(d => d.UserId == id);
         }
 
-        /// Retrieves a list of doctors based on their specialization
+       
         public List<Doctor> GetDoctorsBySpecialization(string specialization)
         {
-            return doctors.Where(d => d.Specialization ==specialization).ToList();
+            return doctors.Where(d => d.Specialization == specialization).ToList();
         }
 
-        /// Retrieves a list of doctors associated with a specific department
-        public List<Doctor> GetDoctorsByDepartment(int DepId)
+       
+        public List<Doctor> GetDoctorsByDepartment(int depId)
         {
-            return doctors.Where(d => d.Departments.Any(dep => dep.DepId == DepId)).ToList();
+            return doctors.Where(d => d.Departments.Any(dep => dep.DepId == depId)).ToList();
         }
-
-        /// Retrieves a list of doctors associated with a specific clinic
         public List<Doctor> GetDoctorsByClinic(int clinicId)
         {
             return doctors.Where(d => d.Clinics.Any(c => c.ClinicId == clinicId)).ToList();
@@ -81,6 +77,7 @@ namespace HealthCenterSystem.Models
             int newId = doctors.Count + 1;
             Doctor newDoctor = new Doctor(newId, name, email, password, specialization);
             newDoctor.PhoneNumber = "00000000";
+
             if (clinic != null)
                 newDoctor.Clinics.Add(clinic);
 
@@ -91,11 +88,41 @@ namespace HealthCenterSystem.Models
             return email;
         }
 
+      
         private string GenerateEmail(string name, string role)
         {
             return $"{name.ToLower()}.{role}@gmail.com";
         }
 
+        public void SaveToFile(string filePath)
+        {
+            using (var writer = new StreamWriter(filePath))
+            {
+                foreach (var doctor in doctors)
+                {
+                    
+                    writer.WriteLine(doctor.ToFileString());
+                }
+            }
+        }
 
+        public void LoadFromFile(string filePath)
+        {
+            doctors.Clear();
+
+            if (!File.Exists(filePath)) return;
+
+            var lines = File.ReadAllLines(filePath);
+
+            foreach (var line in lines)
+            {
+               
+                Doctor doctor = Doctor.FromFileString(line);
+                if (doctor != null)
+                {
+                    doctors.Add(doctor);
+                }
+            }
+        }
     }
 }
