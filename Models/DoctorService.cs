@@ -18,6 +18,10 @@ namespace HealthCenterSystem.Services
             newDoctor.PhoneNumber = phoneNumber;
             doctors.Add(newDoctor);
         }
+        public void AddDoctor(Doctor doctor)
+        {
+            doctors.Add(doctor);
+        }
 
 
         public void UpdateDoctor(int id, string name, string email, string password, string phoneNumber, string specialization)

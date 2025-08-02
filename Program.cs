@@ -43,7 +43,7 @@ namespace HealthCenterSystem
             Program.adminService.SaveToFile("admins.txt");
             adminService.LoadFromFile(adminFilePath);
             var admins = adminService.GetAllAdmins();
-
+          //  doctorService.LoadFromFile(doctorFilePath);
 
             List<Branch> branches = new List<Branch>();
             List<Clinic> clinics = new List<Clinic>();
@@ -374,6 +374,8 @@ namespace HealthCenterSystem
                             Doctor newDoctor = new Doctor(doctorId, doctorName, doctorEmail, doctorPassword, specialization);
                             newDoctor.BranchId = selectedBranch.BranchId;
                             superAdmin.UsersList.Add(newDoctor);
+                            doctorService.AddDoctor(newDoctor);
+                            doctorService.SaveToFile(doctorFilePath);
 
                             Console.WriteLine($"Doctor added successfully with email: {doctorEmail}");
                             Console.ReadKey();
