@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using HealthCenterSystem.Models;
 
 namespace HealthCenterSystem.Models
 {
@@ -15,14 +14,13 @@ namespace HealthCenterSystem.Models
             this.IsActive = true;
         }
 
-       
         private string DoctorsToFileString()
         {
             if (doctors == null || doctors.Count == 0) return "";
+          
             return string.Join(";", doctors.Select(d => d.ToFileString()));
         }
 
-        
         private void DoctorsFromFileString(string doctorsString)
         {
             doctors = new List<Doctor>();
@@ -49,6 +47,7 @@ namespace HealthCenterSystem.Models
             return $"{UserId},{Name},{Email},{Password},{PhoneNumber},{Role},{IsActive},{doctorsString}";
         }
 
+       
         public static Admins FromFileString(string line)
         {
             if (string.IsNullOrWhiteSpace(line))
@@ -73,7 +72,6 @@ namespace HealthCenterSystem.Models
                 IsActive = isActive
             };
 
-            
             if (parts.Length == 8)
             {
                 admin.DoctorsFromFileString(parts[7]);

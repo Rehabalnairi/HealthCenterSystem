@@ -41,7 +41,9 @@ namespace HealthCenterSystem
             Branch.BranchList = BranchFileService.LoadFromFile();
             adminService.LoadFromFile(adminFilePath);
             Program.adminService.SaveToFile("admins.txt");
-           
+            adminService.LoadFromFile(adminFilePath);
+            var admins = adminService.GetAllAdmins();
+
 
             List<Branch> branches = new List<Branch>();
             List<Clinic> clinics = new List<Clinic>();
@@ -245,7 +247,6 @@ namespace HealthCenterSystem
                             string adminPhoneNumber;
                             while (true)
                             {
-
                                 Console.WriteLine("Enter Admin Phone Number: ( must be at least 8 numbers) ");
                                 adminPhoneNumber = Console.ReadLine();
                                 if (string.IsNullOrWhiteSpace(adminPhoneNumber) ||
@@ -257,13 +258,19 @@ namespace HealthCenterSystem
                                 }
                                 break;
                             }
+                            string AdminEmail = superAdmin.GenerateEmail(adminName, "admin");
+                            Admins newAdmin = new Admins(adminId, adminName,AdminEmail, adminPassword, adminPhoneNumber, "Admin");
 
-                            string adminEmail = superAdmin.AddAdmin(adminId, adminName, adminPassword, adminPhoneNumber);
-                            Console.WriteLine($"Admin added successfully. Email: {adminEmail}");
-                            Console.ReadKey();
-                       //     adminService.AddAdmin(Admins admin);
+                            superAdmin.UsersList.Add(newAdmin);  
+                            adminService.AddAdmin(newAdmin);
+
+                          
                             adminService.SaveToFile(adminFilePath);
-                            break; // Exit the loop if a valid ID is entered
+
+                            Console.WriteLine($"Admin added successfully. Email: {newAdmin.Email}");
+                            Console.ReadKey();
+                            break;
+                        // Exit the loop if a valid ID is entered
                         case 2:
                             if (superAdmin.BranchesList.Count == 0)
                             {
@@ -762,8 +769,7 @@ namespace HealthCenterSystem
                     }
                 }
             }
-
-            static void LoadAllData()
+             void LoadAllData()
             {
                 // Load patients
                 patientService.LoadFromFile(patientFilePath);
@@ -776,7 +782,6 @@ namespace HealthCenterSystem
                     doctors = loadedDoctors;
                     users.AddRange(doctors.Cast<User>());
                 }
-
                 // Load admins
                 var loadedAdmins = LoadAdminsFromFile();
                 if (loadedAdmins != null)
@@ -792,7 +797,7 @@ namespace HealthCenterSystem
                 //  recordService.LoadFromFile(patientRecordFilePath,patientFilePath, users);
             }
 
-            static void SaveAllData()
+             void SaveAllData()
             {
                 patientService.SaveToFile(patientFilePath);
                 SaveDoctorsToFile(doctors, doctorFilePath);
@@ -1495,7 +1500,6 @@ namespace HealthCenterSystem
             }
 
         }
-
         public static void PatientLoginMenu(Patient patient)
         {
             while (true)
