@@ -26,6 +26,10 @@ namespace HealthCenterSystem
         public static string doctorFilePath = "doctors.txt";
         public static string adminFilePath = "admins.txt";
         public static string patientRecordFilePath = "patientRecords.txt";
+        public static string BookingFilePath = "bookings.txt";
+        public static string branchFilePath = "branches.txt";
+        public static string clinicFilePath = "clinics.txt";
+        public static string departmentFilePath = "departments.txt";
 
         static void Main(string[] args)
         {
