@@ -43,11 +43,14 @@ namespace HealthCenterSystem
             Program.adminService.SaveToFile("admins.txt");
             adminService.LoadFromFile(adminFilePath);
             var admins = adminService.GetAllAdmins();
-          //  doctorService.LoadFromFile(doctorFilePath);
-
             List<Branch> branches = new List<Branch>();
             List<Clinic> clinics = new List<Clinic>();
             DoctorService doctorService = new DoctorService();
+            doctorService.LoadFromFile(doctorFilePath); 
+           // string doctorFilePath = "doctors.txt";
+            doctorService.LoadFromFile(doctorFilePath);
+            var loadedDoctors = doctorService.GetAllDoctors();
+            Console.WriteLine($"Loaded {loadedDoctors.Count} doctors.");
 
             //patientService.LoadFromFile(patientFilePath);
 

@@ -65,6 +65,7 @@ namespace HealthCenterSystem.Models
             return BookingData.AvailableTimes;
         }
 
+
     }
 }
 
