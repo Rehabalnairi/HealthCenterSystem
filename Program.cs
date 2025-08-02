@@ -17,18 +17,19 @@ namespace HealthCenterSystem
         static SuperAdmin superAdmin = new SuperAdmin(users); // static SuperAdmin instance
         public static List<Admins> admins = new List<Admins>();
         static List<Branch> branches = new List<Branch>();
+        public static List<Doctor> doctors = new List<Doctor>();
         static PatientRecordService recordService = new PatientRecordService();
         //file to save patients
-        static PatientService patientService = new PatientService();
-        const string patientFilePath = "patients.txt";
-        const string patientRecordFilePath = "patient_records.txt";
-        const string filePath = "branches.txt";
-        const string adminFilePath = "admins.txt";
+        static PatientService patientService = new PatientService(); 
         public static AdminService adminService = new AdminService();
-
+        public static string patientFilePath = "patients.txt";
+        public static string doctorFilePath = "doctors.txt";
+        public static string adminFilePath = "admins.txt";
+        public static string patientRecordFilePath = "patientRecords.txt";
 
         static void Main(string[] args)
         {
+            LoadAllData();
             //load patients from file
             patientService.LoadFromFile(patientFilePath);
             patientService.LoadFromFile(patientFilePath);
@@ -40,7 +41,7 @@ namespace HealthCenterSystem
             Branch.BranchList = BranchFileService.LoadFromFile();
             adminService.LoadFromFile(adminFilePath);
             Program.adminService.SaveToFile("admins.txt");
-
+           
 
             List<Branch> branches = new List<Branch>();
             List<Clinic> clinics = new List<Clinic>();
@@ -54,6 +55,7 @@ namespace HealthCenterSystem
                 users.Add(p); // So login can work correctly
             }
             Console.WriteLine("Welcome to Codeline Health System");
+            superAdmin = new SuperAdmin(users);
             int choice = -1;
             while (choice != 0)
             {
@@ -759,6 +761,68 @@ namespace HealthCenterSystem
                             break;
                     }
                 }
+            }
+
+            static void LoadAllData()
+            {
+                // Load patients
+                patientService.LoadFromFile(patientFilePath);
+                users.AddRange(patientService.GetAllPatients());
+
+                // Load doctors
+                var loadedDoctors = LoadDoctorsFromFile();
+                if (loadedDoctors != null)
+                {
+                    doctors = loadedDoctors;
+                    users.AddRange(doctors.Cast<User>());
+                }
+
+                // Load admins
+                var loadedAdmins = LoadAdminsFromFile();
+                if (loadedAdmins != null)
+                {
+                    admins = loadedAdmins;
+                    users.AddRange(admins.Cast<User>());
+                }
+
+                // Load patient records
+                patientService.LoadFromFile(patientFilePath);
+                List<Patient> patients = patientService.GetAllPatients();
+                recordService.LoadFromFile(patientRecordFilePath, patients, users);
+                //  recordService.LoadFromFile(patientRecordFilePath,patientFilePath, users);
+            }
+
+            static void SaveAllData()
+            {
+                patientService.SaveToFile(patientFilePath);
+                SaveDoctorsToFile(doctors, doctorFilePath);
+                SaveAdminsToFile(admins, adminFilePath);
+                recordService.SaveToFile(patientRecordFilePath);
+            }
+
+            // Example of doctor file load/save -- implement actual logic accordingly
+            static List<Doctor> LoadDoctorsFromFile()
+            {
+                // TODO: Implement file reading & deserialization
+                // Return list of Doctor objects or empty list if file missing
+                return new List<Doctor>();
+            }
+
+            static void SaveDoctorsToFile(List<Doctor> doctors, string filePath)
+            {
+                // TODO: Implement file writing & serialization
+            }
+
+            // Similarly for admins
+            static List<Admins> LoadAdminsFromFile()
+            {
+                // TODO: Implement file reading & deserialization
+                return new List<Admins>();
+            }
+
+            static void SaveAdminsToFile(List<Admins> admins, string filePath)
+            {
+                // TODO: Implement file writing & serialization
             }
 
             void AdminMenu()
