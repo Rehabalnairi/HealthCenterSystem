@@ -22,6 +22,7 @@ namespace HealthCenterSystem
         //file to save patients
         static PatientService patientService = new PatientService(); 
         public static AdminService adminService = new AdminService();
+        public static BookingService bookingService = new BookingService();
         public static string patientFilePath = "patients.txt";
         public static string doctorFilePath = "doctors.txt";
         public static string adminFilePath = "admins.txt";
@@ -787,6 +788,9 @@ namespace HealthCenterSystem
                 // Load patients
                 patientService.LoadFromFile(patientFilePath);
                 users.AddRange(patientService.GetAllPatients());
+                //load bookings from file
+                bookingService.LoadBookingsFromFile();
+
 
                 // Load doctors
                 var loadedDoctors = LoadDoctorsFromFile();
@@ -816,8 +820,8 @@ namespace HealthCenterSystem
                 SaveDoctorsToFile(doctors, doctorFilePath);
                 SaveAdminsToFile(admins, adminFilePath);
                 recordService.SaveToFile(patientRecordFilePath);
-                SaveBookingsToFile(patients, BookingFilePath);
-
+                //SaveBookingsToFile(patients, BookingFilePath);
+                bookingService.LoadBookingsFromFile();
 
                 // SavePatientsToFile(patients, patientFilePath);
 
