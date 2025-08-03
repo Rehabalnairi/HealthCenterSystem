@@ -32,35 +32,6 @@ namespace HealthCenterSystem.Models
             return $"Record ID: {RecordId}, Patient: {Patient.Name}, Doctor: {Doctor.Name}, Visit Date: {VisitDate.ToShortDateString()}, Diagnosis: {Diagnosis}, Treatment: {Treatment}, Notes: {Notes}";
         }
 
-        public string ToFileString()
-        {
-            return $"{RecordId}|{Patient.UserId}|{Doctor.UserId}|{VisitDate:yyyy-MM-dd}|{Diagnosis}|{Treatment}|{Notes}";
-        }
-
-        public static PatientRecord FromFileString(string line, List<Patient> patients, List<User> users)
-        {
-            string[] parts = line.Split('|');
-            if (parts.Length != 7) return null;
-
-            int patientId = int.Parse(parts[1]);
-            int doctorId = int.Parse(parts[2]);
-
-            Patient patient = patients.FirstOrDefault(p => p.UserId == patientId);
-            Doctor doctor = users.OfType<Doctor>().FirstOrDefault(d => d.UserId == doctorId);
-
-            if (patient == null || doctor == null) return null;
-
-            return new PatientRecord(
-                int.Parse(parts[0]),
-                patient,
-                doctor,
-                DateTime.Parse(parts[3]),
-                parts[4],
-                parts[5],
-                parts[6]
-            );
-        }
-
         public void UpdateRecord(string diagnosis, string treatment, string notes) // method to update record information
         {
             this.Diagnosis = diagnosis; // update diagnosis information

@@ -13,23 +13,12 @@ namespace HealthCenterSystem.Models
         public List<Doctor> Doctors { get; set; }
         public List<Clinic> Clinics { get; set; }
 
-        //public Department(string depName)
-        //{
-        //    this.DepId = 0; 
-        //    this.DepName = depName;
-        //    this.Clinics = new List<Clinic>();
-        //    this.Doctors = new List<Doctor>();
-        //}
         public Department()
         {
-            this.DepId = 0;
-            this.DepName = "";
-            this.Head = "";
-            this.Clinics = new List<Clinic>();
-            this.Doctors = new List<Doctor>();
+            DepId = IndexDepartmentID++;
+            Clinics = new List<Clinic>();
+            Doctors = new List<Doctor>();
         }
-
-
         // Constructor
         public Department(int depId, string depName, string head)
         {
@@ -76,8 +65,11 @@ namespace HealthCenterSystem.Models
         // Static data holder (consider moving this out in production)
         public static class DepartmentData
         {
-            public static List<Department> Departments = new List<Department>();
-            
+            public static List<Department> Departments = new List<Department>
+            {
+                new Department(1, "Cardiology","re"),
+                new Department(2, "Neurology", "re2")
+            };
         }
 
         public static List<Department> GetAllDepartments()

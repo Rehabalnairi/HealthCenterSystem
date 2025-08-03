@@ -1,124 +1,44 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace HealthCenterSystem.Models
 {
-    public class Doctor : User
+    public class Doctor:User
     {
-        public string Specialization { get; set; }
-        public List<DateTime> AvailableAppointments { get; set; } = new List<DateTime>();
-
-        public List<PatientRecord> PatientRecords { get; set; } = new List<PatientRecord>();
-        public List<Clinic> Clinics { get; set; } = new List<Clinic>();
-        public List<Department> Departments { get; set; } = new List<Department>();
-        public int DepartmentId { get; set; }
+       // public string DoctorNI { get; set; }
+        public string Specialization { get; set; } // property to hold doctor's specialization
+        public List<DateTime> AvailableAppointments { get; set; } = new List<DateTime>(); // list to hold available appointments for the doctor
+        public List<PatientRecord> PatientRecords { get; set; } // list to hold patient records associated with the doctor
+        public List<Clinic> Clinics { get; set; } // list to hold clinics associated with the doctor
+        public List<Department> Departments { get; set; } // list to hold departments associated with the doctor
+        public int DepartmentId { get; set; } // property to hold department ID
         public int? BranchId { get; set; }
-
-        public Doctor(int userId, string name, string email, string password, string specialization)
-            : base(userId, name, email, password, "98376256", "Doctor")
+        public Doctor(int userId, string name, string email, string password,string Specialization)
+            :   base(userId, name, email, password, "98376256", "Doctor") // constructor to initialize doctor properties
         {
-            this.Specialization = specialization;
+            UserId = userId; // set the user ID
+            this.Specialization = Specialization; // initialize specialization
+            this.PatientRecords = new List<PatientRecord>(); // initialize the list of patient records
+            this.Clinics = new List<Clinic>(); // initialize the list of clinics
+            this.Departments = new List<Department>(); // initialize the list of departments
         }
 
-        public void AddPatientRecord(PatientRecord record)
+        public void AddPatientRecord(PatientRecord record) // method to add a patient record
         {
-            this.PatientRecords.Add(record);
+            this.PatientRecords.Add(record); // add the record to the list of patient records
         }
 
-        public void AddClinic(Clinic clinic)
-        {
-            this.Clinics.Add(clinic);
+        public void AddClinic(Clinic clinic) // method to add a clinic
+        {       
+                this.Clinics.Add(clinic); // add the clinic to the list of clinics    
         }
 
-        public override string ToString()
+        public override string ToString() // override ToString method to return doctor's information
         {
             return $"Doctor ID: {UserId}, Name: {Name}, Email: {Email}, Specialization: {Specialization}, Phone: {PhoneNumber}, Role: {Role}";
-        }
-
-        public string ToFileString()
-        {
-            string departmentsIds = Departments != null && Departments.Count > 0
-                ? string.Join("|", Departments.Select(d => d.DepId))
-                : "";
-
-            string clinicsIds = Clinics != null && Clinics.Count > 0
-                ? string.Join("|", Clinics.Select(c => c.ClinicId))
-                : "";
-
-            string appointments = AvailableAppointments != null && AvailableAppointments.Count > 0
-                ? string.Join("|", AvailableAppointments.Select(a => a.ToString("o"))) // ISO 8601 format
-                : "";
-
-            return $"{UserId},{Name},{Email},{Password},{PhoneNumber},{Specialization},{departmentsIds},{clinicsIds},{appointments}";
-        }
-
-        public static Doctor FromFileString(string line)
-        {
-            if (string.IsNullOrWhiteSpace(line))
-                return null;
-
-            var parts = line.Split(',');
-
-            if (parts.Length < 9) 
-                return null;
-
-            if (!int.TryParse(parts[0], out int userId))
-                return null;
-
-            string name = parts[1];
-            string email = parts[2];
-            string password = parts[3];
-            string phone = parts[4];
-            string specialization = parts[5];
-            string departmentsIds = parts[6];
-            string clinicsIds = parts[7];
-            string appointmentsStr = parts[8];
-
-            var doctor = new Doctor(userId, name, email, password, specialization)
-            {
-                PhoneNumber = phone
-            };
-
-            doctor.Departments = departmentsIds.Split('|', StringSplitOptions.RemoveEmptyEntries)
-                .Select(idStr =>
-                {
-                    if (int.TryParse(idStr, out int id))
-                        return new Department { DepId = id };
-                    return null;
-                })
-                .Where(d => d != null)
-                .ToList();
-
-            doctor.Clinics = clinicsIds.Split('|', StringSplitOptions.RemoveEmptyEntries)
-                .Select(idStr =>
-                {
-                    if (int.TryParse(idStr, out int id))
-                        return new Clinic { ClinicId = id };
-                    return null;
-                })
-                .Where(c => c != null)
-                .ToList();
-
-            if (!string.IsNullOrEmpty(appointmentsStr))
-            {
-                doctor.AvailableAppointments = appointmentsStr.Split('|', StringSplitOptions.RemoveEmptyEntries)
-                    .Select(apptStr =>
-                    {
-                        if (DateTime.TryParse(apptStr, null, System.Globalization.DateTimeStyles.RoundtripKind, out var dt))
-                            return dt;
-                        return (DateTime?)null;
-                    })
-                    .Where(dt => dt.HasValue)
-                    .Select(dt => dt.Value)
-                    .ToList();
-            }
-            else
-            {
-                doctor.AvailableAppointments = new List<DateTime>();
-            }
-
-            return doctor;
         }
     }
 }

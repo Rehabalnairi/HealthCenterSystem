@@ -65,47 +65,5 @@ namespace HealthCenterSystem.Models
             return patients.Any(p => p.UserId == id);
         }
 
-        public void SaveToFile(string filePath)
-        {
-            using (StreamWriter writer = new StreamWriter(filePath))
-            {
-                foreach (var patient in patients)
-                {
-                    writer.WriteLine(patient.ToFileString());
-                }
-            }
-        }
-
-        public void LoadFromFile(string filePath)
-        {
-            if (!File.Exists(filePath))
-            {
-                patients = new List<Patient>();
-                return;
-            }
-
-            patients = new List<Patient>();
-            string[] lines = File.ReadAllLines(filePath);
-            foreach (var line in lines)
-            {
-                Patient p = Patient.FromFileString(line);
-                if (p != null)
-                {
-                    patients.Add(p);
-                }
-            }
-        }
-        public void AddPatient(Patient patient)
-        {
-            if (patients.Any(p => p.UserId == patient.UserId))
-            {
-                Console.WriteLine("A patient with this ID already exists.");
-                return;
-            }
-
-            patients.Add(patient);
-        }
-
-
     }
 }
