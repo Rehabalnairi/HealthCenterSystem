@@ -989,62 +989,107 @@ namespace HealthCenterSystem
                             Console.WriteLine("\nAvailable Doctors:");
                             foreach (var d in doctorsList)
                                 Console.WriteLine($"ID:{d.UserId},Name{d.Name},Specialization: {d.Specialization}");
-                            Console.WriteLine("Enter Doctor ID to update/delete:");
-                            if (!int.TryParse(Console.ReadLine(), out int updateDocId))
+
+                            Doctor selectedDoctor = null;
+
+                            while (true)
                             {
-                                Console.WriteLine("Invaild input.");
-                                break;
-                            }
-                            var selectedDoctor = doctorsList.FirstOrDefault(d => d.UserId == updateDocId);
-                            if (selectedDoctor == null)
-                            {
-                                Console.WriteLine("Doctor Not Found");
-                                break;
-                            }
-                            Console.WriteLine("Select an option:");
-                            Console.WriteLine("\n1. Update Doctor\n2. Delete Doctor");
-                            if (!int.TryParse(Console.ReadLine(), out int updateChoice))
-                            {
-                                Console.WriteLine("Invaild input");
-                                break;
-                            }
-                            if (updateChoice == 1)
-                            {
-                                Console.WriteLine("Enter new name (or press Enter to skip): ");
-                                string newName = Console.ReadLine();
-                                if (!string.IsNullOrEmpty(newName))
-                                    selectedDoctor.Name = newName;
-                                Console.WriteLine("Enter new specialization (or press Enter to skip): ");
-                                string newSpec = Console.ReadLine();
-                                if (!string.IsNullOrEmpty(newSpec))
-                                    selectedDoctor.Specialization = newSpec;
-                                Console.WriteLine("Enter new Phone Number (or press Enter to skip):");
-                                string newNumber = Console.ReadLine();
-                                if (string.IsNullOrEmpty(newNumber))
-                                    selectedDoctor.PhoneNumber = newNumber;
-                                Console.WriteLine("Doctor information updated successfully.");
-                            }
-                            else if (updateChoice == 2)
-                            {
-                                Console.WriteLine("Are you sure you want to delete this doctor? (yes/no)");
-                                string confirm = Console.ReadLine().ToLower();
-                                if (confirm == "yes")
+                                Console.Write("Enter Doctor ID to update/delete: ");
+                                if (!int.TryParse(Console.ReadLine(), out int updateDocId))
                                 {
-                                    users.Remove(selectedDoctor);
-                                    Console.WriteLine("Doctor deleted successfully.");
+                                    Console.WriteLine(" Invalid input. ID must be a number.");
+                                    continue;
+                                }
+
+                                selectedDoctor = doctorsList.FirstOrDefault(d => d.UserId == updateDocId);
+                                if (selectedDoctor == null)
+                                {
+                                    Console.WriteLine($" No doctor found with ID {updateDocId}. Try again.");
+                                    continue;
+                                }
+
+                                break;
+                            }
+
+                            int updateChoice;
+                            while (true)
+                            {
+                                Console.WriteLine("Select an option:");
+                                Console.WriteLine("\n1. Update Doctor\n2. Delete Doctor");
+                                if (!int.TryParse(Console.ReadLine(), out updateChoice) || (updateChoice != 1 && updateChoice != 2))
+                                {
+                                    Console.WriteLine(" Invalid input. Please enter 1 to update or 2 to delete.");
+                                    continue;
+                                }
+                                break;
+                            }
+
+                                if (updateChoice == 1)
+                                {
+                                    string newName;
+                                    while (true)
+                                    {
+                                        Console.Write("Enter new name: ");
+                                        newName = Console.ReadLine();
+                                        if (!string.IsNullOrWhiteSpace(newName))
+                                            break;
+                                        Console.WriteLine(" Name is required. Please enter a valid name.");
+                                    }
+                                    selectedDoctor.Name = newName;
+
+                                    string newSpec;
+                                    while (true)
+                                    {
+                                        Console.Write("Enter new specialization: ");
+                                        newSpec = Console.ReadLine();
+                                        if (!string.IsNullOrWhiteSpace(newSpec))
+                                            break;
+                                        Console.WriteLine(" Specialization is required. Please enter a valid specialization.");
+                                    }
+                                    selectedDoctor.Specialization = newSpec;
+
+                                    string newNumber;
+                                    while (true)
+                                    {
+                                        Console.Write("Enter new Phone Number (8 digits): ");
+                                        newNumber = Console.ReadLine();
+
+                                        if (!string.IsNullOrWhiteSpace(newNumber) &&
+                                            newNumber.Length == 8 &&
+                                            newNumber.All(char.IsDigit))
+                                        {
+                                            break;
+                                        }
+
+                                        Console.WriteLine(" Invalid phone number. It must be exactly 8 digits.");
+                                    }
+
+                                    selectedDoctor.PhoneNumber = newNumber;
+                                    Console.WriteLine("Doctor information updated successfully.");
+                                }
+                                else if (updateChoice == 2)
+                                {
+                                    Console.WriteLine("Are you sure you want to delete this doctor? (yes/no)");
+                                    string confirm = Console.ReadLine().ToLower();
+                                    if (confirm == "yes")
+                                    {
+                                        users.Remove(selectedDoctor);
+                                        Console.WriteLine("Doctor deleted successfully.");
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("Deletion cancelled.");
+                                    }
                                 }
                                 else
                                 {
-                                    Console.WriteLine("Deletion cancelled.");
+                                    Console.WriteLine("Invalid choice.");
                                 }
-                            }
-                            else
-                            {
-                                Console.WriteLine("Invalid choice.");
-                            }
+                            
                             Console.WriteLine("Press any key to continue...");
                             Console.ReadKey();
                             break;
+
 
                         case 4:
                             var doctors = users.OfType<Doctor>().ToList();
