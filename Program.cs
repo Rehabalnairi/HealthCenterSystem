@@ -1197,14 +1197,14 @@ namespace HealthCenterSystem
                                 Console.Write("Enter Doctor ID to update/delete: ");
                                 if (!int.TryParse(Console.ReadLine(), out int updateDocId))
                                 {
-                                    Console.WriteLine("❌ Invalid input. ID must be a number.");
+                                    Console.WriteLine(" Invalid input. ID must be a number.");
                                     continue;
                                 }
 
                                 selectedDoctor = doctorsList.FirstOrDefault(d => d.UserId == updateDocId);
                                 if (selectedDoctor == null)
                                 {
-                                    Console.WriteLine($"❌ No doctor found with ID {updateDocId}. Try again.");
+                                    Console.WriteLine($" No doctor found with ID {updateDocId}. Try again.");
                                     continue;
                                 }
 
