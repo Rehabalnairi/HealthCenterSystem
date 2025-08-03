@@ -43,7 +43,7 @@ namespace HealthCenterSystem
             {
                 users.Add(p);
             }
-        //    Branch.BranchList = BranchFileService.LoadFromFile();
+            //    Branch.BranchList = BranchFileService.LoadFromFile();
             adminService.LoadFromFile(adminFilePath);
             Program.adminService.SaveToFile("admins.txt");
             adminService.LoadFromFile(adminFilePath);
@@ -70,9 +70,8 @@ namespace HealthCenterSystem
             //foreach (var c in clinics)
             //{
             //    clinicService.AddClinic(c);
-            //}
-
-
+        //}
+      
             //patientService.LoadFromFile(patientFilePath);
 
             // Now copy loaded patients to global users list
@@ -1002,6 +1001,8 @@ namespace HealthCenterSystem
                             Console.WriteLine($"Doctor {doctor.Name} has been assigned to Department {selectedDepartment.DepName} and Clinic {selectedClinic.Name}.");
                             Console.WriteLine("Press any key to continue...");
                             Console.ReadKey();
+                            ClinicFileService.SaveToFile(clinics);
+
                             break;
 
                         case 2:
