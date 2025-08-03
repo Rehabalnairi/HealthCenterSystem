@@ -816,6 +816,9 @@ namespace HealthCenterSystem
                 SaveDoctorsToFile(doctors, doctorFilePath);
                 SaveAdminsToFile(admins, adminFilePath);
                 recordService.SaveToFile(patientRecordFilePath);
+      
+                // SavePatientsToFile(patients, patientFilePath);
+
             }
 
             // Example of doctor file load/save -- implement actual logic accordingly
@@ -837,6 +840,31 @@ namespace HealthCenterSystem
                 // TODO: Implement file reading & deserialization
                 return new List<Admins>();
             }
+
+            //load booking appointments from file
+            static List<Patient> LoadPatientsFromFile(string patientFilePath)
+            {
+                var patients = new List<Patient>();
+
+                if (!File.Exists(patientFilePath))
+                    return patients;
+
+                foreach (var line in File.ReadAllLines(patientFilePath))
+                {
+                    var patient = Patient.FromFileString(line);
+                    if (patient != null)
+                        patients.Add(patient);
+                }
+
+                return patients;
+            }
+
+            static void SavePatientsToFile(List<Patient> patients, string patientFilePath)
+            {
+                var lines = patients.Select(p => p.ToFileString());
+                File.WriteAllLines(patientFilePath, lines);
+            }
+
 
             static void SaveAdminsToFile(List<Admins> admins, string filePath)
             {

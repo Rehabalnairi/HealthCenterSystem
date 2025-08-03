@@ -1,15 +1,16 @@
 ﻿using HealthCenterSystem.Services;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HealthCenterSystem.Models
 {
     class BookingService : IBookingService
     {
         private List<Booking> bookings = new List<Booking>();
+        private readonly string bookingFilePath = "bookings.txt";
+
         public void AddBooking(Booking booking)
         {
             bool isTimeTaken = bookings.Any(b => b.DoctorId == booking.DoctorId && b.BookingDate == booking.BookingDate);
@@ -18,8 +19,10 @@ namespace HealthCenterSystem.Models
                 Console.WriteLine("This time slot is already booked for this doctor.");
                 return;
             }
+
             bookings.Add(booking);
             Console.WriteLine("Booking added successfully.");
+            SaveBookingsToFile(); // حفظ تلقائي بعد الإضافة
         }
 
         public void CancelBooking(int patientId, DateTime bookingDate)
@@ -29,6 +32,7 @@ namespace HealthCenterSystem.Models
             {
                 bookings.Remove(booking);
                 Console.WriteLine("Booking cancelled successfully.");
+                SaveBookingsToFile(); 
             }
             else
             {
@@ -65,7 +69,39 @@ namespace HealthCenterSystem.Models
             return BookingData.AvailableTimes;
         }
 
+        public void SaveBookingsToFile()
+        {
+            var lines = bookings.Select(b =>
+                $"{b.PatientId}|{b.DoctorId}|{b.BookingDate:yyyy-MM-dd HH:mm}");
+            File.WriteAllLines(bookingFilePath, lines);
+        }
 
+       
+        public void LoadBookingsFromFile()
+        {
+            if (!File.Exists(bookingFilePath))
+                return;
+
+            var loadedBookings = new List<Booking>();
+
+            foreach (var line in File.ReadAllLines(bookingFilePath))
+            {
+                var parts = line.Split('|');
+                if (parts.Length == 3 &&
+                    int.TryParse(parts[0], out int patientId) &&
+                    int.TryParse(parts[1], out int doctorId) &&
+                    DateTime.TryParse(parts[2], out DateTime bookingDate))
+                {
+                    loadedBookings.Add(new Booking
+                    {
+                        PatientId = patientId,
+                        DoctorId = doctorId,
+                        BookingDate = bookingDate
+                    });
+                }
+            }
+
+            bookings = loadedBookings;
+        }
     }
 }
-
