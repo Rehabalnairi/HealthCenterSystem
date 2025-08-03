@@ -17,7 +17,20 @@ namespace HealthCenterSystem
         static SuperAdmin superAdmin = new SuperAdmin(users); // static SuperAdmin instance
         public static List<Admins> admins = new List<Admins>();
         static List<Branch> branches = new List<Branch>();
+        public static List<Doctor> doctors = new List<Doctor>();
         static PatientRecordService recordService = new PatientRecordService();
+        //file to save patients
+        static PatientService patientService = new PatientService(); 
+        public static AdminService adminService = new AdminService();
+        public static BookingService bookingService = new BookingService();
+        public static string patientFilePath = "patients.txt";
+        public static string doctorFilePath = "doctors.txt";
+        public static string adminFilePath = "admins.txt";
+        public static string patientRecordFilePath = "patientRecords.txt";
+        public static string BookingFilePath = "bookings.txt";
+        public static string branchFilePath = "branches.txt";
+        public static string clinicFilePath = "clinics.txt";
+        public static string departmentFilePath = "departments.txt";
 
         static void Main(string[] args)
         {
@@ -69,6 +82,7 @@ namespace HealthCenterSystem
                 users.Add(p); // So login can work correctly
             }
             Console.WriteLine("Welcome to Codeline Health System");
+            superAdmin = new SuperAdmin(users);
             int choice = -1;
             while (choice != 0)
             {
@@ -158,10 +172,12 @@ namespace HealthCenterSystem
                             DoctorMenu(foundDoctor);
                         }
                         break;
-                    case 4: PatientMenu();break;
+                    case 4: PatientMenu(); break;
                     case 0:
                         return; // Exit the application
+                        
                         Console.WriteLine("Exiting the system. Goodbye!");
+
                         break;
 
                     default:
@@ -170,6 +186,11 @@ namespace HealthCenterSystem
                         Console.ReadKey();
                         break;
                 }
+                //patientService.SaveToFile(patientFilePath);
+                //recordService.LoadFromFile(patientRecordFilePath, patientService.GetAllPatients(), users);
+                //patientService.SaveToFile(patientFilePath);
+                //recordService.SaveToFile(patientRecordFilePath);
+
             }
             //SuperAdmin menu
             void SuperAdminMenu(List<Branch> branches, List<Clinic> clinics)
@@ -251,7 +272,6 @@ namespace HealthCenterSystem
                             string adminPhoneNumber;
                             while (true)
                             {
-
                                 Console.WriteLine("Enter Admin Phone Number: ( must be at least 8 numbers) ");
                                 adminPhoneNumber = Console.ReadLine();
                                 if (string.IsNullOrWhiteSpace(adminPhoneNumber) ||
@@ -263,11 +283,19 @@ namespace HealthCenterSystem
                                 }
                                 break;
                             }
+                            string AdminEmail = superAdmin.GenerateEmail(adminName, "admin");
+                            Admins newAdmin = new Admins(adminId, adminName,AdminEmail, adminPassword, adminPhoneNumber, "Admin");
 
-                            string adminEmail = superAdmin.AddAdmin(adminId, adminName, adminPassword, adminPhoneNumber);
-                            Console.WriteLine($"Admin added successfully. Email: {adminEmail}");
+                            superAdmin.UsersList.Add(newAdmin);  
+                            adminService.AddAdmin(newAdmin);
+
+                          
+                            adminService.SaveToFile(adminFilePath);
+
+                            Console.WriteLine($"Admin added successfully. Email: {newAdmin.Email}");
                             Console.ReadKey();
-                            break; // Exit the loop if a valid ID is entered
+                            break;
+                        // Exit the loop if a valid ID is entered
                         case 2:
                             if (superAdmin.BranchesList.Count == 0)
                             {
@@ -371,6 +399,8 @@ namespace HealthCenterSystem
                             Doctor newDoctor = new Doctor(doctorId, doctorName, doctorEmail, doctorPassword, specialization);
                             newDoctor.BranchId = selectedBranch.BranchId;
                             superAdmin.UsersList.Add(newDoctor);
+                            doctorService.AddDoctor(newDoctor);
+                            doctorService.SaveToFile(doctorFilePath);
 
                             Console.WriteLine($"Doctor added successfully with email: {doctorEmail}");
                             Console.ReadKey();
@@ -398,66 +428,67 @@ namespace HealthCenterSystem
                                 switch (branchOption)
                                 {
                                     case 1:
-                                        do 
-                                        { 
-                                        string branchName;
-                                        while (true)
+                                        do
                                         {
-                                            Console.Write("Enter Branch Name: ");
-                                            branchName = Console.ReadLine()?.Trim();
-
-                                            if (string.IsNullOrWhiteSpace(branchName) || branchName.Any(char.IsDigit))
+                                            string branchName;
+                                            while (true)
                                             {
-                                                Console.WriteLine("Invalid branch name. It must contain letters only and cannot be empty.");
-                                                continue;
+                                                Console.Write("Enter Branch Name: ");
+                                                branchName = Console.ReadLine()?.Trim();
+
+                                                if (string.IsNullOrWhiteSpace(branchName) || branchName.Any(char.IsDigit))
+                                                {
+                                                    Console.WriteLine("Invalid branch name. It must contain letters only and cannot be empty.");
+                                                    continue;
+                                                }
+                                                break;
                                             }
-                                            break;
-                                        }
 
-                                        string branchLocation;
-                                        while (true)
-                                        {
-                                            Console.Write("Enter Branch Location: ");
-                                            branchLocation = Console.ReadLine()?.Trim();
-
-                                            if (string.IsNullOrWhiteSpace(branchLocation) || branchLocation.Any(char.IsDigit))
+                                            string branchLocation;
+                                            while (true)
                                             {
-                                                Console.WriteLine("Invalid branch location. It must contain letters only and cannot be empty.");
-                                                continue;
-                                            }
-                                            break;
-                                        }
+                                                Console.Write("Enter Branch Location: ");
+                                                branchLocation = Console.ReadLine()?.Trim();
 
-                                        int noOfFloors;
-                                        while (true)
-                                        {
-                                            Console.Write("Enter Number of Floors: ");
-                                            string floorsInput = Console.ReadLine();
-                                            if (!int.TryParse(floorsInput, out noOfFloors))
+                                                if (string.IsNullOrWhiteSpace(branchLocation) || branchLocation.Any(char.IsDigit))
+                                                {
+                                                    Console.WriteLine("Invalid branch location. It must contain letters only and cannot be empty.");
+                                                    continue;
+                                                }
+                                                break;
+                                            }
+
+                                            int noOfFloors;
+                                            while (true)
                                             {
-                                                Console.WriteLine("Invalid input. Number of floors must be a numeric value.");
-                                                continue;
+                                                Console.Write("Enter Number of Floors: ");
+                                                string floorsInput = Console.ReadLine();
+                                                if (!int.TryParse(floorsInput, out noOfFloors))
+                                                {
+                                                    Console.WriteLine("Invalid input. Number of floors must be a numeric value.");
+                                                    continue;
+                                                }
+                                                break;
                                             }
-                                            break;
-                                        }
-                                            
 
-                                        int noOfRooms;
-                                        while (true)
-                                        {
-                                            Console.Write("Enter Number of Rooms: ");
-                                            string roomsInput = Console.ReadLine();
-                                            if (!int.TryParse(roomsInput, out noOfRooms))
+
+                                            int noOfRooms;
+                                            while (true)
                                             {
-                                                Console.WriteLine("Invalid input. Number of rooms must be a numeric value.");
-                                                continue;
+                                                Console.Write("Enter Number of Rooms: ");
+                                                string roomsInput = Console.ReadLine();
+                                                if (!int.TryParse(roomsInput, out noOfRooms))
+                                                {
+                                                    Console.WriteLine("Invalid input. Number of rooms must be a numeric value.");
+                                                    continue;
+                                                }
+                                                break;
                                             }
-                                            break;
-                                        }
 
-                                        Branch newBranch = superAdmin.AddBranch(branchName, branchLocation, noOfFloors, noOfRooms, "", "");
-                                        branches.Add(newBranch); //add new branch to the list
-                                        Console.WriteLine("Branch added successfully.");
+                                            Branch newBranch = superAdmin.AddBranch(branchName, branchLocation, noOfFloors, noOfRooms, "", "");
+                                            branches.Add(newBranch); //add new branch to the list
+                                            Console.WriteLine("Branch added successfully.");
+                                            BranchFileService.SaveToFile(Branch.BranchList);
 
                                             Console.Write("Do you want to add another branch? (Y/N): ");
                                         }
@@ -567,6 +598,8 @@ namespace HealthCenterSystem
                                         if (updated)
                                         {
                                             Console.WriteLine("Branch updated successfully.");
+                                            BranchFileService.SaveToFile(Branch.BranchList);
+
                                             Console.WriteLine("Press any key to continue...");
                                             Console.ReadKey();
                                         }
@@ -652,18 +685,18 @@ namespace HealthCenterSystem
                                             for (int i = 0; i < deptCount; i++)
                                             {
                                                 string deptName;
-                                            while (true)
-                                            {
-                                                Console.Write($"\nEnter name of department #{i + 1}: ");
-                                                deptName = Console.ReadLine()?.Trim();
-
-                                                if (string.IsNullOrWhiteSpace(deptName) || deptName.Any(char.IsDigit))
+                                                while (true)
                                                 {
-                                                    Console.WriteLine("Invalid department name. It must contain letters only.");
-                                                    continue;
+                                                    Console.Write($"\nEnter name of department #{i + 1}: ");
+                                                    deptName = Console.ReadLine()?.Trim();
+
+                                                    if (string.IsNullOrWhiteSpace(deptName) || deptName.Any(char.IsDigit))
+                                                    {
+                                                        Console.WriteLine("Invalid department name. It must contain letters only.");
+                                                        continue;
+                                                    }
+                                                    break;
                                                 }
-                                                break;
-                                            }
 
                                                 Department newDept = new Department
                                                 {
@@ -690,18 +723,18 @@ namespace HealthCenterSystem
                                                 for (int j = 0; j < clinicCount; j++)
                                                 {
                                                     string clinicName;
-                                            while (true)
-                                            {
-                                                Console.Write($"\tEnter name of clinic #{j + 1} in '{deptName}': ");
-                                                clinicName = Console.ReadLine()?.Trim();
+                                                    while (true)
+                                                    {
+                                                        Console.Write($"\tEnter name of clinic #{j + 1} in '{deptName}': ");
+                                                        clinicName = Console.ReadLine()?.Trim();
 
-                                                if (string.IsNullOrWhiteSpace(clinicName) || clinicName.Any(char.IsDigit))
-                                                {
-                                                    Console.WriteLine("Invalid clinic name. It must contain letters only");
-                                                    continue;
-                                                }
-                                                break;
-                                            }
+                                                        if (string.IsNullOrWhiteSpace(clinicName) || clinicName.Any(char.IsDigit))
+                                                        {
+                                                            Console.WriteLine("Invalid clinic name. It must contain letters only");
+                                                            continue;
+                                                        }
+                                                        break;
+                                                    }
 
                                                     Clinic newClinic = new Clinic
                                                     {
@@ -713,6 +746,8 @@ namespace HealthCenterSystem
                                                 }
 
                                                 branch.Departments.Add(newDept);
+                                                BranchFileService.SaveToFile(Branch.BranchList);
+
                                                 Console.WriteLine($"Department '{deptName}' with {newDept.Clinics.Count} clinic(s) added successfully.");
                                             }
 
@@ -761,9 +796,54 @@ namespace HealthCenterSystem
                     }
                 }
             }
+             void LoadAllData()
+            {
+                // Load patients
+                patientService.LoadFromFile(patientFilePath);
+                users.AddRange(patientService.GetAllPatients());
+                //load bookings from file
+                bookingService.LoadBookingsFromFile();
 
 
-             void  AdminMenu()
+                // Load doctors
+                var loadedDoctors = LoadDoctorsFromFile();
+                if (loadedDoctors != null)
+                {
+                    doctors = loadedDoctors;
+                    users.AddRange(doctors.Cast<User>());
+                }
+                // Load admins
+                var loadedAdmins = LoadAdminsFromFile();
+                if (loadedAdmins != null)
+                {
+                    admins = loadedAdmins;
+                    users.AddRange(admins.Cast<User>());
+                }
+                BranchFileService.LoadFromFile();
+
+
+                // Load patient records
+                patientService.LoadFromFile(patientFilePath);
+                List<Patient> patients = patientService.GetAllPatients();
+                recordService.LoadFromFile(patientRecordFilePath, patients, users);
+                //  recordService.LoadFromFile(patientRecordFilePath,patientFilePath, users);
+            }
+
+             void SaveAllData()
+            {
+                patientService.SaveToFile(patientFilePath);
+                SaveDoctorsToFile(doctors, doctorFilePath);
+                SaveAdminsToFile(admins, adminFilePath);
+                recordService.SaveToFile(patientRecordFilePath);
+                //SaveBookingsToFile(patients, BookingFilePath);
+                bookingService.LoadBookingsFromFile();
+                BranchFileService.SaveToFile(Branch.BranchList);
+                // SavePatientsToFile(patients, patientFilePath);
+           
+            }
+
+            // Example of doctor file load/save -- implement actual logic accordingly
+            static List<Doctor> LoadDoctorsFromFile()
             {
                 // TODO: Implement file reading & deserialization
                 // Return list of Doctor objects or empty list if file missing
@@ -822,14 +902,14 @@ namespace HealthCenterSystem
                 while (adminChoice != 0)
                 {
                     Console.Clear();
-                Console.WriteLine("Admin Menu:");
-                Console.WriteLine("1. Assign Exisiting Doctoer to Department and clinic");
-                Console.WriteLine("2. Add Patient");
-                Console.WriteLine("3. Update Or Delete Doctor");
-                Console.WriteLine("4. Add Appointment");
-                Console.WriteLine("5. Book Appointments For Patient");
-                Console.WriteLine("6. Views");
-                Console.WriteLine("0. Exit Admin Menu");
+                    Console.WriteLine("Admin Menu:");
+                    Console.WriteLine("1. Assign Exisiting Doctoer to Department and clinic");
+                    Console.WriteLine("2. Add Patient");
+                    Console.WriteLine("3. Update Or Delete Doctor");
+                    Console.WriteLine("4. Add Appointment");
+                    Console.WriteLine("5. Book Appointments For Patient");
+                    Console.WriteLine("6. Views");
+                    Console.WriteLine("0. Exit Admin Menu");
 
                     Console.Write("Select an option: ");
                     if (!int.TryParse(Console.ReadLine(), out adminChoice))
@@ -844,311 +924,376 @@ namespace HealthCenterSystem
                     {
                         case 1:
                             Console.Clear();
-                            Console.WriteLine("==Assign Exisiting Doctoer to Department and clinic==");
-                            // Check if there are any branches available
+                            Console.WriteLine("==Assign Existing Doctor to Department and Clinic==");
+
+                            clinics = ClinicFileService.LoadFromFile();
+
+
                             if (branches.Count == 0)
                             {
-                                Console.WriteLine("No branch available.");
+                                Console.WriteLine("No branches available.");
                                 break;
                             }
-                            //view available branches
-                            Console.WriteLine("\nAvailable Branches");
 
+                            Console.WriteLine("\nAvailable Branches:");
                             foreach (var b in branches)
-                                Console.WriteLine($"{b.BranchId}.\n{b.BranchName}");
-                            //select branch
-                            Console.WriteLine("Enter Branch ID:");
+                                Console.WriteLine($"{b.BranchId}. {b.BranchName}");
+
+                            Console.Write("Enter Branch ID: ");
                             if (!int.TryParse(Console.ReadLine(), out int branchId))
                             {
-                                Console.WriteLine("Invaild Input!");
-                                break;
-                            }
-                            var selectBranch = branches.FirstOrDefault(b => b.BranchId == branchId);
-                            if (selectBranch == null)
-                            {
-                                Console.WriteLine("Branch not found");
-                                break;
-                            }
-                            if (selectBranch.Departments.Count == 0)
-                            {
-                                Console.WriteLine("This Branch has no department");
-                                break;
-                            }
-                            Console.WriteLine("\nAvailable Departments:");
-                            foreach (var dep in selectBranch.Departments)
-                                Console.WriteLine($"{dep.DepId}.{dep.DepName}");
-                            //select department
-                            Console.WriteLine("Enter Department ID:");
-                            if (!int.TryParse(Console.ReadLine(), out int depId))
-                            {
-                                Console.WriteLine("Invalid Input!");
+                                Console.WriteLine("Invalid input!");
                                 break;
                             }
 
-                            var selectedDepartment = selectBranch.Departments.FirstOrDefault(d => d.DepId == depId);
+                            var selectedBranch = branches.FirstOrDefault(b => b.BranchId == branchId);
+                            if (selectedBranch == null)
+                            {
+                                Console.WriteLine("Branch not found.");
+                                break;
+                            }
+
+                            if (selectedBranch.Departments.Count == 0)
+                            {
+                                Console.WriteLine("This branch has no departments.");
+                                break;
+                            }
+
+                            Console.WriteLine("\nAvailable Departments:");
+                            foreach (var dep in selectedBranch.Departments)
+                                Console.WriteLine($"{dep.DepId}. {dep.DepName}");
+
+                            Console.Write("Enter Department ID: ");
+                            if (!int.TryParse(Console.ReadLine(), out int depId))
+                            {
+                                Console.WriteLine("Invalid input!");
+                                break;
+                            }
+
+                            var selectedDepartment = selectedBranch.Departments.FirstOrDefault(d => d.DepId == depId);
                             if (selectedDepartment == null)
                             {
                                 Console.WriteLine("Department not found.");
                                 break;
                             }
+
                             if (selectedDepartment.Clinics == null || selectedDepartment.Clinics.Count == 0)
                             {
                                 Console.WriteLine("This department has no clinics.");
                                 break;
                             }
+
                             Console.WriteLine("Available Clinics in this Department:");
                             foreach (var clinic in selectedDepartment.Clinics)
-                                Console.WriteLine($"{clinic.ClinicId}{clinic.Name}");
-                            //select clinic
-                            Console.WriteLine("Enter Clinic ID to assign doctor:");
+                                Console.WriteLine($"{clinic.ClinicId}. {clinic.Name}");
+
+                            Console.Write("Enter Clinic ID to assign doctor: ");
                             if (!int.TryParse(Console.ReadLine(), out int clinicId))
                             {
-                                Console.WriteLine("Invalid Input!");
+                                Console.WriteLine("Invalid input!");
                                 break;
                             }
+
                             var selectedClinic = selectedDepartment.Clinics.FirstOrDefault(c => c.ClinicId == clinicId);
                             if (selectedClinic == null)
                             {
                                 Console.WriteLine("Clinic not found.");
                                 break;
                             }
-                            Console.WriteLine("Enter Doctoer ID to assign:");
+
+                            Console.Write("Enter Doctor ID to assign: ");
                             if (!int.TryParse(Console.ReadLine(), out int doctorId))
                             {
-                                Console.WriteLine("Invalid Input!");
+                                Console.WriteLine("Invalid input!");
                                 break;
                             }
+
                             Doctor doctor = users.OfType<Doctor>().FirstOrDefault(d => d.UserId == doctorId);
                             if (doctor == null)
                             {
                                 Console.WriteLine("Doctor not found.");
                                 break;
                             }
+
                             selectedDepartment.Doctors.Add(doctor);
-                            Console.WriteLine($"Doctor {doctor.Name} has been assigned to Department {selectedDepartment.DepName} and Clinic {selectedClinic.Name}.");
+
+                         
+                            Console.WriteLine($"Doctor {doctor.Name} assigned to Department {selectedDepartment.DepName} and Clinic {selectedClinic.Name}.");
                             Console.WriteLine("Press any key to continue...");
                             Console.ReadKey();
+
+                            ClinicFileService.SaveToFile(clinics);
                             break;
 
 
                         case 2:
-                            while (true) { 
-                            Console.Clear();
-                            Console.WriteLine("==Add Patient==");
-                            // Patient ID
-                            int patientId;
-                            while (true)
-                            {
-                                Console.Write("Enter Patient ID (at least 6 digits): ");
-                                if (!int.TryParse(Console.ReadLine(), out patientId) || patientId.ToString().Length < 6)
+                            while (true) {
+                                Console.Clear();
+                                Console.WriteLine("==Add Patient==");
+                                // Patient ID
+                                int patientId;
+                                while (true)
                                 {
-                                    Console.WriteLine("Invalid Patient ID. It must be a number with at least 6 digits.");
-                                    continue;
+                                    Console.Write("Enter Patient ID (at least 6 digits): ");
+                                    if (!int.TryParse(Console.ReadLine(), out patientId) || patientId.ToString().Length < 6)
+                                    {
+                                        Console.WriteLine("Invalid Patient ID. It must be a number with at least 6 digits.");
+                                        continue;
+                                    }
+
+                                    // Check if ID already exists
+                                    bool idExists = users.Any(u => u is Patient && u.UserId == patientId);
+                                    if (idExists)
+                                    {
+                                        Console.WriteLine("This Patient ID already exists. Please enter a unique ID.");
+                                        continue;
+                                    }
+                                    break;
+                                }
+                                // Patient Name
+                                string patientName;
+                                while (true)
+                                {
+                                    Console.Write("Enter Patient Name (letters only): ");
+                                    patientName = Console.ReadLine()?.Trim();
+                                    if (!string.IsNullOrWhiteSpace(patientName) && patientName.All(char.IsLetter))
+                                        break;
+                                    Console.WriteLine("Invalid Patient Name. It must contain letters only.");
                                 }
 
-                                // Check if ID already exists
-                                bool idExists = users.Any(u => u is Patient && u.UserId == patientId);
-                                if (idExists)
+                                // Patient Email
+                                string patientEmail;
+                                while (true)
                                 {
-                                    Console.WriteLine("This Patient ID already exists. Please enter a unique ID.");
-                                    continue;
+                                    Console.Write("Enter Patient Email(e.g. example@domain.com): ");
+                                    patientEmail = Console.ReadLine()?.Trim();
+                                    if (!string.IsNullOrWhiteSpace(patientEmail) && patientEmail.Contains("@") && patientEmail.Contains("."))
+                                        break;
+                                    Console.WriteLine("Invalid Email format.");
                                 }
+
+                                // Patient Phone
+                                string patientPhone;
+                                while (true)
+                                {
+                                    Console.Write("Enter Patient Phone Number: ");
+                                    patientPhone = Console.ReadLine()?.Trim();
+                                    if (!string.IsNullOrWhiteSpace(patientPhone) && patientPhone.All(char.IsDigit) && patientPhone.Length >= 8)
+                                        break;
+                                    Console.WriteLine("Invalid Phone Number. It must contain at least 8 digits.");
+                                }
+
+                                // Password
+                                string patientPassword;
+                                while (true)
+                                {
+                                    Console.Write("Enter Patient Password (at least 8 characters, with a letter, number, and symbol): ");
+                                    patientPassword = Console.ReadLine();
+                                    if (!string.IsNullOrWhiteSpace(patientPassword) &&
+                                        patientPassword.Length >= 8 &&
+                                        patientPassword.Any(char.IsLetter) &&
+                                        patientPassword.Any(char.IsDigit) &&
+                                        patientPassword.Any(ch => !char.IsLetterOrDigit(ch)))
+                                    {
+                                        break;
+                                    }
+                                    Console.WriteLine("Invalid Password. It must be at least 8 characters and contain a letter, number, and symbol.");
+                                }
+
+                                // Gender
+                                string gender = " ";
+                                while (true)
+                                {
+                                    Console.WriteLine("Select Gender:");
+                                    Console.WriteLine("1. Male");
+                                    Console.WriteLine("2. Female");
+                                    Console.Write("Enter choice (1 or 2): ");
+                                    string genderChoice = Console.ReadLine()?.Trim();
+
+                                    if (genderChoice == "1")
+                                    {
+                                        gender = "Male";
+                                        break;
+                                    }
+                                    if (genderChoice == "2")
+                                    {
+                                        gender = "Female";
+                                        break;
+                                    }
+                                    Console.WriteLine("Invalid choice. Please enter 1 or 2.");
+                                }
+
+                                // Date of Birth
+                                DateTime dob;
+                                while (true)
+                                {
+                                    Console.Write("Enter Date of Birth (yyyy-mm-dd): ");
+                                    if (DateTime.TryParse(Console.ReadLine(), out dob))
+                                        break;
+                                    Console.WriteLine("Invalid date format.");
+                                }
+
+                                // Address
+                                string address;
+                                while (true)
+                                {
+                                    Console.Write("Enter Address (letters only): ");
+                                    address = Console.ReadLine()?.Trim();
+                                    if (!string.IsNullOrWhiteSpace(address) && address.All(ch => char.IsLetter(ch) || ch == ' '))
+                                        break;
+                                    Console.WriteLine("Invalid Address. It must contain only letters and no numbers.");
+                                }
+
+
+                                Patient newPatient = new Patient(
+                                 patientId,
+                                 patientName,
+                                 patientEmail,
+                                 patientPassword,
+                                 patientPhone,
+                                 gender,
+                                 dob,
+                                 address
+                                  );
                                 
-                                break;
-                            }
+                                users.Add(newPatient);
+                                Console.WriteLine("Patient Add successfully");
+                                patientService.AddPatient(newPatient); 
+                                patientService.SaveToFile(patientFilePath); 
 
-                            // Patient Name
-                            string patientName;
-                            while (true)
-                            {
-                                Console.Write("Enter Patient Name (letters only): ");
-                                patientName = Console.ReadLine()?.Trim();
-                                if (!string.IsNullOrWhiteSpace(patientName) && patientName.All(char.IsLetter))
+
+                                Console.WriteLine("\nDo you want to:");
+                                Console.WriteLine("1. Add another patient");
+                                Console.WriteLine("2. Return to Admin Menu");
+                                Console.Write("Enter your choice: ");
+                                string choice = Console.ReadLine();
+
+                                if (choice == "2")
                                     break;
-                                Console.WriteLine("Invalid Patient Name. It must contain letters only.");
                             }
-
-                            // Patient Email
-                            string patientEmail;
-                            while (true)
-                            {
-                                Console.Write("Enter Patient Email(e.g. example@domain.com): ");
-                                patientEmail = Console.ReadLine()?.Trim();
-                                if (!string.IsNullOrWhiteSpace(patientEmail) && patientEmail.Contains("@") && patientEmail.Contains("."))
-                                    break;
-                                Console.WriteLine("Invalid Email format.");
-                            }
-
-                            // Patient Phone
-                            string patientPhone;
-                            while (true)
-                            {
-                                Console.Write("Enter Patient Phone Number: ");
-                                patientPhone = Console.ReadLine()?.Trim();
-                                if (!string.IsNullOrWhiteSpace(patientPhone) && patientPhone.All(char.IsDigit) && patientPhone.Length >= 8)
-                                    break;
-                                Console.WriteLine("Invalid Phone Number. It must contain at least 8 digits.");
-                            }
-
-                            // Password
-                            string patientPassword;
-                            while (true)
-                            {
-                                Console.Write("Enter Patient Password (at least 8 characters, with a letter, number, and symbol): ");
-                                patientPassword = Console.ReadLine();
-                                if (!string.IsNullOrWhiteSpace(patientPassword) &&
-                                    patientPassword.Length >= 8 &&
-                                    patientPassword.Any(char.IsLetter) &&
-                                    patientPassword.Any(char.IsDigit) &&
-                                    patientPassword.Any(ch => !char.IsLetterOrDigit(ch)))
-                                {
-                                    break;
-                                }
-                                Console.WriteLine("Invalid Password. It must be at least 8 characters and contain a letter, number, and symbol.");
-                            }
-
-                            // Gender
-                            string gender = " ";
-                            while (true)
-                            {
-                                Console.WriteLine("Select Gender:");
-                                Console.WriteLine("1. Male");
-                                Console.WriteLine("2. Female");
-                                Console.Write("Enter choice (1 or 2): ");
-                                string genderChoice = Console.ReadLine()?.Trim();
-
-                                if (genderChoice == "1")
-                                {
-                                    gender = "Male";
-                                    break;
-                                }
-                                if (genderChoice == "2")
-                                {
-                                    gender = "Female";
-                                    break;
-                                }
-                                Console.WriteLine("Invalid choice. Please enter 1 or 2.");
-                            }
-
-                            // Date of Birth
-                            DateTime dob;
-                            while (true)
-                            {
-                                Console.Write("Enter Date of Birth (yyyy-mm-dd): ");
-                                if (DateTime.TryParse(Console.ReadLine(), out dob))
-                                    break;
-                                Console.WriteLine("Invalid date format.");
-                            }
-
-                            // Address
-                            string address;
-                            while (true)
-                            {
-                                Console.Write("Enter Address (letters only): ");
-                                address = Console.ReadLine()?.Trim();
-                                if (!string.IsNullOrWhiteSpace(address) && address.All(ch => char.IsLetter(ch) || ch == ' '))
-                                    break;
-                                Console.WriteLine("Invalid Address. It must contain only letters and no numbers.");
-                            }
-
-
-                            Patient newPatient = new Patient(
-                             patientId,
-                             patientName,
-                             patientEmail,
-                             patientPassword,  
-                             patientPhone,
-                             gender,
-                             dob,
-                             address
-                              );
-
-                            users.Add(newPatient);
-                            Console.WriteLine("Patient Add successfully");
-                            Console.WriteLine("\nDo you want to:");
-                            Console.WriteLine("1. Add another patient");
-                            Console.WriteLine("2. Return to Admin Menu");
-                            Console.Write("Enter your choice: ");
-                            string choice = Console.ReadLine();
-
-                            if (choice == "2")
-                                break;
-                    }
-                    break;
+                            break;
 
                         case 3:
                             Console.Clear();
-                            Console.WriteLine("==Update Or Delete Doctor");
+                            Console.WriteLine("== Update Or Delete Doctor ==");
+
+                            // Show available doctors
                             var doctorsList = users.OfType<Doctor>().ToList();
                             if (doctorsList.Count == 0)
                             {
-                                Console.WriteLine("No Docter Found.");
+                                Console.WriteLine("No Doctor Found.");
                                 break;
                             }
+
                             Console.WriteLine("\nAvailable Doctors:");
                             foreach (var d in doctorsList)
-                                Console.WriteLine($"ID:{d.UserId},Name{d.Name},Specialization: {d.Specialization}");
-                            Console.WriteLine("Enter Doctor ID to update/delete:");
-                            if (!int.TryParse(Console.ReadLine(), out int updateDocId))
+                                Console.WriteLine($"ID: {d.UserId}, Name: {d.Name}, Specialization: {d.Specialization}");
+
+                            Doctor selectedDoctor = null;
+
+                            // Select doctor by ID
+                            while (true)
                             {
-                                Console.WriteLine("Invaild input.");
+                                Console.Write("Enter Doctor ID to update/delete: ");
+                                if (!int.TryParse(Console.ReadLine(), out int updateDocId))
+                                {
+                                    Console.WriteLine(" Invalid input. ID must be a number.");
+                                    continue;
+                                }
+
+                                selectedDoctor = doctorsList.FirstOrDefault(d => d.UserId == updateDocId);
+                                if (selectedDoctor == null)
+                                {
+                                    Console.WriteLine($" No doctor found with ID {updateDocId}. Try again.");
+                                    continue;
+                                }
+
                                 break;
                             }
-                            var selectedDoctor = doctorsList.FirstOrDefault(d => d.UserId == updateDocId);
-                            if (selectedDoctor == null)
+
+                            // Choose update or delete
+                            int updateChoice;
+                            while (true)
                             {
-                                Console.WriteLine("Doctor Not Found");
+                                Console.WriteLine("\nSelect an option:");
+                                Console.WriteLine("1. Update Doctor");
+                                Console.WriteLine("2. Delete Doctor");
+                                if (!int.TryParse(Console.ReadLine(), out updateChoice) || (updateChoice != 1 && updateChoice != 2))
+                                {
+                                    Console.WriteLine(" Invalid choice. Please enter 1 or 2.");
+                                    continue;
+                                }
                                 break;
                             }
-                            Console.WriteLine("Select an option:");
-                            Console.WriteLine("\n1. Update Doctor\n2. Delete Doctor");
-                            if (!int.TryParse(Console.ReadLine(), out int updateChoice))
-                            {
-                                Console.WriteLine("Invaild input");
-                                break;
-                            }
+
+                            // ===== Update Doctor =====
                             if (updateChoice == 1)
                             {
-                                Console.WriteLine("Enter new name (or press Enter to skip): ");
-                                string newName = Console.ReadLine();
-                                if (!string.IsNullOrEmpty(newName))
-                                    selectedDoctor.Name = newName;
-                                Console.WriteLine("Enter new specialization (or press Enter to skip): ");
-                                string newSpec = Console.ReadLine();
-                                if (!string.IsNullOrEmpty(newSpec))
-                                    selectedDoctor.Specialization = newSpec;
-                                Console.WriteLine("Enter new Phone Number (or press Enter to skip):");
-                                string newNumber = Console.ReadLine();
-                                if (string.IsNullOrEmpty(newNumber))
-                                    selectedDoctor.PhoneNumber = newNumber;
-                                Console.WriteLine("Doctor information updated successfully.");
+                                string newName;
+                                while (true)
+                                {
+                                    Console.Write("Enter new name: ");
+                                    newName = Console.ReadLine();
+                                    if (!string.IsNullOrWhiteSpace(newName))
+                                        break;
+                                    Console.WriteLine(" Name is required. Please enter a valid name.");
+                                }
+                                selectedDoctor.Name = newName;
+
+                                string newSpec;
+                                while (true)
+                                {
+                                    Console.Write("Enter new specialization: ");
+                                    newSpec = Console.ReadLine();
+                                    if (!string.IsNullOrWhiteSpace(newSpec))
+                                        break;
+                                    Console.WriteLine(" Specialization is required. Please enter a valid one.");
+                                }
+                                selectedDoctor.Specialization = newSpec;
+
+                                string newNumber;
+                                while (true)
+                                {
+                                    Console.Write("Enter new phone number (8 digits): ");
+                                    newNumber = Console.ReadLine();
+                                    if (!string.IsNullOrWhiteSpace(newNumber) &&
+                                        newNumber.Length == 8 &&
+                                        newNumber.All(char.IsDigit))
+                                    {
+                                        break;
+                                    }
+                                    Console.WriteLine(" Invalid phone number. It must be exactly 8 digits.");
+                                }
+                                selectedDoctor.PhoneNumber = newNumber;
+
+                                Console.WriteLine(" Doctor information updated successfully.");
                             }
+
+                            // ===== Delete Doctor =====
                             else if (updateChoice == 2)
                             {
-                                Console.WriteLine("Are you sure you want to delete this doctor? (yes/no)");
+                                Console.Write("Are you sure you want to delete this doctor? (yes/no): ");
                                 string confirm = Console.ReadLine().ToLower();
                                 if (confirm == "yes")
                                 {
                                     users.Remove(selectedDoctor);
-                                    Console.WriteLine("Doctor deleted successfully.");
+                                    Console.WriteLine(" Doctor deleted successfully.");
                                 }
                                 else
                                 {
-                                    Console.WriteLine("Deletion cancelled.");
+                                    Console.WriteLine(" Deletion cancelled.");
                                 }
                             }
-                            else
-                            {
-                                Console.WriteLine("Invalid choice.");
-                            }
-                            Console.WriteLine("Press any key to continue...");
+
+                            Console.WriteLine("\nPress any key to continue...");
                             Console.ReadKey();
                             break;
+
 
                         case 4:
                             var doctors = users.OfType<Doctor>().ToList();
 
-                            if (doctors.Count() == 0)
+                            if (doctors.Count == 0)
                             {
                                 Console.WriteLine("No doctors available.");
                                 Console.WriteLine("Press any key to return to menu.");
@@ -1157,133 +1302,142 @@ namespace HealthCenterSystem
                             }
 
                             Console.WriteLine("Select a doctor to add appointments:");
-                            for (int i = 0; i < doctors.Count(); i++)
+                            for (int i = 0; i < doctors.Count; i++)
                             {
                                 Console.WriteLine($"{i + 1}. {doctors[i].Name} - {doctors[i].Specialization}");
                             }
 
                             Console.Write("Enter doctor number: ");
-                            if (!int.TryParse(Console.ReadLine(), out int docIndex) || docIndex < 1 || docIndex > doctors.Count())
+                            if (!int.TryParse(Console.ReadLine(), out int docIndex) || docIndex < 1 || docIndex > doctors.Count)
                             {
                                 Console.WriteLine("Invalid selection.");
+                                Console.WriteLine("Press any key to return.");
                                 Console.ReadKey();
-                                return;
+                                break;
                             }
 
-                            Doctor selDoctor = doctors[docIndex - 1];
+                            Doctor selectDoctor = doctors[docIndex - 1];
 
                             Console.Write("How many appointments do you want to add? ");
                             if (!int.TryParse(Console.ReadLine(), out int count) || count <= 0)
                             {
                                 Console.WriteLine("Invalid number.");
+                                Console.WriteLine("Press any key to return.");
                                 Console.ReadKey();
-                                return;
+                                break;
                             }
 
                             for (int i = 0; i < count; i++)
                             {
-                                Console.Write($"Enter appointment date and time (e.g., 2025-08-01 10:00): ");
-                                if (DateTime.TryParse(Console.ReadLine(), out DateTime appointment))
+                                while (true)
                                 {
-                                    selDoctor.AvailableAppointments.Add(appointment);
-                                    Console.WriteLine("Appointment added.");
-                                    Console.ReadKey();
-                                }
-                                else
-                                {
-                                    Console.WriteLine("Invalid date format.");
-                                    Console.ReadKey();
+                                    Console.Write($"Enter appointment #{i + 1} date and time (yyyy-MM-dd HH:mm, e.g., 2025-08-01 10:00): ");
+                                    string input = Console.ReadLine();
+
+                                    if (DateTime.TryParseExact(input, "yyyy-MM-dd HH:mm", null, System.Globalization.DateTimeStyles.None, out DateTime appointment))
+                                    {
+                                        if (appointment <= DateTime.Now)
+                                        {
+                                            Console.WriteLine("Appointment date and time must be in the future.");
+                                            continue;
+                                        }
+
+                                        selectDoctor.AvailableAppointments.Add(appointment);
+                                        Console.WriteLine("Appointment added.");
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("Invalid date and time format. Please use yyyy-MM-dd HH:mm.");
+                                    }
                                 }
                             }
-                            Console.WriteLine("Appointments added successfully.");
+
+                            Console.WriteLine("All appointments added successfully.");
+                            Console.WriteLine("Press any key to return.");
                             Console.ReadKey();
-
-
                             break;
+
 
                         case 5:
-                            Console.Clear();
-                            Console.WriteLine("==Book Appointments For Patient==");
-                            var doctorList = users.OfType<Doctor>().ToList();
-                            if (doctorList.Count == 0)
-                            {
-                                Console.WriteLine("No doctors available.");
-                                break;
-                            }
-                            Console.WriteLine("Available Doctors:");
-                            for (int i = 0; i < doctorList.Count; i++)
-                            {
-                                Console.WriteLine($"{i + 1}. {doctorList[i].Name} - {doctorList[i].Specialization}");
-                            }
-
-                            Doctor selectedDoctorForAppointment;
-                            while (true)
-                            {
-                                if (int.TryParse(Console.ReadLine(), out int doctorChoice) &&
-                                doctorChoice >= 1 && doctorChoice <= doctorList.Count)
-                                {
-                                    selectedDoctorForAppointment = doctorList[doctorChoice - 1];
-                                    break;
-                                }
-                                Console.WriteLine("Invalid doctor selection. Please try again.");
-                            }
-
-                            DateTime appointmentDateTime;
-                            while (true)
-                            {
-                                Console.Write("Enter appointment date and time (e.g. 2025-08-05 14:30): ");
-                                string input = Console.ReadLine();
-
-                                if (DateTime.TryParse(input, out appointmentDateTime))
-                                {
-                                    if (appointmentDateTime < DateTime.Now)
+                                    Console.Clear();
+                                    Console.WriteLine("==Book Appointments For Patient==");
+                                    var doctorList = users.OfType<Doctor>().ToList();
+                                    if (doctorList.Count == 0)
                                     {
-                                        Console.WriteLine("Appointment cannot be in the past.");
-                                        continue;
+                                        Console.WriteLine("No doctors available.");
+                                        break;
                                     }
-                                    break;
-                                }
-                                Console.WriteLine("Invalid date/time format. Please use yyyy-MM-dd HH:mm.");
-                            }
+                                    Console.WriteLine("Available Doctors:");
+                                    for (int i = 0; i < doctorList.Count; i++)
+                                    {
+                                        Console.WriteLine($"{i + 1}. {doctorList[i].Name} - {doctorList[i].Specialization}");
+                                    }
+                                    Console.Write("Select a doctor by number: ");
+                                    if (!int.TryParse(Console.ReadLine(), out int doctorChoice) || doctorChoice < 1 || doctorChoice > doctorList.Count)
+                                    {
+                                        Console.WriteLine("Invalid selection.");
+                                        break;
+                                    }
+                                    Doctor selectedDoctorForAppointment = doctorList[doctorChoice - 1];
+                                    DateTime appointmentDateTime;
+                                    while (true)
+                                    {
+                                        Console.Write("Enter appointment date and time (e.g. 2025-08-05 14:30): ");
+                                        string input = Console.ReadLine();
 
-                            Console.Write("Enter Patient ID to book this appointment: ");
-                            if (!int.TryParse(Console.ReadLine(), out int PatientId))
-                            {
-                                Console.WriteLine("Invalid Patient ID.");
-                                break;
-                            }
+                                        if (DateTime.TryParse(input, out appointmentDateTime))
+                                        {
+                                            if (appointmentDateTime < DateTime.Now)
+                                            {
+                                                Console.WriteLine("Appointment cannot be in the past.");
+                                                continue;
+                                            }
+                                            break;
+                                        }
+                                        Console.WriteLine("Invalid date/time format. Please use yyyy-MM-dd HH:mm.");
+                                    }
 
-                            Patient patient = users.OfType<Patient>().FirstOrDefault(p => p.UserId == PatientId);
-                            if (patient == null)
-                            {
-                                Console.WriteLine("Patient not found.");
-                                break;
-                            }
+                                    Console.Write("Enter Patient ID to book this appointment: ");
+                                    if (!int.TryParse(Console.ReadLine(), out int PatientId))
+                                    {
+                                        Console.WriteLine("Invalid Patient ID.");
+                                        break;
+                                    }
 
-                            if (patient.BookedAppointments != null && patient.BookedAppointments.Contains(appointmentDateTime))
-                            {
-                                Console.WriteLine("This patient has already booked this appointment.");
-                                break;
-                            }
-    
-                            if (patient.BookedAppointments == null)
-                                patient.BookedAppointments = new List<DateTime>();
+                                    Patient patient = users.OfType<Patient>().FirstOrDefault(p => p.UserId == PatientId);
+                                    if (patient == null)
+                                    {
+                                        Console.WriteLine("Patient not found.");
+                                        break;
+                                    }
 
-                            if (selectedDoctorForAppointment.AvailableAppointments == null)
-                                selectedDoctorForAppointment.AvailableAppointments = new List<DateTime>();
+                                    if (patient.BookedAppointments != null && patient.BookedAppointments.Contains(appointmentDateTime))
+                                    {
+                                        Console.WriteLine("This patient has already booked this appointment.");
+                                        break;
+                                    }
 
-                            if (!selectedDoctorForAppointment.AvailableAppointments.Contains(appointmentDateTime))
-                            {
-                                selectedDoctorForAppointment.AvailableAppointments.Add(appointmentDateTime);
-                            }
+                                    if (patient.BookedAppointments == null)
+                                        patient.BookedAppointments = new List<DateTime>();
 
-                            patient.BookedAppointments.Add(appointmentDateTime);
-                            selectedDoctorForAppointment.AvailableAppointments.Remove(appointmentDateTime);
+                                    if (selectedDoctorForAppointment.AvailableAppointments == null)
+                                        selectedDoctorForAppointment.AvailableAppointments = new List<DateTime>();
 
-                            Console.WriteLine($"Appointment on {appointmentDateTime} booked for Patient {patient.Name}.");
+                                    if (!selectedDoctorForAppointment.AvailableAppointments.Contains(appointmentDateTime))
+                                    {
+                                        selectedDoctorForAppointment.AvailableAppointments.Add(appointmentDateTime);
+                                    }
+
+                                    patient.BookedAppointments.Add(appointmentDateTime);
+                                    selectedDoctorForAppointment.AvailableAppointments.Remove(appointmentDateTime);
+
+                                    Console.WriteLine($"Appointment on {appointmentDateTime} booked for Patient {patient.Name}.");
+                                    patientService.SaveToFile(patientFilePath); 
+
                             Console.WriteLine("Press any key to continue...");
-                            Console.ReadKey();
-                            break;
+                                    Console.ReadKey();
+                                    break;
 
                         case 6:
                                     {
@@ -1299,112 +1453,112 @@ namespace HealthCenterSystem
                                             Console.Write("Select an option: ");
                                             string viewChoice = Console.ReadLine();
 
-                                    switch (viewChoice)
-                                    {
-                                        case "1":
-                                            Console.Clear();
-                                            Console.WriteLine("All Branches,Departments and Clinics:");
-                                            //var branches = Branch.GetAllBranches();
-                                            if (branches == null || branches.Count == 0)
+                                            switch (viewChoice)
                                             {
-                                                Console.WriteLine("NO Branches Available");
-
-                                            }
-                                            else
-                                            {
-                                                foreach (var br in branches)
-                                                {
-                                                    Console.WriteLine($"Branch:{br.BranchName}");
-                                                    foreach (var dep in br.Departments)
+                                                case "1":
+                                                    Console.Clear();
+                                                    Console.WriteLine("All Branches,Departments and Clinics:");
+                                                    //var branches = Branch.GetAllBranches();
+                                                    if (branches == null || branches.Count == 0)
                                                     {
-                                                        Console.WriteLine($"\tDepartment: {dep.DepName}");
-                                                        foreach (var clinic in dep.Clinics)
+                                                        Console.WriteLine("NO Branches Available");
+
+                                                    }
+                                                    else
+                                                    {
+                                                        foreach (var br in branches)
                                                         {
-                                                            Console.WriteLine($"\t\tClinic: {clinic.Name}, Active: {clinic.IsActive}");
+                                                            Console.WriteLine($"Branch:{br.BranchName}");
+                                                            foreach (var dep in br.Departments)
+                                                            {
+                                                                Console.WriteLine($"\tDepartment: {dep.DepName}");
+                                                                foreach (var clinic in dep.Clinics)
+                                                                {
+                                                                    Console.WriteLine($"\t\tClinic: {clinic.Name}, Active: {clinic.IsActive}");
+                                                                }
+                                                            }
+
                                                         }
                                                     }
+                                                    Console.WriteLine("Press any key to continue...");
+                                                    Console.ReadKey();
+                                                    break;
 
-                                                }
+                                                case "2":
+                                                    Console.Clear();
+                                                    Console.WriteLine("All Doctors:");
+
+                                                    var allDoctors = users.OfType<Doctor>().ToList();
+
+                                                    if (allDoctors == null || allDoctors.Count == 0)
+                                                    {
+                                                        Console.WriteLine("No Doctors Available");
+                                                        break;
+                                                    }
+                                                    else
+                                                    {
+                                                        foreach (var Doctor in allDoctors)
+                                                        {
+                                                            Console.WriteLine($"Doctor ID: {Doctor.UserId}, Name: {Doctor.Name}, Email: {Doctor.Email}, Specialization: {Doctor.Specialization}, Phone: {Doctor.PhoneNumber}");
+                                                        }
+                                                    }
+                                                    Console.WriteLine("Press any key to continue...");
+                                                    Console.ReadKey();
+                                                    break;
+
+                                                case "3":
+                                                    Console.Clear();
+                                                    Console.WriteLine("All Appointments:");
+                                                    var Doctors = users.OfType<Doctor>().ToList();
+                                                    foreach (var doc in Doctors)
+                                                    {
+                                                        Console.WriteLine($"\nDr. {doc.Name}'s Appointments:");
+                                                        if (doc.AvailableAppointments == null || doc.AvailableAppointments.Count == 0)
+                                                        {
+                                                            Console.WriteLine("\tNo appointments.");
+                                                            continue;
+                                                        }
+                                                        foreach (var app in doc.AvailableAppointments)
+                                                        {
+                                                            Console.WriteLine($"\t- {app}");
+                                                        }
+                                                    }
+                                                    Console.WriteLine("Press any key to continue...");
+                                                    Console.ReadKey();
+                                                    break;
+
+                                                case "4":
+                                                    Console.Clear();
+                                                    Console.WriteLine("All Patients:");
+
+                                                    var allPatients = users.OfType<Patient>().ToList();
+
+                                                    if (allPatients == null || allPatients.Count == 0)
+                                                    {
+                                                        Console.WriteLine("No Patients Available");
+                                                        break;
+                                                    }
+                                                    else
+                                                    {
+                                                        foreach (var Patient in allPatients)
+                                                        {
+                                                            Console.WriteLine($"Patient ID: {Patient.UserId}, Name: {Patient.Name}, Email: {Patient.Email}, Phone: {Patient.PhoneNumber}");
+                                                        }
+                                                    }
+                                                    Console.WriteLine("Press any key to continue...");
+                                                    Console.ReadKey();
+                                                    break;
+
+                                                case "0":
+                                                    return;
+
+                                                default:
+                                                    Console.WriteLine("Invalid choice. Please try again.");
+                                                    Console.ReadKey();
+                                                    break;
+
+
                                             }
-                                            Console.WriteLine("Press any key to continue...");
-                                            Console.ReadKey();
-                                            break;
-
-                                        case "2":
-                                            Console.Clear();
-                                            Console.WriteLine("All Doctors:");
-
-                                            var allDoctors = users.OfType<Doctor>().ToList();
-
-                                            if (allDoctors == null || allDoctors.Count == 0)
-                                            {
-                                                Console.WriteLine("No Doctors Available");
-                                                break;
-                                            }
-                                            else
-                                            {
-                                                foreach (var Doctor in allDoctors)
-                                                {
-                                                    Console.WriteLine($"Doctor ID: {Doctor.UserId}, Name: {Doctor.Name}, Email: {Doctor.Email}, Specialization: {Doctor.Specialization}, Phone: {Doctor.PhoneNumber}");
-                                                }
-                                            }
-                                            Console.WriteLine("Press any key to continue...");
-                                            Console.ReadKey();
-                                            break;
-
-                                        case "3":
-                                            Console.Clear();
-                                            Console.WriteLine("All Appointments:");
-                                            var Doctors = users.OfType<Doctor>().ToList();
-                                            foreach (var doc in Doctors)
-                                            {
-                                                Console.WriteLine($"\nDr. {doc.Name}'s Appointments:");
-                                                if (doc.AvailableAppointments == null || doc.AvailableAppointments.Count == 0)
-                                                {
-                                                    Console.WriteLine("\tNo appointments.");
-                                                    continue;
-                                                }
-                                                foreach (var app in doc.AvailableAppointments)
-                                                {
-                                                    Console.WriteLine($"\t- {app}");
-                                                }
-                                            }
-                                            Console.WriteLine("Press any key to continue...");
-                                            Console.ReadKey();
-                                            break;
-
-                                        case "4":
-                                            Console.Clear();
-                                            Console.WriteLine("All Patients:");
-
-                                            var allPatients = users.OfType<Patient>().ToList();
-
-                                            if (allPatients == null || allPatients.Count == 0)
-                                            {
-                                                Console.WriteLine("No Patients Available");
-                                                break;
-                                            }
-                                            else
-                                            {
-                                                foreach (var Patient in allPatients)
-                                                {
-                                                    Console.WriteLine($"Patient ID: {Patient.UserId}, Name: {Patient.Name}, Email: {Patient.Email}, Phone: {Patient.PhoneNumber}");
-                                                }
-                                            }
-                                            Console.WriteLine("Press any key to continue...");
-                                            Console.ReadKey();
-                                            break;
-
-                                        case "0":
-                                            return;
-
-                                        default:
-                                            Console.WriteLine("Invalid choice. Please try again.");
-                                            Console.ReadKey();
-                                            break;
-
-
-                                    }
 
                                         }
                                     }
@@ -1462,6 +1616,9 @@ namespace HealthCenterSystem
                         break;
 
                     case "0":
+                        patientService.SaveToFile(patientFilePath);
+                        recordService.SaveToFile(patientRecordFilePath);
+
                         return;
 
                     default:
@@ -1469,9 +1626,11 @@ namespace HealthCenterSystem
                         Console.ReadKey();
                         break;
                 }
-            }
-        }
+                
 
+            }
+
+        }
         public static void PatientLoginMenu(Patient patient)
         {
             while (true)
@@ -1536,7 +1695,8 @@ namespace HealthCenterSystem
                         Console.WriteLine("Invalid option. Press any key to try again.");
                         Console.ReadKey();
                         break;
-                }
+                }//
+                patientService.SaveToFile(patientFilePath);
             }
         }
         public static void RegisterPatient()
@@ -1667,6 +1827,8 @@ namespace HealthCenterSystem
 
             Patient newPatient = new Patient(userId, name, email, password, phone, gender, dob, address);
             users.Add(newPatient);
+            patientService.AddPatient(newPatient);
+            patientService.SaveToFile(patientFilePath);
 
             Console.WriteLine($"Registration successful! Your Patient ID is: {newPatient.UserId}");
             Console.ReadKey();
@@ -1747,6 +1909,7 @@ namespace HealthCenterSystem
                         string notes = Console.ReadLine();
 
                         recordService.AddRecord(patient, loggedInDoctor, diagnosis, treatment, notes);
+                        recordService.SaveToFile(patientRecordFilePath);
                         Console.ReadKey();
                         break;
 
@@ -1828,6 +1991,8 @@ namespace HealthCenterSystem
                         if (recordService.UpdateRecord(recordId, newDiagnosis, newTreatment, newNotes))
                         {
                             Console.WriteLine("Record updated successfully.");
+                            recordService.SaveToFile(patientRecordFilePath); 
+
                             Console.WriteLine("== Updated Record ==");
                             Console.WriteLine($"Record ID: {recordId}");
                             Console.WriteLine($"Diagnosis: {newDiagnosis}");
@@ -1853,7 +2018,3 @@ namespace HealthCenterSystem
         }
     }
 }
-
-
-
-
