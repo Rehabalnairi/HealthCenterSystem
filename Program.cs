@@ -43,7 +43,7 @@ namespace HealthCenterSystem
             {
                 users.Add(p);
             }
-            //    Branch.BranchList = BranchFileService.LoadFromFile();
+            //Branch.BranchList = BranchFileService.LoadFromFile();
             adminService.LoadFromFile(adminFilePath);
             Program.adminService.SaveToFile("admins.txt");
             adminService.LoadFromFile(adminFilePath);
@@ -70,9 +70,11 @@ namespace HealthCenterSystem
             //foreach (var c in clinics)
             //{
             //    clinicService.AddClinic(c);
-        //}
-      
+            //}
+
             //patientService.LoadFromFile(patientFilePath);
+            clinics = ClinicFileService.LoadFromFile();
+          //Branch.LoadBranchesFromFile();
 
             // Now copy loaded patients to global users list
             foreach (var p in patientService.GetAllPatients())
@@ -892,6 +894,9 @@ namespace HealthCenterSystem
 
             void AdminMenu()
             {
+                BookingService bookingService = new BookingService();
+                bookingService.LoadBookingsFromFile();
+           
                 int adminChoice = -1;
 
                 while (adminChoice != 0)
@@ -913,97 +918,113 @@ namespace HealthCenterSystem
                         Console.ReadKey();
                         continue;
                     }
+                    List<Clinic> clinics = ClinicFileService.LoadFromFile();
+
                     switch (adminChoice)
                     {
                         case 1:
                             Console.Clear();
-                            Console.WriteLine("==Assign Exisiting Doctoer to Department and clinic==");
-                            // Check if there are any branches available
+                            Console.WriteLine("==Assign Existing Doctor to Department and Clinic==");
+
+                            clinics = ClinicFileService.LoadFromFile();
+
+
                             if (branches.Count == 0)
                             {
-                                Console.WriteLine("No branch available.");
+                                Console.WriteLine("No branches available.");
                                 break;
                             }
-                            //view available branches
-                            Console.WriteLine("\nAvailable Branches");
 
+                            Console.WriteLine("\nAvailable Branches:");
                             foreach (var b in branches)
-                                Console.WriteLine($"{b.BranchId}.\n{b.BranchName}");
-                            //select branch
-                            Console.WriteLine("Enter Branch ID:");
+                                Console.WriteLine($"{b.BranchId}. {b.BranchName}");
+
+                            Console.Write("Enter Branch ID: ");
                             if (!int.TryParse(Console.ReadLine(), out int branchId))
                             {
-                                Console.WriteLine("Invaild Input!");
-                                break;
-                            }
-                            var selectBranch = branches.FirstOrDefault(b => b.BranchId == branchId);
-                            if (selectBranch == null)
-                            {
-                                Console.WriteLine("Branch not found");
-                                break;
-                            }
-                            if (selectBranch.Departments.Count == 0)
-                            {
-                                Console.WriteLine("This Branch has no department");
-                                break;
-                            }
-                            Console.WriteLine("\nAvailable Departments:");
-                            foreach (var dep in selectBranch.Departments)
-                                Console.WriteLine($"{dep.DepId}.{dep.DepName}");
-                            //select department
-                            Console.WriteLine("Enter Department ID:");
-                            if (!int.TryParse(Console.ReadLine(), out int depId))
-                            {
-                                Console.WriteLine("Invalid Input!");
+                                Console.WriteLine("Invalid input!");
                                 break;
                             }
 
-                            var selectedDepartment = selectBranch.Departments.FirstOrDefault(d => d.DepId == depId);
+                            var selectedBranch = branches.FirstOrDefault(b => b.BranchId == branchId);
+                            if (selectedBranch == null)
+                            {
+                                Console.WriteLine("Branch not found.");
+                                break;
+                            }
+
+                            if (selectedBranch.Departments.Count == 0)
+                            {
+                                Console.WriteLine("This branch has no departments.");
+                                break;
+                            }
+
+                            Console.WriteLine("\nAvailable Departments:");
+                            foreach (var dep in selectedBranch.Departments)
+                                Console.WriteLine($"{dep.DepId}. {dep.DepName}");
+
+                            Console.Write("Enter Department ID: ");
+                            if (!int.TryParse(Console.ReadLine(), out int depId))
+                            {
+                                Console.WriteLine("Invalid input!");
+                                break;
+                            }
+
+                            var selectedDepartment = selectedBranch.Departments.FirstOrDefault(d => d.DepId == depId);
                             if (selectedDepartment == null)
                             {
                                 Console.WriteLine("Department not found.");
                                 break;
                             }
+
                             if (selectedDepartment.Clinics == null || selectedDepartment.Clinics.Count == 0)
                             {
                                 Console.WriteLine("This department has no clinics.");
                                 break;
                             }
+
                             Console.WriteLine("Available Clinics in this Department:");
                             foreach (var clinic in selectedDepartment.Clinics)
-                                Console.WriteLine($"{clinic.ClinicId}{clinic.Name}");
-                            //select clinic
-                            Console.WriteLine("Enter Clinic ID to assign doctor:");
+                                Console.WriteLine($"{clinic.ClinicId}. {clinic.Name}");
+
+                            Console.Write("Enter Clinic ID to assign doctor: ");
                             if (!int.TryParse(Console.ReadLine(), out int clinicId))
                             {
-                                Console.WriteLine("Invalid Input!");
+                                Console.WriteLine("Invalid input!");
                                 break;
                             }
+
                             var selectedClinic = selectedDepartment.Clinics.FirstOrDefault(c => c.ClinicId == clinicId);
                             if (selectedClinic == null)
                             {
                                 Console.WriteLine("Clinic not found.");
                                 break;
                             }
-                            Console.WriteLine("Enter Doctoer ID to assign:");
+
+                            Console.Write("Enter Doctor ID to assign: ");
                             if (!int.TryParse(Console.ReadLine(), out int doctorId))
                             {
-                                Console.WriteLine("Invalid Input!");
+                                Console.WriteLine("Invalid input!");
                                 break;
                             }
+
                             Doctor doctor = users.OfType<Doctor>().FirstOrDefault(d => d.UserId == doctorId);
                             if (doctor == null)
                             {
                                 Console.WriteLine("Doctor not found.");
                                 break;
                             }
+
                             selectedDepartment.Doctors.Add(doctor);
-                            Console.WriteLine($"Doctor {doctor.Name} has been assigned to Department {selectedDepartment.DepName} and Clinic {selectedClinic.Name}.");
+
+                         
+                            Console.WriteLine($"Doctor {doctor.Name} assigned to Department {selectedDepartment.DepName} and Clinic {selectedClinic.Name}.");
                             Console.WriteLine("Press any key to continue...");
                             Console.ReadKey();
-                            ClinicFileService.SaveToFile(clinics);
 
+                            ClinicFileService.SaveToFile(clinics);
                             break;
+
 
                         case 2:
                             while (true) {
@@ -1370,7 +1391,7 @@ namespace HealthCenterSystem
                                     Console.ReadKey();
                                     break;
 
-                                case 6:
+                        case 6:
                                     {
                                         while (true)
                                         {
@@ -1494,13 +1515,13 @@ namespace HealthCenterSystem
                                         }
                                     }
                                     break;
-                                case 0:
-                                    return; // Exit Admin menu
+                        case 0:
+                        return; // Exit Admin menu
 
-                                default:
-                                    Console.WriteLine("Invalid choice. Please try again.");
-                                    Console.ReadKey();
-                                    break;
+                      default:
+                        Console.WriteLine("Invalid choice. Please try again.");
+                        Console.ReadKey();
+                        break;
                                 }
                             }
                     }

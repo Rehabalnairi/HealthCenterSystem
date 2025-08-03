@@ -39,6 +39,12 @@ namespace HealthCenterSystem.Models
                 Console.WriteLine("No booking found for the specified patient and date.");
             }
         }
+        public List<Booking> GetBookingsByPatient(int patientId)
+        {
+            return bookings.Where(b => b.PatientId == patientId).ToList();
+        }
+
+
 
         public List<Booking> GetAllBookings()
         {
