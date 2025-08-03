@@ -55,6 +55,10 @@ namespace HealthCenterSystem
             doctorService.LoadFromFile(doctorFilePath);
             var loadedDoctors = doctorService.GetAllDoctors();
             Console.WriteLine($"Loaded {loadedDoctors.Count} doctors.");
+            foreach (var doctor in loadedDoctors)
+            {
+                users.Add(doctor); // Add doctors to the global users list
+            }
 
             //patientService.LoadFromFile(patientFilePath);
 

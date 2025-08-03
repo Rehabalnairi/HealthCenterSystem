@@ -60,7 +60,7 @@ namespace HealthCenterSystem.Models
 
             var parts = line.Split(',');
 
-            if (parts.Length < 9)  
+            if (parts.Length < 9) 
                 return null;
 
             if (!int.TryParse(parts[0], out int userId))

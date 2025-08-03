@@ -20,11 +20,10 @@ namespace HealthCenterSystem.Models
             this.IsActive = true;
         }
 
-
         public string ToFileString()
         {
             string bookedApps = BookedAppointments != null && BookedAppointments.Count > 0
-                ? string.Join(";", BookedAppointments.Select(d => d.ToString("o")))  
+                ? string.Join(";", BookedAppointments.Select(d => d.ToString("o")))  // صيغة ISO 8601 دقيقة
                 : "";
 
             return $"{UserId}|{Name}|{Email}|{Password}|{PhoneNumber}|{Gender}|{DateOfBirth:yyyy-MM-dd}|{Address}|{bookedApps}";
