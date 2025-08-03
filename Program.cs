@@ -43,7 +43,7 @@ namespace HealthCenterSystem
             {
                 users.Add(p);
             }
-            Branch.BranchList = BranchFileService.LoadFromFile();
+        //    Branch.BranchList = BranchFileService.LoadFromFile();
             adminService.LoadFromFile(adminFilePath);
             Program.adminService.SaveToFile("admins.txt");
             adminService.LoadFromFile(adminFilePath);
@@ -51,8 +51,9 @@ namespace HealthCenterSystem
             List<Branch> branches = new List<Branch>();
             List<Clinic> clinics = new List<Clinic>();
             DoctorService doctorService = new DoctorService();
-            doctorService.LoadFromFile(doctorFilePath); 
-           // string doctorFilePath = "doctors.txt";
+            doctorService.LoadFromFile(doctorFilePath);
+            // string doctorFilePath = "doctors.txt";
+            BranchFileService.LoadFromFile();
             doctorService.LoadFromFile(doctorFilePath);
             var loadedDoctors = doctorService.GetAllDoctors();
             Console.WriteLine($"Loaded {loadedDoctors.Count} doctors.");
@@ -60,6 +61,17 @@ namespace HealthCenterSystem
             {
                 users.Add(doctor); // Add doctors to the global users list
             }
+            Console.WriteLine("Branches loaded from file:");
+            foreach (var branch in Branch.BranchList)
+            {
+                Console.WriteLine($"{branch.BranchId} - {branch.BranchName} in {branch.BranchLocation}");
+            }
+            clinics = ClinicFileService.LoadFromFile();
+            //foreach (var c in clinics)
+            //{
+            //    clinicService.AddClinic(c);
+            //}
+
 
             //patientService.LoadFromFile(patientFilePath);
 
@@ -806,6 +818,8 @@ namespace HealthCenterSystem
                     admins = loadedAdmins;
                     users.AddRange(admins.Cast<User>());
                 }
+                BranchFileService.LoadFromFile();
+
 
                 // Load patient records
                 patientService.LoadFromFile(patientFilePath);
@@ -822,9 +836,9 @@ namespace HealthCenterSystem
                 recordService.SaveToFile(patientRecordFilePath);
                 //SaveBookingsToFile(patients, BookingFilePath);
                 bookingService.LoadBookingsFromFile();
-
+                BranchFileService.SaveToFile(Branch.BranchList);
                 // SavePatientsToFile(patients, patientFilePath);
-
+           
             }
 
             // Example of doctor file load/save -- implement actual logic accordingly
