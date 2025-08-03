@@ -816,7 +816,9 @@ namespace HealthCenterSystem
                 SaveDoctorsToFile(doctors, doctorFilePath);
                 SaveAdminsToFile(admins, adminFilePath);
                 recordService.SaveToFile(patientRecordFilePath);
-      
+                SaveBookingsToFile(patients, BookingFilePath);
+
+
                 // SavePatientsToFile(patients, patientFilePath);
 
             }

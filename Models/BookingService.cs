@@ -22,7 +22,7 @@ namespace HealthCenterSystem.Models
 
             bookings.Add(booking);
             Console.WriteLine("Booking added successfully.");
-            SaveBookingsToFile(); // حفظ تلقائي بعد الإضافة
+            SaveBookingsToFile();
         }
 
         public void CancelBooking(int patientId, DateTime bookingDate)
@@ -32,7 +32,7 @@ namespace HealthCenterSystem.Models
             {
                 bookings.Remove(booking);
                 Console.WriteLine("Booking cancelled successfully.");
-                SaveBookingsToFile(); 
+                SaveBookingsToFile();
             }
             else
             {
@@ -71,37 +71,19 @@ namespace HealthCenterSystem.Models
 
         public void SaveBookingsToFile()
         {
-            var lines = bookings.Select(b =>
-                $"{b.PatientId}|{b.DoctorId}|{b.BookingDate:yyyy-MM-dd HH:mm}");
+            var lines = bookings.Select(b => b.ToFileString()).ToList();
             File.WriteAllLines(bookingFilePath, lines);
         }
 
-       
         public void LoadBookingsFromFile()
         {
-            if (!File.Exists(bookingFilePath))
-                return;
+            if (!File.Exists(bookingFilePath)) return;
 
-            var loadedBookings = new List<Booking>();
-
-            foreach (var line in File.ReadAllLines(bookingFilePath))
-            {
-                var parts = line.Split('|');
-                if (parts.Length == 3 &&
-                    int.TryParse(parts[0], out int patientId) &&
-                    int.TryParse(parts[1], out int doctorId) &&
-                    DateTime.TryParse(parts[2], out DateTime bookingDate))
-                {
-                    loadedBookings.Add(new Booking
-                    {
-                        PatientId = patientId,
-                        DoctorId = doctorId,
-                        BookingDate = bookingDate
-                    });
-                }
-            }
-
-            bookings = loadedBookings;
+            var lines = File.ReadAllLines(bookingFilePath);
+            bookings = lines
+                .Select(line => Booking.FromFileString(line))
+                .Where(b => b != null)
+                .ToList();
         }
     }
 }
